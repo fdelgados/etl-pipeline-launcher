@@ -1,0 +1,142 @@
+version: "3"
+
+services:
+  mysql:
+    container_name: etl-pipeline-launcher-mysql
+    image: mysql:8
+    networks:
+      etl_pipeline_launcher:
+        ipv4_address: 10.5.0.3
+    volumes:
+      - mysql-data:/var/lib/mysql/
+    ports:
+      - "3360:3306"
+    environment:
+      - TZ=UTC
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    command: [ "--default-authentication-plugin=mysql_native_password" ]
+
+  #  redis_pubsub:
+  #    build:
+  #      context: .
+  #      dockerfile: Dockerfile
+  #    image: websitecorpus-image
+  #    depends_on:
+  #      - mysql
+  #      - redis
+  #      - mailhog
+  #    environment:
+  #      - DB_USER=root
+  #      - DB_HOST=
+  #      - DB_PASSWORD=
+  #      - REDIS_HOST=redis
+  #      - EMAIL_HOST=mailhog
+  #      - PYTHONDONTWRITEBYTECODE=1
+  #    volumes:
+  #      - ./src:/src
+  #      - ./tests:/tests
+  #    entrypoint:
+  #      - python
+  #      - /src/corpus/entrypoints/redis_eventconsumer.py
+
+  application:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql
+      - rabbitmq
+      #      - redis_pubsub
+      - mailhog
+      - mongo
+      - mongo-express
+    networks:
+      etl_pipeline_launcher:
+        ipv4_address: 10.5.0.2
+    environment:
+      - DB_USER=launcher
+      - DB_HOST=etl-pipeline-launcher-mysql
+      - DB_PASSWORD=rG3LQE$p,htKfA6*
+      - API_HOST=localhost
+      - REDIS_HOST=etl-pipeline-launcher-redis
+      - EMAIL_HOST=etl-pipeline-launcher-mail
+      - RABBIT_HOST=etl-pipeline-launcher-rabbitmq
+      - PYTHONDONTWRITEBYTECODE=1
+      - FLASK_APP=infrastructure/entrypoint/start.py
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "5000:5000"
+
+  rabbitmq:
+    container_name: etl-pipeline-launcher-rabbitmq
+    image: 'rabbitmq:3.7-management'
+    restart: unless-stopped
+    networks:
+      etl_pipeline_launcher:
+        ipv4_address: 10.5.0.5
+    ports:
+      - "5630:5672"
+      - "8090:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=ingestion
+      - RABBITMQ_DEFAULT_PASS=c34w1
+
+  redis:
+    container_name: etl-pipeline-launcher-redis
+    image: redis:alpine
+    command: [ "redis-server", "--appendonly", "yes" ]
+    hostname: redis
+    networks:
+      etl_pipeline_launcher:
+        ipv4_address: 10.5.0.4
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis-data:/redis-data
+
+  mailhog:
+    container_name: etl-pipeline-launcher-mail
+    image: mailhog/mailhog
+    networks:
+      etl_pipeline_launcher:
+        ipv4_address: 10.5.0.6
+    ports:
+      - "11025:1025"
+      - "18025:8025"
+
+  mongo:
+    image: mongo:3.1
+    container_name: etl-pipeline-launcher-mongodb
+    restart: always
+    networks:
+      etl_pipeline_launcher:
+        ipv4_address: 10.5.0.7
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=example
+
+  mongo-express:
+    image: mongo-express:0.32
+    container_name: etl-pipeline-launcher-mongo-express
+    restart: always
+    networks:
+      etl_pipeline_launcher:
+        ipv4_address: 10.5.0.8
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=example
+
+networks:
+  etl_pipeline_launcher:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
+          gateway: 10.5.0.1
+volumes:
+  mysql-data:

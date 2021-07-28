@@ -1,0 +1,17 @@
+# app
+sqlalchemy~=1.4.22
+flask~=2.0.1
+redis
+pyjwt==1.4.2
+PyMySQL==0.9.3
+dependency-injector
+ddd-shared-fdelgados==0.0.4
+setuptools
+
+# dev/tests
+pytest
+pytest-icdiff
+mypy
+pylint
+requests
+tenacity

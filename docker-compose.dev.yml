@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  application:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - DB_USER=launcher
+      - DB_HOST=etl-pipeline-launcher-mysql
+      - DB_PASSWORD=rG3LQE$p,htKfA6*
+      - API_HOST=localhost
+      - FLASK_DEBUG=1
+      - FLASK_ENV=development
+    volumes:
+      - ./src:/src
+      - ./tests:/tests
+    ports:
+      - "5000:5000"
