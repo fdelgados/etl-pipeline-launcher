@@ -63,7 +63,7 @@ services:
       - EMAIL_HOST=etl-pipeline-launcher-mail
       - RABBIT_HOST=etl-pipeline-launcher-rabbitmq
       - PYTHONDONTWRITEBYTECODE=1
-      - FLASK_APP=infrastructure/entrypoint/start.py
+      - FLASK_APP=infrastructure/entrypoint/flask/start.py
       - PYTHONUNBUFFERED=1
     ports:
       - "5000:5000"
