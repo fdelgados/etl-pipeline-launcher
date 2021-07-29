@@ -5,5 +5,5 @@ setup(
     author="Cisco Delgado",
     author_mail="fdelgados@gmail.com",
     version="0.1",
-    packages=["infrastructure"],
+    packages=["application", "domain", "infrastructure", "shared"],
 )
