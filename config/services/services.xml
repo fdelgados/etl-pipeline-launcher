@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+
+<services>
+    <service id="launcher.tenant.domain.service.finder.tenant_finder"
+             class="launcher.tenant.domain.service.finder.TenantFinder">
+        <argument name="tenant_repository" value="launcher.tenant.domain.model.repository.tenant_repository" type="service" />
+    </service>
+
+    <service id="launcher.tenant.domain.model.repository.tenant_repository"
+             class="launcher.tenant.infrastructure.persistence.sqlalchemy.repository.SqlAlchemyTenantRepository" />
+
+    <service id="launcher.pipeline.domain.model.repository.pipeline_repository"
+             class="launcher.pipeline.infrastructure.persistence.sqlalchemy.repository.SqlAlchemyPipelineRepository" />
+
+    <service id="launcher.launcher.pipeline.application.launcher.launch_pipeline"
+             class="launcher.pipeline.application.launcher.LaunchPipeline">
+        <argument name="pipeline_repository" value="launcher.pipeline.domain.model.repository.pipeline_repository" type="service" />
+        <argument name="tenant_finder" value="launcher.tenant.domain.service.finder.tenant_finder" type="service" />
+    </service>
+</services>

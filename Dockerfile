@@ -15,6 +15,7 @@ COPY src/ /src/
 RUN pip install -e /src
 
 COPY tests/ /tests/
+COPY config/ /config/
 
 WORKDIR /src
 

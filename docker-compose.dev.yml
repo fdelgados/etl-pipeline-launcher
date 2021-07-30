@@ -8,12 +8,13 @@ services:
     environment:
       - DB_USER=launcher
       - DB_HOST=etl-pipeline-launcher-mysql
-      - DB_PASSWORD=rG3LQE$p,htKfA6*
+      - DB_PASSWORD=wTUbtEmk2S6R
       - API_HOST=localhost
       - FLASK_DEBUG=1
       - FLASK_ENV=development
     volumes:
       - ./src:/src
       - ./tests:/tests
+      - ./config:/config
     ports:
       - "5000:5000"

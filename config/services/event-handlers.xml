@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+
+<events>
+    <event class="launcher.pipeline.domain.events.pipeline_launched.PipelineLaunched">
+        <handler class="launcher.pipeline.application.subscribers.NotifyPipelineLaunchRequest" />
+    </event>
+</events>
