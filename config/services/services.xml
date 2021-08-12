@@ -17,4 +17,25 @@
         <argument name="pipeline_repository" value="launcher.pipeline.domain.model.repository.pipeline_repository" type="service" />
         <argument name="tenant_finder" value="launcher.tenant.domain.service.finder.tenant_finder" type="service" />
     </service>
+
+    <service id="identityaccess.domain.model.tenant.tenant_repository"
+             class="identityaccess.infrastructure.persistence.sqlalchemy.repository.SqlAlchemyTenantRepository"/>
+
+    <service id="identityaccess.domain.model.user.user_repository"
+             class="identityaccess.infrastructure.persistence.sqlalchemy.repository.SqlAlchemyUserRepository"/>
+
+    <service id="identityaccess.domain.service.authentication.authentication_service"
+             class="identityaccess.infrastructure.service.authentication.DefaultAuthenticationService">
+        <argument name="tenant_repository" value="identityaccess.domain.model.tenant.tenant_repository" type="service"/>
+        <argument name="user_repository" value="identityaccess.domain.model.user.user_repository" type="service"/>
+    </service>
+
+    <service id="identityaccess.domain.service.token_generator.token_generator"
+             class="identityaccess.infrastructure.service.token_generator.JwtTokenAuthentication"/>
+
+    <service id="identityaccess.application.service.authenticate.authenticate"
+             class="identityaccess.application.service.authenticate.Authenticate">
+        <argument name="authentication_service" value="identityaccess.domain.service.authentication.authentication_service" type="service"/>
+        <argument name="token_generator" value="identityaccess.domain.service.token_generator.token_generator" type="service"/>
+    </service>
 </services>

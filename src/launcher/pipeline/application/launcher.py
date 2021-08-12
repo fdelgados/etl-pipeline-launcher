@@ -75,7 +75,8 @@ class CommandValidator:
         if not command.tenant_id:
             raise InvalidRequestParamsException(
                 ErrorCodes.MISSING_REQUEST_PARAMETER,
-                "Tenant must be provided")
+                "Tenant must be provided"
+            )
 
         if not command.sitemap_url:
             raise InvalidRequestParamsException(

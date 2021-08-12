@@ -6,4 +6,4 @@ from shared.infrastructure.application.settings import Settings
 
 class SqlAlchemyTenantRepository(TenantRepository, Repository):
     def __init__(self):
-        super().__init__(Tenant, Settings.database_dsn())
+        super().__init__(Tenant, Settings.database_dsn("launcher"))

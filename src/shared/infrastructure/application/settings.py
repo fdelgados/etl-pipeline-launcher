@@ -14,11 +14,13 @@ class Settings:
         return "{}:{}{}".format(url, port, Settings.api_prefix())
 
     @staticmethod
-    def database_dsn():
+    def database_dsn(context: str):
+        context = context.upper()
+
         host = os.environ.get("DB_HOST")
-        user = os.environ.get("DB_USER")
-        database = os.environ.get("DB_NAME")
-        password = os.environ.get("DB_PASSWORD")
+        user = os.environ.get("{}_DB_USER".format(context))
+        database = os.environ.get("{}_DB_NAME".format(context))
+        password = os.environ.get("{}_DB_PASSWORD".format(context))
 
         return "mysql+pymysql://{}:{}@{}/{}?charset=utf8mb4".format(
             user,

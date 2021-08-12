@@ -6,5 +6,4 @@ from shared.infrastructure.application.settings import Settings
 
 class SqlAlchemyPipelineRepository(PipelineRepository, Repository):
     def __init__(self):
-        dsn = Settings.database_dsn()
-        super().__init__(Pipeline, dsn)
+        super().__init__(Pipeline, Settings.database_dsn("launcher"))

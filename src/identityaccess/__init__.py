@@ -3,7 +3,7 @@ from __future__ import annotations
 from enum import IntEnum
 
 
-class ApiBaseError(RuntimeError):
+class IdentityAccessError(RuntimeError):
     def __init__(self, error: ErrorCodes, details: str = "") -> None:
         self.code = int(error.value)
         self.message = str(error)
@@ -12,7 +12,7 @@ class ApiBaseError(RuntimeError):
             self.message = "{}. {}".format(self.message, details)
 
 
-class InvalidRequestParamsException(ApiBaseError):
+class InvalidRequestParamsException(IdentityAccessError):
     pass
 
 
@@ -30,7 +30,9 @@ class ErrorCodes(IntEnum):
 
     AUTHENTICATION_FAILED = 2001, "Authentication failed"
     TENANT_NOT_FOUND = 2002, "Tenant not found"
-    TENANT_ACCOUNT_DEACTIVATE = 2003, "Tenant account deactivated"
+    TENANT_ACCOUNT_DEACTIVATED = 2003, "Tenant account is deactivated"
+    USER_NOT_FOUND = 2004, "Incorrect username/password combination. Please try again"
+    USER_DISABLED = 2005, "User is disabled"
 
     def __str__(self):
         return self._message

@@ -10,6 +10,20 @@ class AuthenticationError(RuntimeError):
     pass
 
 
+class Authenticate:
+    def __init__(self, argument):
+        self._argument = argument
+
+    def __call__(self, fn):
+        if not callable(fn):
+            raise ValueError
+
+        @wraps(fn)
+        def decorated(*args, **kwargs):
+
+            return decorated
+
+
 def authentication_required(*args, **kwargs):
     func = None
     if len(args) == 1 and callable(args[0]):
@@ -23,8 +37,12 @@ def authentication_required(*args, **kwargs):
             if not auth_header:
                 raise AuthenticationError("Api key not provided")
 
+            token_type, auth_token = auth_header.split()
+
+            if token_type != "Bearer":
+                raise AuthenticationError("Api key not provided")
+
             try:
-                auth_token = auth_header.replace("Bearer ", "")
                 payload = jwt.decode(
                     auth_token,
                     Settings.secret_key(),
