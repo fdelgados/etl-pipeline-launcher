@@ -5,11 +5,26 @@ from enum import IntEnum
 
 class IdentityAccessError(RuntimeError):
     def __init__(self, error: ErrorCodes, details: str = "") -> None:
-        self.code = int(error.value)
-        self.message = str(error)
+        self._error = error
+        self._details = details
 
-        if details:
-            self.message = "{}. {}".format(self.message, details)
+        self.code = int(self._error.value)
+        self.message = str(self._error)
+
+        if self._details:
+            self.message = "{}. {}".format(self.message, self._details)
+
+    @property
+    def error(self):
+        return self._error
+
+    @property
+    def details(self):
+        return self._details
+
+    @classmethod
+    def create_from_error(cls, error: IdentityAccessError) -> IdentityAccessError:
+        return cls(error.error, details=error.details)
 
 
 class InvalidRequestParamsException(IdentityAccessError):
@@ -33,6 +48,12 @@ class ErrorCodes(IntEnum):
     TENANT_ACCOUNT_DEACTIVATED = 2003, "Tenant account is deactivated"
     USER_NOT_FOUND = 2004, "Incorrect username/password combination. Please try again"
     USER_DISABLED = 2005, "User is disabled"
+
+    INVALID_ACCESS_TOKEN_TYPE = 2006, 'Access token must be of type Bearer'
+    INVALID_ACCESS_TOKEN = 2007, 'Invalid access token'
+    ACCESS_TOKEN_EXPIRED = 2008, 'Access token expired'
+    PERMISSION_DENIED = 2009, 'Permission denied'
+    TENANT_ID_MISMATCH = 2010, 'The tenant id supplied does not correspond to the tenant id of the access token'
 
     def __str__(self):
         return self._message

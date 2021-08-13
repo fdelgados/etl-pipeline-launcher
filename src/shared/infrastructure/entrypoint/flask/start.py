@@ -5,6 +5,7 @@ from launcher.pipeline.infrastructure.controller.flask.api.pipeline import pipel
 
 from identityaccess.infrastructure.persistence.sqlalchemy.mapping import IdentityAccessOrm
 from identityaccess.infrastructure.controller.flask.api.authentication import authentication_ns
+from identityaccess.infrastructure.controller.flask.api.authorization import authorization_ns
 
 from shared.infrastructure.controller.flask.api.launcher import launcher_api
 from shared.infrastructure.application.settings import Settings
@@ -26,3 +27,4 @@ api = Api(app)
 app.register_blueprint(launcher_api, url_prefix=Settings.api_prefix())
 app.register_blueprint(pipeline_api, url_prefix="{}/pipelines".format(Settings.api_prefix()))
 api.add_namespace(authentication_ns)
+api.add_namespace(authorization_ns)

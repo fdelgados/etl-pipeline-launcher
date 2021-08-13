@@ -1,9 +1,12 @@
 import abc
 
 from identityaccess.domain.model.scope import Scope
+from identityaccess.domain.model.tenant import TenantId
+from identityaccess.domain.model.access_token import AccessToken
+from identityaccess import IdentityAccessError
 
 
-class AuthorizationError(RuntimeError):
+class AuthorizationError(IdentityAccessError):
     pass
 
 
@@ -19,5 +22,5 @@ class AuthorizationService(metaclass=abc.ABCMeta):
         return True
 
     @abc.abstractmethod
-    def authorize(self, access_token: str, scope: Scope) -> None:
+    def authorize(self, tenant_id: TenantId, access_token: AccessToken, scope: Scope) -> None:
         raise NotImplementedError

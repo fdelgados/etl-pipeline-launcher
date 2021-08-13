@@ -24,6 +24,9 @@
     <service id="identityaccess.domain.model.user.user_repository"
              class="identityaccess.infrastructure.persistence.sqlalchemy.repository.SqlAlchemyUserRepository"/>
 
+    <service id="identityaccess.domain.model.permission.permission_repository"
+             class="identityaccess.infrastructure.persistence.sqlalchemy.repository.SqlAlchemyPermissionRepository"/>
+
     <service id="identityaccess.domain.service.authentication.authentication_service"
              class="identityaccess.infrastructure.service.authentication.DefaultAuthenticationService">
         <argument name="tenant_repository" value="identityaccess.domain.model.tenant.tenant_repository" type="service"/>
@@ -37,5 +40,20 @@
              class="identityaccess.application.service.authenticate.Authenticate">
         <argument name="authentication_service" value="identityaccess.domain.service.authentication.authentication_service" type="service"/>
         <argument name="token_generator" value="identityaccess.domain.service.token_generator.token_generator" type="service"/>
+    </service>
+
+    <service id="identityaccess.domain.service.permission_checker.permission_checker"
+             class="identityaccess.infrastructure.service.permission_checker.DbPermissionChecker">
+        <argument name="permission_repository" value="identityaccess.domain.model.permission.permission_repository" type="service"/>
+    </service>
+
+    <service id="identityaccess.domain.service.authorization.authorization_service"
+             class="identityaccess.infrastructure.service.authorization.JwtAuthorizationService">
+        <argument name="permission_checker" value="identityaccess.domain.service.permission_checker.permission_checker" type="service"/>
+    </service>
+
+    <service id="identityaccess.application.service.authorize.authorize"
+             class="identityaccess.application.service.authorize.Authorize">
+        <argument name="authorization_service" value="identityaccess.domain.service.authorization.authorization_service" type="service"/>
     </service>
 </services>
