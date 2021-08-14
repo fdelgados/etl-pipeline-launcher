@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_restx import Api
+from pydic import create_container
 from launcher.tenant.infrastructure.persistence.sqlalchemy.mapping import LauncherOrm
 from launcher.pipeline.infrastructure.controller.flask.api.pipeline import pipeline_api
 
@@ -9,7 +10,6 @@ from identityaccess.infrastructure.controller.flask.api.authorization import aut
 
 from shared.infrastructure.controller.flask.api.launcher import launcher_api
 from shared.infrastructure.application.settings import Settings
-from shared.infrastructure.application.dependency_injection import container, event_handlers
 
 
 launcher_orm = LauncherOrm()
@@ -19,8 +19,7 @@ identityaccess_orm = IdentityAccessOrm()
 identityaccess_orm.start_mappers()
 
 app = Flask(__name__)
-app.container = container
-app.event_handlers = event_handlers
+app.container = create_container([Settings.services_file()])
 
 api = Api(app)
 

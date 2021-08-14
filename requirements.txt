@@ -5,7 +5,7 @@ charset-normalizer==2.0.3
 click==8.0.1
 cryptography==3.4.7
 ddd-shared-fdelgados==0.0.4
-dependency-injector==4.34.2
+pydic-fdelgados==0.0.1
 Flask==2.0.1
 flask-restx==0.5.0
 greenlet==1.1.0
