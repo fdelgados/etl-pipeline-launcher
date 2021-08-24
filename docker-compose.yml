@@ -2,6 +2,9 @@ version: "3"
 
 services:
   mysql:
+    build:
+      context: ./docker/mysql
+      dockerfile: Dockerfile
     container_name: etl-pipeline-launcher-mysql
     image: mysql:latest
     networks:
@@ -12,6 +15,7 @@ services:
     ports:
       - "3360:3306"
     environment:
+      - MYSQL_ROOT_HOST=%
       - MYSQL_ROOT_PASSWORD=HyMn4q6UR6wa
     command: --default-authentication-plugin=mysql_native_password
     restart: always
@@ -54,21 +58,9 @@ services:
       etl_pipeline_launcher:
         ipv4_address: 10.5.0.2
     environment:
-      - DB_HOST=etl-pipeline-launcher-mysql
-      - LAUNCHER_DB_NAME=launcher
-      - LAUNCHER_DB_USER=launcher
-      - LAUNCHER_DB_PASSWORD=wTUbtEmk2S6R
-      - APP_URL=http://localhost
-      - APP_PORT=5000
-      - API_PREFIX=/api/v1
-      - ROOT_DIR=/
-      - REDIS_HOST=etl-pipeline-launcher-redis
-      - EMAIL_HOST=etl-pipeline-launcher-mail
-      - RABBIT_HOST=etl-pipeline-launcher-rabbitmq
       - PYTHONDONTWRITEBYTECODE=1
       - FLASK_APP=shared/infrastructure/entrypoint/flask/start.py
       - PYTHONUNBUFFERED=1
-      - SECRET_KEY=97fb4ece66b95a5f3bd5f13faecb3dbdf3a86f49
     ports:
       - "5000:5000"
 
@@ -82,9 +74,6 @@ services:
     ports:
       - "5630:5672"
       - "8090:15672"
-    environment:
-      - RABBITMQ_DEFAULT_USER=ingestion
-      - RABBITMQ_DEFAULT_PASS=c34w1
 
   redis:
     container_name: etl-pipeline-launcher-redis

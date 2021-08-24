@@ -6,9 +6,6 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      - LAUNCHER_DB_USER=launcher
-      - LAUNCHER_DB_PASSWORD=wTUbtEmk2S6R
-      - API_HOST=localhost
       - FLASK_DEBUG=1
       - FLASK_ENV=development
     volumes:
