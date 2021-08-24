@@ -3,21 +3,22 @@ id = "fc050f989329b47f861e5760c713c820"
 root_dir = "/"
 logs_dir = "/log"
 contexts_dir = "/src"
-[application.development]
+baseurl = "http://localhost"
+[application.production]
 baseurl = "http://localhost"
 
 [identity_access]
-[identity_access.development]
 token_issuer = "http://localhost"
 public_key_file = "/export/certs/identity_access.pem"
+[identity_access.production]
 
 [database]
 host = "etl-pipeline-launcher-mysql"
 name = "launcher"
 user = "launcher"
 password = "wTUbtEmk2S6R"
-[database.development]
-[database.development.launcher]
+[database.production]
+[database.production.launcher]
 host = "etl-pipeline-launcher-mysql"
 name = "launcher"
 user = "launcher"
@@ -32,5 +33,20 @@ version = 1
 doc_path = "/api/doc"
 include_default_error_message = false
 
-[email]
+[mailhog]
 host = "etl-pipeline-launcher-mail"
+smtp_port = 11025
+http_port = 18025
+
+[redis]
+host = "etl-pipeline-launcher-redis"
+port = 6379
+
+[rabbitmq]
+host = "etl-pipeline-launcher-rabbitmq"
+user = "admin"
+password = "yvPZ6j9n4ZyhXJV2"
+port = 5630
+http_port = 8090
+
+[mongodb]
