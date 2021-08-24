@@ -3,12 +3,13 @@ from __future__ import annotations
 from typing import Dict, List
 
 from shared_context.domain.events import DomainEvent
-from launcher.pipeline.domain.model.aggregate import TenantId, PipelineId
+from launcher.pipeline.domain.model.aggregate import PipelineId
 
 
 class PipelineLaunched(DomainEvent):
     def __init__(
-        self, tenant_id: TenantId,
+        self,
+        tenant_id: str,
         pipeline_id: PipelineId,
         custom_request_headers: Dict,
         selector_mapping: Dict,

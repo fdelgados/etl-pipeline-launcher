@@ -2,6 +2,6 @@
 
 <events>
     <event class="launcher.pipeline.domain.events.pipeline_launched.PipelineLaunched">
-        <handler class="launcher.pipeline.application.subscribers.NotifyPipelineLaunchRequest" />
+        <handler id="launcher.pipeline.application.subscribers.notify_pipeline_launch_request" />
     </event>
 </events>

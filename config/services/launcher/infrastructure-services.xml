@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+
+<services>
+    <service id="launcher.pipeline.infrastructure.persistence.sqlalchemy.repository.sql_alchemy_pipeline_repository"
+             class="launcher.pipeline.infrastructure.persistence.sqlalchemy.repository.SqlAlchemyPipelineRepository" />
+</services>

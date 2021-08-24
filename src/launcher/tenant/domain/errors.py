@@ -1,2 +1,0 @@
-class TenantNotFoundException(RuntimeError):
-    pass

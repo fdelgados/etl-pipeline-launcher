@@ -1,0 +1,36 @@
+[application]
+id = "fc050f989329b47f861e5760c713c820"
+root_dir = "/"
+logs_dir = "/log"
+contexts_dir = "/src"
+[application.development]
+baseurl = "http://localhost"
+
+[identity_access]
+[identity_access.development]
+token_issuer = "http://localhost"
+public_key_file = "/export/certs/identity_access.pem"
+
+[database]
+host = "etl-pipeline-launcher-mysql"
+name = "launcher"
+user = "launcher"
+password = "wTUbtEmk2S6R"
+[database.development]
+[database.development.launcher]
+host = "etl-pipeline-launcher-mysql"
+name = "launcher"
+user = "launcher"
+password = "wTUbtEmk2S6R"
+
+[api]
+title = "ETL Pipeline Launcher API"
+port = 5000
+prefix = "/api/v{:d}"
+version_str = "v{:d}"
+version = 1
+doc_path = "/api/doc"
+include_default_error_message = false
+
+[email]
+host = "etl-pipeline-launcher-mail"

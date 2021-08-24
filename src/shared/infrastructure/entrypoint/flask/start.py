@@ -1,29 +1,29 @@
 from flask import Flask
 from flask_restx import Api
 from pydic import create_container
-from launcher.tenant.infrastructure.persistence.sqlalchemy.mapping import LauncherOrm
 from launcher.pipeline.infrastructure.controller.flask.api.pipeline import pipeline_api
-
-from identityaccess.infrastructure.persistence.sqlalchemy.mapping import IdentityAccessOrm
-from identityaccess.infrastructure.controller.flask.api.authentication import authentication_ns
-from identityaccess.infrastructure.controller.flask.api.authorization import authorization_ns
+from launcher.pipeline.infrastructure.persistence.sqlalchemy.mapping import LauncherOrm
 
 from shared.infrastructure.controller.flask.api.launcher import launcher_api
-from shared.infrastructure.application.settings import Settings
+from shared.infrastructure.application.settings import settings
 
 
 launcher_orm = LauncherOrm()
 launcher_orm.start_mappers()
 
-identityaccess_orm = IdentityAccessOrm()
-identityaccess_orm.start_mappers()
-
 app = Flask(__name__)
-app.container = create_container([Settings.services_file()])
+app.container = create_container(
+    settings.services_files(),
+    settings.event_handlers_file()
+)
 
-api = Api(app)
+app.config['ERROR_INCLUDE_MESSAGE'] = False
 
-app.register_blueprint(launcher_api, url_prefix=Settings.api_prefix())
-app.register_blueprint(pipeline_api, url_prefix="{}/pipelines".format(Settings.api_prefix()))
-api.add_namespace(authentication_ns)
-api.add_namespace(authorization_ns)
+api = Api(
+    app,
+    doc=settings.api_doc_path(),
+    title=settings.api_title(),
+    version=settings.api_version_str()
+)
+api.add_namespace(launcher_api, path=settings.api_prefix())
+api.add_namespace(pipeline_api, path=settings.api_prefix('pipelines'))

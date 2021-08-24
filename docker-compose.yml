@@ -58,9 +58,6 @@ services:
       - LAUNCHER_DB_NAME=launcher
       - LAUNCHER_DB_USER=launcher
       - LAUNCHER_DB_PASSWORD=wTUbtEmk2S6R
-      - IDENTITYACCESS_DB_NAME=identity_access
-      - IDENTITYACCESS_DB_USER=master
-      - IDENTITYACCESS_DB_PASSWORD=hY54t68WGWpd
       - APP_URL=http://localhost
       - APP_PORT=5000
       - API_PREFIX=/api/v1

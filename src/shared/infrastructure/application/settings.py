@@ -1,64 +1,96 @@
 import os
+import toml
+import glob
+from setuptools import find_packages
 
 
 class Settings:
-    @staticmethod
-    def api_prefix():
-        return os.environ.get("API_PREFIX")
+    def __init__(self, environment: str = 'development'):
+        self._config = toml.load('/config/settings.toml')
+        self._environment = environment
 
-    @staticmethod
-    def api_url():
-        url = os.environ.get("APP_URL")
-        port = os.environ.get("APP_PORT")
+    def _get(self, section: str, entry: str):
+        config = self._config.get(section)
 
-        return "{}:{}{}".format(url, port, Settings.api_prefix())
+        if self._environment == 'development':
+            return config.get(entry)
 
-    @staticmethod
-    def database_dsn(context: str):
-        context = context.upper()
+        return config.get(self._environment).get(entry)
 
-        host = os.environ.get("DB_HOST")
-        user = os.environ.get("{}_DB_USER".format(context))
-        database = os.environ.get("{}_DB_NAME".format(context))
-        password = os.environ.get("{}_DB_PASSWORD".format(context))
+    def application_id(self):
+        return self._config.get('application').get('id')
+
+    def api_version(self):
+        return self._config.get('api').get('version')
+
+    def api_title(self):
+        return self._config.get('api').get('title')
+
+    def api_doc_path(self):
+        return self._config.get('api').get('doc_path', '/doc')
+
+    def api_version_str(self):
+        return self._config.get('api').get('version_str').format(self.api_version())
+
+    def api_prefix(self, path: str = None):
+        api_prefix = self._config.get('api').get('prefix').format(self.api_version())
+        if not path:
+            return api_prefix
+
+        return f'{api_prefix}/{path}'
+
+    def base_url(self):
+        return self._config.get('application').get(self._environment).get('baseurl')
+
+    def api_url(self):
+        url = self.base_url()
+        port = self._config.get('api').get('port')
+
+        return "{}:{}{}".format(url, port, self.api_prefix())
+
+    def database_dsn(self, context: str):
+        database_config = self._config.get('database').get(self._environment).get(context)
 
         return "mysql+pymysql://{}:{}@{}/{}?charset=utf8mb4".format(
-            user,
-            password,
-            host,
-            database
+            database_config.get('user'),
+            database_config.get('password'),
+            database_config.get('host'),
+            database_config.get('name')
         )
 
-    @staticmethod
-    def _app_root_dir():
-        return os.environ.get("ROOT_DIR")
+    def _app_root_dir(self):
+        return self._config.get('application').get('root_dir')
 
-    @staticmethod
-    def services_file():
-        return os.path.join(
-            Settings._app_root_dir(),
-            "config/services/",
-            "services.xml"
-        )
+    def contexts(self):
+        contexts_dir = self._config.get('application').get('contexts_dir')
 
-    @staticmethod
-    def event_handlers_file():
-        return os.path.join(
-            Settings._app_root_dir(),
-            "config/services/",
-            "event-handlers.xml"
-        )
+        return list(filter(lambda context: '.' not in context, find_packages(where=contexts_dir)))
 
-    @staticmethod
-    def secret_key():
-        return os.environ.get("SECRET_KEY")
+    def services_files(self):
+        services_dir = os.path.join(self._app_root_dir(), 'config/services/')
 
-    @staticmethod
-    def mapping_class_pattern():
+        return glob.glob(f'{services_dir}**/*-services.xml')
+
+    def event_handlers_file(self):
+        return os.path.join(self._app_root_dir(), 'config/services/', 'event-handlers.xml')
+
+    def public_key(self):
+        identity_access_config = self._config.get('identity_access').get(self._environment)
+
+        with open(identity_access_config.get('public_key_file')) as fp:
+            return fp.read()
+
+    def token_issuer(self):
+        identity_access_config = self._config.get('identity_access').get(self._environment)
+
+        return identity_access_config.get('token_issuer')
+
+
+    def mapping_class_pattern(self):
         return "infrastructure.persistence.sqlalchemy.mapping.{}.{}Orm"
 
-    @staticmethod
-    def api_path():
-        api_version = os.environ.get("API_VERSION", "v1")
+    def api_path(self):
+        return "/{}".format(self.api_version())
 
-        return "/{}".format(api_version)
+
+settings = Settings(os.environ.get('FLASK_ENV'))

@@ -1,54 +1,52 @@
-from flask import make_response, request, jsonify, current_app, Blueprint
+from flask import make_response, request
+from flask_restx import Namespace
 from http import HTTPStatus
 
-from shared_context.infrastructure.api.flask import error_response
+from shared.infrastructure.controller.flask.api import BaseController
 
-from shared.infrastructure.security.authentication import authentication_required, AuthenticationError
-from shared.infrastructure.application.settings import Settings
-from shared.application.errors import ErrorCodes, InvalidRequestParamsException
-from launcher.tenant.domain.errors import TenantNotFoundException
-from launcher.pipeline.application.launcher import LaunchPipeline, LaunchPipelineCommand
+from shared.infrastructure.security import AuthorizationError, ExpiredTokenException
+from shared.infrastructure.application.settings import settings
+from shared.application.errors import InvalidRequestParamsException
+from launcher.pipeline.application.launch_pipeline import LaunchPipeline, LaunchPipelineCommand
 
-pipeline_api = Blueprint("pipeline_api", __name__)
+pipeline_api = Namespace(
+    'pipeline',
+    description='ETL pipeline launcher'
+)
 
 
-@pipeline_api.route("", methods=["POST"])
-@authentication_required
-def launch_pipeline(tenant_id: str):
-    params = request.get_json()
+@pipeline_api.errorhandler(AuthorizationError)
+@pipeline_api.errorhandler(ExpiredTokenException)
+def handle_authorization_error(error):
+    return BaseController.api_error(error, HTTPStatus.UNAUTHORIZED)
 
-    command = LaunchPipelineCommand(
-        tenant_id,
-        params.get("sitemapUrl"),
-        params.get("customRequestHeaders"),
-        params.get("selectorMapping"),
-        params.get("excludedSelectors"),
-        params.get("description"),
-        params.get("customFields")
-    )
 
-    launcher_service: LaunchPipeline = current_app.container.get(
-        "launcher.launcher.pipeline.application.launcher.launch_pipeline"
-    )
+@pipeline_api.errorhandler(InvalidRequestParamsException)
+def handle_value_error(error):
+    return BaseController.api_error(error, HTTPStatus.BAD_REQUEST)
 
-    try:
-        pipeline_id = launcher_service.handle(command)
-    except InvalidRequestParamsException as e:
-        return error_response(e.code, e.message, status=HTTPStatus.BAD_REQUEST)
-    except TenantNotFoundException as e:
-        return error_response(
-            ErrorCodes.TENANT_NOT_FOUND,
-            "{}. {}".format(str(ErrorCodes.TENANT_NOT_FOUND), str(e)),
-            status=HTTPStatus.FORBIDDEN
-        )
-    except AuthenticationError as e:
-        return error_response(
-            ErrorCodes.AUTHENTICATION_FAILED,
-            "{}. {}".format(str(ErrorCodes.AUTHENTICATION_FAILED), str(e)),
-            status=HTTPStatus.UNAUTHORIZED
+
+@pipeline_api.route('')
+class PipelineController(BaseController):
+    def post(self):
+        params = request.get_json()
+
+        command = LaunchPipelineCommand(
+            params.get("sitemapUrl"),
+            params.get("customRequestHeaders"),
+            params.get("selectorMapping"),
+            params.get("excludedSelectors"),
+            params.get("description"),
+            params.get("customFields")
         )
 
-    response = make_response("", 202)
-    response.headers["Location"] = "{}/corpora/{}".format(Settings.api_url(), pipeline_id)
+        launcher_service: LaunchPipeline = self.service(
+            'launcher.pipeline.application.launch_pipeline.launch_pipeline'
+        )
 
-    return response
+        pipeline_id = launcher_service.execute(command)
+
+        response = make_response("", HTTPStatus.ACCEPTED)
+        response.headers["Location"] = "{}/corpora/{}".format(settings.api_url(), pipeline_id)
+
+        return response

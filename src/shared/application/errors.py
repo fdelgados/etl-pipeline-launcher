@@ -25,12 +25,12 @@ class ErrorCodes(IntEnum):
 
         return obj
 
-    MISSING_REQUEST_PARAMETER = 1001, "Missing request parameter"
-    INVALID_REQUEST_PARAMETER = 1002, "Invalid request parameter"
+    MISSING_REQUEST_PARAMETER = 1001, 'Missing request parameter'
+    INVALID_REQUEST_PARAMETER = 1002, 'Invalid request parameter'
 
-    AUTHENTICATION_FAILED = 2001, "Authentication failed"
-    TENANT_NOT_FOUND = 2002, "Tenant not found"
-    TENANT_ACCOUNT_DEACTIVATE = 2003, "Tenant account deactivated"
+    AUTHORIZATION_FAILED = 2001, 'Authorization failed'
+    ACCESS_TOKEN_EXPIRED = 2002, 'Access token has expired. You can use the refresh token to obtain a new one'
+    ACCESS_TOKEN_NOT_PROVIDED = 2003, 'Access token not provided'
 
     def __str__(self):
         return self._message

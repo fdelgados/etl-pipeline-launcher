@@ -25,26 +25,18 @@ CREATE INDEX `event_store_event_name_index`
 CREATE INDEX `event_store_aggregate_id_index`
     ON event_store (`aggregate_id`);
 
-DROP TABLE IF EXISTS `tenants`;
-CREATE TABLE `tenants`
-(
-    `id` BINARY(16) NOT NULL,
-    `company_name` VARCHAR(100) NOT NULL,
-    `active` tinyint(1) DEFAULT 0 NOT NULL,
-    PRIMARY KEY `pk_tenants` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 DROP TABLE IF EXISTS `pipelines`;
 CREATE TABLE `pipelines`
 (
     `id` BINARY(16) NOT NULL,
-    `tenant_id` BINARY(16) NOT NULL,
+    `tenant_id` CHAR(36) NOT NULL,
+    `launched_by` VARCHAR(30) NOT NULL,
     `completed` tinyint(1) DEFAULT 0 NOT NULL,
     PRIMARY KEY `pk_pipelines` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE INDEX `pipelines_tenant_id_index`
-    ON pipelines (`tenant_id`);
+CREATE INDEX `pipelines_launcher_index`
+    ON pipelines (`tenant_id`, `launched_by`);
 
 
 DELIMITER //

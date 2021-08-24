@@ -8,8 +8,6 @@ services:
     environment:
       - LAUNCHER_DB_USER=launcher
       - LAUNCHER_DB_PASSWORD=wTUbtEmk2S6R
-      - IDENTITYACCESS_DB_USER=master
-      - IDENTITYACCESS_DB_PASSWORD=hY54t68WGWpd
       - API_HOST=localhost
       - FLASK_DEBUG=1
       - FLASK_ENV=development
@@ -17,5 +15,7 @@ services:
       - ./src:/src
       - ./tests:/tests
       - ./config:/config
+      - ./export:/export
+      - ./log:/log
     ports:
       - "5000:5000"
