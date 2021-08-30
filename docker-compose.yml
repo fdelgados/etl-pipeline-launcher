@@ -6,19 +6,18 @@ services:
       context: ./docker/mysql
       dockerfile: Dockerfile
     container_name: etl-pipeline-launcher-mysql
-    image: mysql:latest
+    image: mysql-server:latest
     networks:
       etl_pipeline_launcher:
         ipv4_address: 10.5.0.3
     volumes:
       - ./.mysql-data:/var/lib/mysql/
     ports:
-      - "3360:3306"
+      - "33060:3306"
     environment:
       - MYSQL_ROOT_HOST=%
       - MYSQL_ROOT_PASSWORD=HyMn4q6UR6wa
     command: --default-authentication-plugin=mysql_native_password
-    restart: always
 
   #  redis_pubsub:
   #    build:
@@ -46,7 +45,7 @@ services:
   application:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./docker/application/Dockerfile
     depends_on:
       - mysql
       - rabbitmq
