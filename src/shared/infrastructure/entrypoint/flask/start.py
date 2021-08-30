@@ -4,8 +4,8 @@ from flask_restx import Api
 from pydic import create_container
 from launcher.pipeline.infrastructure.controller.flask.api.pipeline import pipeline_api
 
-from shared.infrastructure.controller.flask.api.launcher import launcher_api
-from shared.infrastructure.application.settings import settings
+from launcher.shared.infrastructure.controller.flask.api import launcher_api
+from shared import settings
 
 
 def _generate_db_maps():
@@ -34,8 +34,7 @@ app.container = create_container(
     settings.services_files(),
     settings.event_handlers_file()
 )
-
-app.config['ERROR_INCLUDE_MESSAGE'] = settings.include_default_error_message()
+app.config.from_mapping(settings.flask_config())
 
 api = Api(
     app,

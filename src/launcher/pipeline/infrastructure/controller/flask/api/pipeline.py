@@ -5,7 +5,7 @@ from http import HTTPStatus
 from shared.infrastructure.controller.flask.api import BaseController
 
 from shared.infrastructure.security import AuthorizationError, ExpiredTokenException
-from shared.infrastructure.application.settings import settings
+from shared import settings
 from shared.application.errors import InvalidRequestParamsException
 from launcher.pipeline.application.launch_pipeline import LaunchPipeline, LaunchPipelineCommand
 

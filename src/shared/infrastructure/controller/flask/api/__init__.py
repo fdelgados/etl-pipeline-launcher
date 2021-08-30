@@ -1,7 +1,7 @@
 from flask_restx import Resource
 from flask import current_app
 from shared.application.errors import ApiBaseError
-from shared.infrastructure.application.settings import settings
+from shared import settings
 from http import HTTPStatus
 
 

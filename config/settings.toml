@@ -38,3 +38,6 @@ port = 5630
 http_port = 8090
 
 [mongodb]
+
+[flask]
+error_include_message = false

@@ -2,7 +2,7 @@ from functools import wraps
 from flask import request
 import credential_shield as cs
 
-from shared.infrastructure.application.settings import settings
+from shared import settings
 from shared.application.errors import ErrorCodes, ApiBaseError
 from shared.domain.user import User
 

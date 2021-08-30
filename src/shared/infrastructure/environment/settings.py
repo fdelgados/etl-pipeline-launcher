@@ -32,6 +32,9 @@ class Settings:
         return self._environment == 'development'
 
     def flask_config(self) -> Dict:
+        if not self._config.get('flask'):
+            return {}
+
         return {key.upper(): value for (key, value) in self._config.get('flask').items()}
 
     def _get(self, section: str, entry: str, default: Optional[str] = None) -> Any:
@@ -104,14 +107,20 @@ class Settings:
     def token_issuer(self) -> str:
         return self._get('identity_access', 'token_issuer')
 
-    def include_default_error_message(self) -> bool:
-        return self._get('api', 'include_default_error_message')
-
     def mapping_class_pattern(self) -> str:
         return '{}.infrastructure.persistence.sqlalchemy.mapping.{}Mapping'
 
     def api_path(self):
         return "/{}".format(self.api_version())
+
+    def logs_dir(self):
+        return self._get('application', 'logs_dir')
+
+    def templates_dir(self):
+        return self._get('application', 'templates_dir')
+
+    def assets_dir(self):
+        return self._get('application', 'assets_dir')
 
 
 settings = Settings(os.environ.get('FLASK_ENV'))

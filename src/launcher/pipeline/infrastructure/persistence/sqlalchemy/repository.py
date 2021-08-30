@@ -1,7 +1,7 @@
 from shared_context.infrastructure.persistence.sqlalchemy import Repository
 from launcher.pipeline.domain.model.repository import PipelineRepository
 from launcher.pipeline.domain.model.aggregate import Pipeline
-from shared.infrastructure.application.settings import settings
+from shared import settings
 
 
 class SqlAlchemyPipelineRepository(PipelineRepository, Repository):
