@@ -1,4 +1,4 @@
-from launcher.pipeline.domain.events.pipeline_launched import PipelineLaunched
+from launcher.pipeline.domain.event import PipelineLaunched
 
 
 class NotifyPipelineLaunchRequest:

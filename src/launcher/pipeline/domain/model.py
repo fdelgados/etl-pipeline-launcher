@@ -1,5 +1,8 @@
-from shared_context.domain.model import AggregateRoot
-from shared_context.domain.model import Uuid
+from __future__ import annotations
+
+import abc
+
+from shared_context.domain.model import AggregateRoot, Repository, Uuid
 
 
 class PipelineId(Uuid):
@@ -18,3 +21,9 @@ class Pipeline(AggregateRoot):
 
     def __repr__(self):
         return 'Pipeline <{}>'.format(self.pipeline_id.value)
+
+
+class PipelineRepository(Repository, metaclass=abc.ABCMeta):
+    @staticmethod
+    def generate_identifier():
+        return PipelineId()

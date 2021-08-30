@@ -9,7 +9,7 @@ from sqlalchemy.orm import mapper
 
 from shared_context.infrastructure.persistence.sqlalchemy import Orm
 
-from launcher.pipeline.domain.model.aggregate import Pipeline
+from launcher.pipeline.domain.model import Pipeline
 from launcher.pipeline.infrastructure.persistence.sqlalchemy.type import PipelineIdType
 
 

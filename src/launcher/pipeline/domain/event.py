@@ -1,9 +1,6 @@
-from __future__ import annotations
-
-from typing import Dict, List
-
+from typing import List, Dict
 from shared_context.domain.events import DomainEvent
-from launcher.pipeline.domain.model.aggregate import PipelineId
+from launcher.pipeline.domain.model import PipelineId
 
 
 class PipelineLaunched(DomainEvent):

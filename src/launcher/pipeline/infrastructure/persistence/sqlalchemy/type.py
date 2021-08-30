@@ -2,7 +2,7 @@ import uuid
 
 import sqlalchemy.types as types
 
-from launcher.pipeline.domain.model.aggregate import PipelineId
+from launcher.pipeline.domain.model import PipelineId
 
 
 class PipelineIdType(types.TypeDecorator):

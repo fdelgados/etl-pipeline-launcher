@@ -1,4 +1,5 @@
 import os
+import re
 import toml
 import glob
 import collections
@@ -107,8 +108,24 @@ class Settings:
     def token_issuer(self) -> str:
         return self._get('identity_access', 'token_issuer')
 
-    def mapping_class_pattern(self) -> str:
-        return '{}.infrastructure.persistence.sqlalchemy.mapping.{}Mapping'
+    def db_mapping_classes(self):
+        src_dir = os.path.join(self._app_root_dir(), 'src')
+
+        context_mapping_files = {}
+        mapping_modules = []
+        for context in self.contexts():
+            mapping_files = glob.glob(f'{src_dir}/{context}/infrastructure/persistence/sqlalchemy/mapping.py')
+            mapping_files.extend(glob.glob(f'{src_dir}/{context}/**/infrastructure/persistence/sqlalchemy/mapping.py'))
+            context_mapping_files[context] = mapping_files
+
+        for context, files in context_mapping_files.items():
+            for file in files:
+                module_name = file.replace(f'{src_dir}/', '').replace('/', '.')
+                module_name = re.sub(r'\.py$', '', module_name)
+                module_name = '{}.{}Mapping'.format(module_name, context.capitalize())
+                mapping_modules.append(module_name)
+
+        return mapping_modules
 
     def api_path(self):
         return "/{}".format(self.api_version())

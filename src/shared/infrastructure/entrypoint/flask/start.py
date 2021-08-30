@@ -9,11 +9,8 @@ from shared import settings
 
 
 def _generate_db_maps():
-    contexts = settings.contexts()
-    orm_file_pattern = settings.mapping_class_pattern()
-
-    for context in contexts:
-        module_name, class_name = orm_file_pattern.format(context, context.capitalize()).rsplit('.', 1)
+    for mapping_class in settings.db_mapping_classes():
+        module_name, class_name = mapping_class.rsplit('.', 1)
 
         try:
             spec = util.find_spec(module_name)

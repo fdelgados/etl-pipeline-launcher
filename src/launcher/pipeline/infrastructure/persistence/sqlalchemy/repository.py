@@ -1,6 +1,6 @@
 from shared_context.infrastructure.persistence.sqlalchemy import Repository
-from launcher.pipeline.domain.model.repository import PipelineRepository
-from launcher.pipeline.domain.model.aggregate import Pipeline
+from launcher.pipeline.domain.model import PipelineRepository
+from launcher.pipeline.domain.model import Pipeline
 from shared import settings
 
 

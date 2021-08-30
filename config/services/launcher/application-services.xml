@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 
 <services>
-    <service id="launcher.pipeline.application.launch_pipeline.launch_pipeline"
-             class="launcher.pipeline.application.launch_pipeline.LaunchPipeline">
-        <argument name="pipeline_repository" value="launcher.pipeline.domain.model.repository.pipeline_repository" type="service" />
+    <service id="launcher.pipeline.application.service.launch_pipeline.launch_pipeline"
+             class="launcher.pipeline.application.service.launch_pipeline.LaunchPipeline">
+        <argument name="pipeline_repository" value="launcher.pipeline.domain.model.pipeline_repository" type="service" />
     </service>
     <service id="launcher.pipeline.application.subscribers.notify_pipeline_launch_request"
              class="launcher.pipeline.application.subscribers.NotifyPipelineLaunchRequest" />

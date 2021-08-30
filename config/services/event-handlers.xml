@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 
 <events>
-    <event class="launcher.pipeline.domain.events.pipeline_launched.PipelineLaunched">
+    <event class="launcher.pipeline.domain.event.PipelineLaunched">
         <handler id="launcher.pipeline.application.subscribers.notify_pipeline_launch_request" />
     </event>
 </events>

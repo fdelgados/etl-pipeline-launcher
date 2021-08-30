@@ -6,9 +6,8 @@ from launcher.shared.application.errors import MissingRequestParamsException
 import shared.infrastructure.security as sec
 from shared.domain.user import User
 
-from launcher.pipeline.domain.model.aggregate import Pipeline, PipelineId
-from launcher.pipeline.domain.model.repository import PipelineRepository
-from launcher.pipeline.domain.events.pipeline_launched import PipelineLaunched
+from launcher.pipeline.domain.model import Pipeline, PipelineId, PipelineRepository
+from launcher.pipeline.domain.event import PipelineLaunched
 
 
 @dataclass(frozen=True)

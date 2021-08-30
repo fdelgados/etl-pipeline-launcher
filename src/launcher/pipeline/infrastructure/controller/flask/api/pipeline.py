@@ -7,7 +7,7 @@ from shared.infrastructure.controller.flask.api import BaseController
 from shared.infrastructure.security import AuthorizationError, ExpiredTokenException
 from shared import settings
 from launcher.shared.application.errors import InvalidRequestParamsException
-from launcher.pipeline.application.launch_pipeline import LaunchPipeline, LaunchPipelineCommand
+from launcher.pipeline.application.service.launch_pipeline import LaunchPipeline, LaunchPipelineCommand
 
 pipeline_api = Namespace(
     'pipeline',
@@ -41,12 +41,12 @@ class PipelineController(BaseController):
         )
 
         launcher_service: LaunchPipeline = self.service(
-            'launcher.pipeline.application.launch_pipeline.launch_pipeline'
+            'launcher.pipeline.application.service.launch_pipeline.launch_pipeline'
         )
 
         pipeline_id = launcher_service.execute(command)
 
         response = make_response("", HTTPStatus.ACCEPTED)
-        response.headers["Location"] = "{}/corpora/{}".format(settings.api_url(), pipeline_id)
+        response.headers["Location"] = "{}/pipelines/{}".format(settings.api_url(), pipeline_id)
 
         return response
