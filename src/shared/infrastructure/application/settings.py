@@ -69,12 +69,15 @@ class Settings:
         return "{}:{}{}".format(url, port, self.api_prefix())
 
     def database_dsn(self, context: str) -> str:
-        database_config = self._config.get('database').get(context)
+        database_config = self._config.get('database')
+        host = database_config.get('host')
+
+        database_config = database_config.get(context)
 
         return "mysql+pymysql://{}:{}@{}/{}?charset=utf8mb4".format(
             database_config.get('user'),
             database_config.get('password'),
-            database_config.get('host'),
+            host,
             database_config.get('name')
         )
 

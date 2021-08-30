@@ -3,26 +3,14 @@ id = "fc050f989329b47f861e5760c713c820"
 root_dir = "/"
 logs_dir = "/log"
 contexts_dir = "/src"
-baseurl = "http://localhost"
-[application.production]
-baseurl = "http://localhost"
 
 [identity_access]
 token_issuer = "http://localhost"
 public_key_file = "/export/certs/identity_access.pem"
-[identity_access.production]
 
 [database]
-host = "etl-pipeline-launcher-mysql"
-name = "launcher"
-user = "launcher"
-password = "wTUbtEmk2S6R"
-[database.production]
-[database.production.launcher]
-host = "etl-pipeline-launcher-mysql"
-name = "launcher"
-user = "launcher"
-password = "wTUbtEmk2S6R"
+[database.launcher]
+  name = "launcher"
 
 [api]
 title = "ETL Pipeline Launcher API"
