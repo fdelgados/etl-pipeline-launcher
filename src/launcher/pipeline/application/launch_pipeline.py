@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from typing import List
 
 from shared.infrastructure.event import DomainEventPublisher
-from shared.application.errors import InvalidRequestParamsException, ErrorCodes
+from launcher.shared.application.errors import MissingRequestParamsException
 import shared.infrastructure.security as sec
 from shared.domain.user import User
 
@@ -57,7 +57,6 @@ class CommandValidator:
     @staticmethod
     def validate(command: LaunchPipelineCommand):
         if not command.sitemap_url:
-            raise InvalidRequestParamsException(
-                ErrorCodes.MISSING_REQUEST_PARAMETER,
+            raise MissingRequestParamsException(
                 "Parameter 'sitemapUrl' must be provided."
             )

@@ -12,10 +12,6 @@ class ApiBaseError(RuntimeError):
             self.message = "{}. {}".format(self.message, details)
 
 
-class InvalidRequestParamsException(ApiBaseError):
-    pass
-
-
 class ErrorCodes(IntEnum):
     def __new__(cls, value: int, message: str):
         obj = int.__new__(cls, value)
