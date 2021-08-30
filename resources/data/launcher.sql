@@ -8,6 +8,31 @@ FLUSH PRIVILEGES;
 
 USE `launcher`;
 
+-- FUNCTIONS
+DELIMITER //
+
+CREATE FUNCTION UUID_TO_BIN(uuid CHAR(36))
+    RETURNS BINARY(16) DETERMINISTIC
+BEGIN
+    RETURN UNHEX(CONCAT(REPLACE(uuid, '-', '')));
+END; //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE FUNCTION BIN_TO_UUID(bin BINARY(16))
+    RETURNS CHAR(36) DETERMINISTIC
+BEGIN
+    DECLARE hex CHAR(32);
+    SET hex = HEX(bin);
+    RETURN LOWER(CONCAT(LEFT(hex, 8), '-', MID(hex, 9, 4), '-', MID(hex, 13, 4), '-', MID(hex, 17, 4), '-', RIGHT(hex, 12)));
+END; //
+
+DELIMITER ;
+
+-- TABLES
+
 DROP TABLE IF EXISTS `event_store`;
 CREATE TABLE `event_store`
 (
@@ -38,11 +63,4 @@ CREATE TABLE `pipelines`
 CREATE INDEX `pipelines_launcher_index`
     ON pipelines (`tenant_id`, `launched_by`);
 
-
-DELIMITER //
-CREATE DEFINER=`launcher`@`localhost` FUNCTION `ordered_uuid`(uuid BINARY(36))
-    RETURNS binary(16) DETERMINISTIC
-    RETURN UNHEX(CONCAT(SUBSTR(uuid, 15, 4),SUBSTR(uuid, 10, 4),SUBSTR(uuid, 1, 8),SUBSTR(uuid, 20, 4),SUBSTR(uuid, 25)));
-//
-DELIMITER ;
 
