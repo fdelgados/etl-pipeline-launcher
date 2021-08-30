@@ -13,7 +13,7 @@ from launcher.pipeline.domain.model.aggregate import Pipeline
 from launcher.pipeline.infrastructure.persistence.sqlalchemy.type import PipelineIdType
 
 
-class LauncherOrm(Orm):
+class LauncherMapping(Orm):
     def start_mappers(self) -> None:
         metadata = MetaData()
 

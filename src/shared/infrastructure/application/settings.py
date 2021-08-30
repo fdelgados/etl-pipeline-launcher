@@ -1,59 +1,75 @@
 import os
 import toml
 import glob
+import collections
+
+from typing import Dict, Any, Optional, List
 from setuptools import find_packages
 
 
 class Settings:
     def __init__(self, environment: str = 'development'):
-        self._config = toml.load('/config/settings.toml')
         self._environment = environment
+        self._config = toml.load('/config/settings.toml')
+        environment_config = toml.load(f'/config/settings.{self._environment}.toml')
 
-    def _get(self, section: str, entry: str, default=None):
-        config = self._config.get(section)
+        self._dict_merge(self._config, environment_config)
 
-        if self._environment == 'development':
-            return config.get(entry, default)
+    def _dict_merge(self, dct, merge_dct) -> None:
+        for k, v in merge_dct.items():
+            if k in dct and isinstance(dct[k], dict) and isinstance(merge_dct[k], collections.Mapping):
+                self._dict_merge(dct[k], merge_dct[k])
+            else:
+                dct[k] = merge_dct[k]
 
-        return config.get(self._environment).get(entry, default)
+    def environment(self) -> str:
+        return self._environment
 
-    def application_id(self):
+    def is_production(self) -> bool:
+        return self._environment == 'production'
+
+    def is_development(self) -> bool:
+        return self._environment == 'development'
+
+    def flask_config(self) -> Dict:
+        return {key.upper(): value for (key, value) in self._config.get('flask').items()}
+
+    def _get(self, section: str, entry: str, default: Optional[str] = None) -> Any:
+        return self._config.get(section).get(entry, default)
+
+    def application_id(self) -> str:
         return self._get('application', 'id')
 
-    def api_version(self):
+    def api_version(self) -> int:
         return self._get('api', 'version')
 
-    def api_title(self):
+    def api_title(self) -> str:
         return self._get('api', 'title')
 
-    def api_doc_path(self):
+    def api_doc_path(self) -> str:
         return self._get('api', 'doc_path', '/doc')
 
-    def api_version_str(self):
+    def api_version_str(self) -> str:
         return self._get('api', 'version_str').format(self.api_version())
 
-    def api_prefix(self, path: str = None):
+    def api_prefix(self, path: Optional[str] = None) -> str:
         api_prefix = self._get('api', 'prefix').format(self.api_version())
         if not path:
             return api_prefix
 
         return f'{api_prefix}/{path}'
 
-    def base_url(self):
+    def base_url(self) -> str:
         return self._get('application', 'baseurl')
 
-    def api_url(self):
+    def api_url(self) -> str:
         url = self.base_url()
         port = self._get('api', 'port')
 
         return "{}:{}{}".format(url, port, self.api_prefix())
 
-    def database_dsn(self, context: str):
-        database_config = self._config.get('database')
-        if self._environment != 'development':
-            database_config = database_config.get(self._environment)
-
-        database_config = database_config.get(context)
+    def database_dsn(self, context: str) -> str:
+        database_config = self._config.get('database').get(context)
 
         return "mysql+pymysql://{}:{}@{}/{}?charset=utf8mb4".format(
             database_config.get('user'),
@@ -62,32 +78,34 @@ class Settings:
             database_config.get('name')
         )
 
-    def _app_root_dir(self):
+    def _app_root_dir(self) -> str:
         return self._get('application', 'root_dir')
 
-    def contexts(self):
+    def contexts(self) -> List:
         contexts_dir = self._get('application', 'contexts_dir')
 
         return list(filter(lambda context: '.' not in context, find_packages(where=contexts_dir)))
 
-    def services_files(self):
+    def services_files(self) -> List:
         services_dir = os.path.join(self._app_root_dir(), 'config/services/')
 
         return glob.glob(f'{services_dir}**/*-services.xml')
 
-    def event_handlers_file(self):
+    def event_handlers_file(self) -> str:
         return os.path.join(self._app_root_dir(), 'config/services/', 'event-handlers.xml')
 
-    def public_key(self):
+    def public_key(self) -> str:
         with open(self._get('identity_access', 'public_key_file')) as fp:
             return fp.read()
 
-    def token_issuer(self):
+    def token_issuer(self) -> str:
         return self._get('identity_access', 'token_issuer')
 
+    def include_default_error_message(self) -> bool:
+        return self._get('api', 'include_default_error_message')
 
-    def mapping_class_pattern(self):
-        return "infrastructure.persistence.sqlalchemy.mapping.{}.{}Orm"
+    def mapping_class_pattern(self) -> str:
+        return '{}.infrastructure.persistence.sqlalchemy.mapping.{}Mapping'
 
     def api_path(self):
         return "/{}".format(self.api_version())
