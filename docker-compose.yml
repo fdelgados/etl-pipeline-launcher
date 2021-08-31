@@ -65,8 +65,11 @@ services:
 
   rabbitmq:
     container_name: etl-pipeline-launcher-rabbitmq
-    image: 'rabbitmq:3.7-management'
+    image: rabbitmq:3-management-alpine
     restart: unless-stopped
+    environment:
+      - RABBITMQ_USER=admin
+      - RABBITMQ_PASSWORD=yvPZ6j9n4ZyhXJV2
     networks:
       etl_pipeline_launcher:
         ipv4_address: 10.5.0.5

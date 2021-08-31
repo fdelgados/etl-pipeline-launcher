@@ -1,13 +1,12 @@
 from typing import List, Dict
 from shared_context.domain.events import DomainEvent
-from launcher.pipeline.domain.model import PipelineId
 
 
 class PipelineLaunched(DomainEvent):
     def __init__(
         self,
         tenant_id: str,
-        pipeline_id: PipelineId,
+        pipeline_id: str,
         custom_request_headers: Dict,
         selector_mapping: Dict,
         excluded_selectors: List,

@@ -31,11 +31,13 @@ host = "etl-pipeline-launcher-redis"
 port = 6379
 
 [rabbitmq]
+[rabbitmq.connection]
 host = "etl-pipeline-launcher-rabbitmq"
-user = "admin"
-password = "yvPZ6j9n4ZyhXJV2"
-port = 5630
-http_port = 8090
+user = "guest"
+password = "guest"
+port = 5672
+[[rabbitmq.exchanges.pipeline_launches]]
+queue = "etl_pipeline_launcher.etl.start_process_on_pipeline_launched"
 
 [mongodb]
 

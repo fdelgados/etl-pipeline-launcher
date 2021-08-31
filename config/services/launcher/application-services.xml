@@ -5,6 +5,9 @@
              class="launcher.pipeline.application.service.launch_pipeline.LaunchPipeline">
         <argument name="pipeline_repository" value="launcher.pipeline.domain.model.pipeline_repository" type="service" />
     </service>
+
     <service id="launcher.pipeline.application.subscribers.notify_pipeline_launch_request"
-             class="launcher.pipeline.application.subscribers.NotifyPipelineLaunchRequest" />
+             class="launcher.pipeline.application.subscribers.NotifyPipelineLaunchRequest">
+        <argument name="message_publisher" value="shared.domain.service.messaging.publisher.publisher" type="service"/>
+    </service>
 </services>

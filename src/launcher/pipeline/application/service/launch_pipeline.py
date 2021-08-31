@@ -38,7 +38,7 @@ class LaunchPipeline:
 
         pipeline_launched = PipelineLaunched(
             pipeline.tenant_id,
-            pipeline.pipeline_id,
+            str(pipeline.pipeline_id),
             command.custom_request_headers,
             command.selector_mapping,
             command.excluded_selectors,

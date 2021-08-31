@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+
+<services>
+    <service id="shared.infrastructure.messaging.rabbitmq.publisher.rabbit_mq_publisher"
+             class="shared.infrastructure.messaging.rabbitmq.publisher.RabbitMqPublisher">
+        <argument name="logger" value="shared.domain.service.logging.logger.logger" type="service"/>
+    </service>
+
+    <service id="shared.infrastructure.logging.file.logger.file_logger"
+             class="shared.infrastructure.logging.file.logger.FileLogger" />
+</services>

@@ -85,6 +85,12 @@ class Settings:
             database_config.get('name')
         )
 
+    def rabbit_connection_settings(self):
+        return self._config.get('rabbitmq').get('connection')
+
+    def rabbit_exchanges(self):
+        return self._config.get('rabbitmq').get('exchanges')
+
     def _app_root_dir(self) -> str:
         return self._get('application', 'root_dir')
 

@@ -14,6 +14,7 @@ RUN mkdir -p /src
 RUN mkdir -p /export/certs
 RUN mkdir -p /log
 COPY src/ /src/
+COPY setup.py /setup.py
 RUN pip install -e /src
 
 COPY tests/ /tests/

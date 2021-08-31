@@ -1,8 +1,10 @@
 from launcher.pipeline.domain.event import PipelineLaunched
+from shared.domain.service.messaging.publisher import Publisher
 
 
 class NotifyPipelineLaunchRequest:
+    def __init__(self, message_publisher: Publisher):
+        self._message_publisher = message_publisher
+
     def handle(self, event: PipelineLaunched):
-        f = open("/demofile3.txt", "w")
-        f.write("{} {} {}".format(event.tenant_id, event.pipeline_id, event.occurred_on))
-        f.close()
+        self._message_publisher.publish(str(event), 'pipeline_launches')

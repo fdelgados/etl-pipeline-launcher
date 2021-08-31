@@ -1,4 +1,3 @@
-from importlib import util
 from flask import Flask
 from flask_restx import Api
 from pydic import create_container
@@ -7,24 +6,11 @@ from launcher.pipeline.infrastructure.controller.flask.api.pipeline import pipel
 from launcher.shared.infrastructure.controller.flask.api import launcher_api
 from shared import settings
 
+from bootstrap import Bootstrap
 
-def _generate_db_maps():
-    for mapping_class in settings.db_mapping_classes():
-        module_name, class_name = mapping_class.rsplit('.', 1)
+bootstrap = Bootstrap()
 
-        try:
-            spec = util.find_spec(module_name)
-            module = util.module_from_spec(spec)
-            spec.loader.exec_module(module)
-
-            class_ = getattr(module, class_name)
-            mapper = class_()
-            mapper.start_mappers()
-        except (ModuleNotFoundError, AttributeError):
-            continue
-
-
-_generate_db_maps()
+bootstrap.logger.info('Bootstrapping Flask application')
 
 app = Flask(__name__)
 app.container = create_container(
@@ -33,6 +19,7 @@ app.container = create_container(
 )
 app.config.from_mapping(settings.flask_config())
 
+bootstrap.logger.info('Bootstrapping API')
 api = Api(
     app,
     doc=settings.api_doc_path(),
