@@ -1,5 +1,6 @@
 import logging
-import inspect
+import traceback
+import sys
 
 from typing import Optional
 
@@ -31,11 +32,6 @@ class FileLogger(Logger):
     def _logger(self):
         return logging.getLogger(self._name)
 
-    # def _configure_logger(self, logfile: str = 'application'):
-    #     stack = inspect.stack()
-    #     frame = stack[2]
-    #     module_name = inspect.getmodulename(frame.filename)
-
     def debug(self, message: str, *args) -> None:
         self._logger.debug(message, *args)
 
@@ -43,10 +39,22 @@ class FileLogger(Logger):
         self._logger.info(message, *args)
 
     def warning(self, message: str, *args) -> None:
-        self._logger.warning(message, *args)
+        self._logger.warning(self._format_message(message), *args)
 
     def error(self, message: str, *args) -> None:
-        self._logger.error(message, *args)
+        self._logger.error(self._format_message(message), *args)
 
     def critical(self, message: str, *args) -> None:
-        self._logger.critical(message, *args)
+        self._logger.critical(self._format_message(message), *args)
+
+    def _format_message(self, message: str):
+        exc_type, exc_value, exc_tb = sys.exc_info()
+
+        if not exc_type and not exc_value and not exc_tb:
+            return message
+
+        tb = traceback.TracebackException(exc_type, exc_value, exc_tb)
+        stack = tb.stack[0]
+
+        return f'{message}. File {stack.filename}, line {stack.lineno} in <{stack.name}>'
+

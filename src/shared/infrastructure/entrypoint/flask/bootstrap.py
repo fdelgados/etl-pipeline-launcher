@@ -1,4 +1,6 @@
 from importlib import util
+from pika import exceptions
+from time import sleep
 
 from shared import settings
 from shared.infrastructure.logging.file.logger import FileLogger
@@ -27,18 +29,23 @@ class Bootstrap:
                 class_ = getattr(module, class_name)
                 mapper = class_()
                 mapper.start_mappers()
+
+                self.logger.info('Database tables mappings generated')
             except (ModuleNotFoundError, AttributeError):
                 continue
 
-    def _setup_messages_queues(self) -> None:
-        self.logger.info('Setup message broker')
+    def _setup_messages_queues(self, tries: int = 1) -> None:
+        self.logger.info(f'Setting up message broker ({tries})')
+
+        if tries > 1:
+            sleep(5)
 
         connector = RabbitMqConnector(self.logger)
-        connection = connector.connect()
-
-        exchanges = settings.rabbit_exchanges()
 
         try:
+            connection = connector.connect()
+
+            exchanges = settings.rabbit_exchanges()
             channel = connection.channel()
 
             for exchange_name, queues in exchanges.items():
@@ -47,8 +54,19 @@ class Bootstrap:
                     queue_name = list(queue.values())[0]
                     channel.queue_declare(queue_name, durable=True)
                     channel.queue_bind(queue_name, exchange_name)
+
+            self.logger.info('Message broker has been setup')
+        except exceptions.AMQPError as error:
+            if tries > 5:
+                self.logger.critical(repr(error))
+
+                raise
+
+            self.logger.warning(f'AMQPConnectionError: connection error try {tries}')
+            tries += 1
+            self._setup_messages_queues(tries)
         except Exception as error:
-            self.logger.error(str(error))
+            self.logger.critical(str(error))
 
             raise
         finally:

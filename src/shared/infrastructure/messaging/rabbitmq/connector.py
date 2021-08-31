@@ -28,11 +28,14 @@ class RabbitMqConnector:
 
             return self._connection
         except exceptions.AMQPConnectionError as error:
-            self._logger.error(str(error))
+            self._logger.error(repr(error))
 
             raise
 
     def disconnect(self):
+        if not self._connection:
+            return
+
         try:
             self._connection.close()
         except exceptions.ConnectionWrongStateError as error:
