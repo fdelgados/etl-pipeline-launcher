@@ -11,5 +11,6 @@ services:
       - ./config:/config
       - ./export:/export
       - ./log:/log
+      - ./cli:/cli
     ports:
       - "5000:5000"

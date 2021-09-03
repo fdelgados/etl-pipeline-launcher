@@ -24,3 +24,6 @@ class PipelineLaunched(DomainEvent):
         self.sitemap_url = sitemap_url
         self.description = description
         self.custom_fields = custom_fields
+
+    def event_name(self) -> str:
+        return 'pipeline_launched'

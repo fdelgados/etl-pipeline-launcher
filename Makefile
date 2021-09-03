@@ -30,3 +30,9 @@ logs:
 
 black:
 	black -l 86 $$(find * -name '*.py')
+
+run-workers:
+	docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d workers
+
+reload-workers:
+	docker-compose restart workers

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 
 <services>
-    <service id="shared.domain.service.messaging.publisher.publisher"
-             alias="shared.infrastructure.messaging.rabbitmq.publisher.rabbit_mq_publisher" />
+    <service id="shared.domain.service.messaging.publisher.event_publisher"
+             alias="shared.infrastructure.messaging.rabbitmq.publisher.rabbit_mq_event_publisher" />
 
     <service id="shared.domain.service.logging.logger.logger"
              alias="shared.infrastructure.logging.file.logger.file_logger"/>

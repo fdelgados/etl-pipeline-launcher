@@ -19,6 +19,8 @@ RUN pip install -e ./
 
 COPY tests/ /tests/
 COPY config/ /config/
+COPY cli/ /cli/
+CMD chmod +x /cli/run_workers.py
 
 WORKDIR /src
 

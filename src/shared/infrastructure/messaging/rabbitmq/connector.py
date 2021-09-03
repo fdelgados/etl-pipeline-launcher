@@ -1,5 +1,6 @@
 import pika
 from pika import exceptions
+from typing import Optional, Dict
 from shared import settings
 from shared.domain.service.logging.logger import Logger
 
@@ -9,8 +10,10 @@ class RabbitMqConnector:
         self._logger = logger
         self._connection = None
 
-    def connect(self) -> pika.BlockingConnection:
-        connection_settings = settings.rabbit_connection_settings()
+    def connect(self, connection_settings: Optional[Dict] = None) -> pika.BlockingConnection:
+        if not connection_settings:
+            connection_settings = settings.rabbit_connection_settings()
+
         credentials = pika.PlainCredentials(
             connection_settings.get('user'),
             connection_settings.get('password')
@@ -21,16 +24,16 @@ class RabbitMqConnector:
                 pika.ConnectionParameters(
                     host=connection_settings.get('host'),
                     port=connection_settings.get('port'),
-                    virtual_host='/',
+                    virtual_host=connection_settings.get('vhost', '/'),
                     credentials=credentials
                 )
             )
 
             return self._connection
-        except exceptions.AMQPConnectionError as error:
+        except Exception as error:
             self._logger.error(repr(error))
 
-            raise
+            raise Exception(repr(error))
 
     def disconnect(self):
         if not self._connection:

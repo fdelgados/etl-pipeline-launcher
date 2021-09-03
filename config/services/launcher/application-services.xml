@@ -8,6 +8,6 @@
 
     <service id="launcher.pipeline.application.subscribers.notify_pipeline_launch_request"
              class="launcher.pipeline.application.subscribers.NotifyPipelineLaunchRequest">
-        <argument name="message_publisher" value="shared.domain.service.messaging.publisher.publisher" type="service"/>
+        <argument name="event_publisher" value="shared.domain.service.messaging.publisher.event_publisher" type="service"/>
     </service>
 </services>

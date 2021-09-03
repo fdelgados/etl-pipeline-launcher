@@ -9,6 +9,7 @@ from shared import settings
 from bootstrap import Bootstrap
 
 bootstrap = Bootstrap()
+bootstrap.generate_db_maps().run_workers()
 
 bootstrap.logger.info('Bootstrapping Flask application')
 

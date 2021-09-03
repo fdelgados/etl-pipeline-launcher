@@ -65,6 +65,7 @@ services:
 
   rabbitmq:
     container_name: etl-pipeline-launcher-rabbitmq
+    hostname: rabbitmq-server
     image: rabbitmq:3-management-alpine
     restart: unless-stopped
     environment:
@@ -74,8 +75,8 @@ services:
       etl_pipeline_launcher:
         ipv4_address: 10.5.0.5
     ports:
-      - "5630:5672"
-      - "8090:15672"
+      - "5672:5672"
+      - "15672:15672"
 
   redis:
     container_name: etl-pipeline-launcher-redis

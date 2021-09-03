@@ -1,10 +1,10 @@
 from launcher.pipeline.domain.event import PipelineLaunched
-from shared.domain.service.messaging.publisher import Publisher
+from shared.domain.service.messaging.publisher import EventPublisher
 
 
 class NotifyPipelineLaunchRequest:
-    def __init__(self, message_publisher: Publisher):
-        self._message_publisher = message_publisher
+    def __init__(self, event_publisher: EventPublisher):
+        self._event_publisher = event_publisher
 
     def handle(self, event: PipelineLaunched):
-        self._message_publisher.publish(str(event), 'pipeline_launches')
+        self._event_publisher.publish(event, 'etl_pipeline.launcher.pipelines')

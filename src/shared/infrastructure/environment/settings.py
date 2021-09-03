@@ -16,6 +16,14 @@ class Settings:
 
         self._dict_merge(self._config, environment_config)
 
+        services_dir = os.path.join(self._app_root_dir(), 'config/services/')
+
+        self._subscribed_events = {}
+        subscribed_events_files = glob.glob(f'{services_dir}**/subscribed-events.toml')
+
+        for subscribed_events_file in subscribed_events_files:
+            self._dict_merge(self._subscribed_events, toml.load(subscribed_events_file))
+
     def _dict_merge(self, dct, merge_dct) -> None:
         for k, v in merge_dct.items():
             if k in dct and isinstance(dct[k], dict) and isinstance(merge_dct[k], collections.Mapping):
@@ -88,8 +96,30 @@ class Settings:
     def rabbit_connection_settings(self):
         return self._config.get('rabbitmq').get('connection')
 
-    def rabbit_exchanges(self):
-        return self._config.get('rabbitmq').get('exchanges')
+    def rabbit_publish_exchange(self):
+        exchanges = self._config.get('rabbitmq').get('exchanges')
+
+        if not exchanges:
+            return []
+
+        return exchanges.get('publish')
+
+    def rabbit_subscribe_exchanges(self):
+        exchanges = self._config.get('rabbitmq').get('exchanges')
+
+        if not exchanges:
+            return []
+
+        return exchanges.get('subscribe')
+
+    def subscribed_events(self):
+        return self._subscribed_events
+
+    def event_subscribed_commands(self, exchange: str, event: str):
+        if not self._subscribed_events:
+            return {}
+
+        return self._subscribed_events.get(exchange, {}).get(event, {})
 
     def _app_root_dir(self) -> str:
         return self._get('application', 'root_dir')
@@ -146,4 +176,4 @@ class Settings:
         return self._get('application', 'assets_dir')
 
 
-settings = Settings(os.environ.get('FLASK_ENV'))
+settings = Settings(os.environ.get('FLASK_ENV', 'development'))

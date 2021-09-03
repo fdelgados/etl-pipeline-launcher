@@ -1,21 +1,31 @@
+import re
+import pika
 from pika import exceptions
 
-from shared.domain.service.messaging.publisher import Publisher
+from shared import settings
+from shared.domain.service.messaging.publisher import EventPublisher
 from shared.domain.service.logging.logger import Logger
+from shared_context.domain.events import DomainEvent
 from .connector import RabbitMqConnector
 
 
-class RabbitMqPublisher(Publisher):
+class RabbitMqEventPublisher(EventPublisher):
     def __init__(self, logger: Logger):
         self._logger = logger
         self._connector = RabbitMqConnector(self._logger)
 
-    def publish(self, message: str, exchange: str = '') -> None:
+    def publish(self, event: DomainEvent, publisher: str) -> None:
         connection = self._connect()
 
         try:
             channel = connection.channel()
-            channel.basic_publish(exchange=exchange, routing_key='', body=message.encode())
+            channel.exchange_declare(exchange=publisher, exchange_type='direct', durable=True)
+            channel.basic_publish(
+                exchange=publisher,
+                routing_key=event.event_name(),
+                body=event.serialize().encode(),
+                properties=pika.BasicProperties(delivery_mode=2)
+            )
         except (exceptions.AMQPError, ValueError) as error:
             self._logger.error(str(error))
 

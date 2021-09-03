@@ -1,15 +1,8 @@
 import abc
+from shared_context.domain.events import DomainEvent
 
 
-class Publisher(metaclass=abc.ABCMeta):
+class EventPublisher(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def publish(self, message: str, exchange: str = '') -> None:
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    def _connect(self):
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    def _disconnect(self):
+    def publish(self, event: DomainEvent, publisher: str) -> None:
         raise NotImplementedError
