@@ -9,12 +9,20 @@ from setuptools import find_packages
 
 
 class Settings:
-    def __init__(self, environment: str = 'development'):
+    def __init__(self, environment: str = 'development', country: str = 'es'):
         self._environment = environment
-        self._config = toml.load('/config/settings.toml')
-        environment_config = toml.load(f'/config/settings.{self._environment}.toml')
+        self._country = country
 
-        self._dict_merge(self._config, environment_config)
+        self._config = toml.load('/config/common/settings.toml')
+        common_environment_config = toml.load(f'/config/common/settings.{self._environment}.toml')
+
+        self._dict_merge(self._config, common_environment_config)
+
+        country_config = toml.load(f'/config/{self._country}/settings.toml')
+        self._dict_merge(self._config, country_config)
+
+        country_environment_config = toml.load(f'/config/{self._country}/settings.{self._environment}.toml')
+        self._dict_merge(self._config, country_environment_config)
 
         services_dir = os.path.join(self._app_root_dir(), 'config/services/')
 
@@ -189,8 +197,11 @@ class Settings:
     def assets_dir(self):
         return self._get('application', 'assets_dir')
 
-    def time_zone(self, country: str = 'es'):
-        return self._get('application', 'timezones').get(country)
+    def time_zone(self):
+        return self._get('application', 'timezone')
 
 
-settings = Settings(os.environ.get('FLASK_ENV', 'development'))
+settings = Settings(
+    os.environ.get('FLASK_ENV', 'development'),
+    os.environ.get('COUNTRY', 'es')
+)
