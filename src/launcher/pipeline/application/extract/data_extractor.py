@@ -22,7 +22,7 @@ from launcher.pipeline.domain.service.scraping import (
 from shared.infrastructure.event import DomainEventPublisher
 from launcher.pipeline.domain.event.extraction_started import ExtractionStarted
 from launcher.pipeline.domain.event.extraction_completed import ExtractionCompleted
-from launcher.pipeline.domain.model.document import Page, PageRepository
+from launcher.pipeline.domain.model.page import Page, PageRepository
 
 
 @dataclass(frozen=True)

@@ -13,7 +13,7 @@ from sqlalchemy.orm import registry
 from shared_context.infrastructure.persistence.sqlalchemy import Orm
 
 from launcher.pipeline.domain.model.pipeline import Pipeline
-from launcher.pipeline.domain.model.document import Page
+from launcher.pipeline.domain.model.page import Page
 from launcher.pipeline.infrastructure.persistence.sqlalchemy.type import (
     PipelineIdType,
     UrlType,

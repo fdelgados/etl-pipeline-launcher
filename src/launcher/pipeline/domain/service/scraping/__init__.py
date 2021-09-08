@@ -2,7 +2,7 @@ import abc
 
 from typing import List, Dict
 
-from launcher.pipeline.domain.model.document import Page
+from launcher.pipeline.domain.model.page import Page
 from launcher.pipeline.domain.model.url import Url
 from launcher.pipeline.domain.model.pipeline import Pipeline
 

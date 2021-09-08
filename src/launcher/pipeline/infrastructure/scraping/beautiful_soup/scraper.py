@@ -18,7 +18,7 @@ from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 from json import loads, decoder
 
-from launcher.pipeline.domain.model.document import Page
+from launcher.pipeline.domain.model.page import Page
 from launcher.pipeline.domain.model.url import Url, InvalidUrlException
 from launcher.pipeline.domain.model.pipeline import Pipeline
 from launcher.pipeline.domain.service.scraping import (

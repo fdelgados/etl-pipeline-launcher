@@ -2,7 +2,7 @@ import json
 from sqlalchemy import text
 from shared import settings
 from shared_context.infrastructure.persistence.sqlalchemy import Repository
-from launcher.pipeline.domain.model.document import (
+from launcher.pipeline.domain.model.page import (
     PageRepository,
     Page
 )
