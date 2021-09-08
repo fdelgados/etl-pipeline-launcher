@@ -1,0 +1,2 @@
+[commands]
+"etl:start_etl" = "etl.infrastructure.command.start_etl.StartEtl"

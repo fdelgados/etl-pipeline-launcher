@@ -2,10 +2,9 @@
 
 import os.path
 import subprocess
-import shlex
 import threading
 from pika import exceptions
-from typing import Dict
+from typing import Dict, Any
 import json
 
 from shared.domain.service.logging.logger import Logger
@@ -13,17 +12,15 @@ from shared.infrastructure.messaging.rabbitmq.connector import RabbitMqConnector
 from shared import settings
 
 
-def _on_message(ch, method, _, body):
-    message = json.loads(body.decode('utf-8'))
+def _on_message(ch, method, _, message):
     commands = settings.event_subscribed_commands(method.exchange, method.routing_key)
 
     command = commands.get(method.consumer_tag)
     if not command:
         ch.basic_nack(delivery_tag=method.delivery_tag)
 
-    command_file = os.path.join('../src/', f'{command}.py')
     process = subprocess.Popen(
-        ['python', command_file],
+        _build_command(command, message),
         stdout=subprocess.PIPE,
         universal_newlines=True
     )
@@ -44,6 +41,36 @@ def _on_message(ch, method, _, body):
         ch.basic_nack(delivery_tag=method.delivery_tag, requeue=False)
     else:
         ch.basic_ack(delivery_tag=method.delivery_tag)
+
+
+def _build_command(command_name, message):
+    executable = os.path.join(os.path.dirname(__file__), 'console.py')
+
+    command = ['python', executable, command_name]
+    decoded_message = json.loads(message.decode('utf-8'))
+    metadata = decoded_message.get('metadata', {})
+    body = decoded_message.get('body', {})
+
+    def quote(val: Any):
+        chars = [' ']
+        if isinstance(val, list):
+            val = ','.join(val)
+
+        if any(char in val for char in chars):
+            return f'"{val}"'
+
+        return val
+
+    for argument, value in metadata.items():
+        command.append(f"--{argument.replace('_', '-')}={quote(value)}")
+
+    for argument, value in body.items():
+        if value is None:
+            continue
+
+        command.append(f"--{argument.replace('_', '-')}={quote(value)}")
+
+    return command
 
 
 def consume(exchange_name: str, routing_keys: Dict, logger: Logger, channel) -> None:

@@ -6,4 +6,13 @@
 
     <service id="shared.domain.service.logging.logger.logger"
              alias="shared.infrastructure.logging.file.logger.file_logger"/>
+
+    <service id="shared.domain.service.logging.progress_bar"
+             alias="shared.infrastructure.logging.progress.logger.progress_bar_logger"/>
+
+    <service id="shared.domain.service.caching.cache.cache"
+             alias="shared.infrastructure.caching.redis.cache.redis_cache"/>
+
+    <service id="shared.domain.service.event.event_store"
+             alias="shared.infrastructure.event.sqlalchemy.event_store.sql_alchemy_event_store" />
 </services>

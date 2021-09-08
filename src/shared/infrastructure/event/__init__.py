@@ -1,6 +1,25 @@
-from typing import List
-from shared_context.domain.events import DomainEvent
-from flask import current_app as app
+import threading
+import abc
+from typing import List, Optional, Any
+from shared_context.domain.events import DomainEvent as BaseDomainEvent
+from shared import Application
+
+
+__all__ = ['DomainEvent', 'DomainEventPublisher']
+
+
+class DomainEvent(BaseDomainEvent, metaclass=abc.ABCMeta):
+    def __init__(self, pipeline_id: str, aggregate_id: Optional[Any] = None):
+        self._pipeline_id = pipeline_id
+
+        if not aggregate_id:
+            aggregate_id = self._pipeline_id
+
+        super().__init__(aggregate_id)
+
+    @property
+    def pipeline_id(self):
+        return self._pipeline_id
 
 
 class DomainEventPublisher:
@@ -12,9 +31,12 @@ class DomainEventPublisher:
     @staticmethod
     def _publish_event(domain_event: DomainEvent) -> None:
         domain_event_name = _classname(domain_event)
+        event_handlers = Application.container().event_handlers(domain_event_name)
 
-        for subscriber in app.container.event_handlers(domain_event_name):
-            subscriber.handle(domain_event)
+        for subscriber in event_handlers:
+            # subscriber.handle(domain_event)
+            thread = threading.Thread(target=subscriber.handle, args=(domain_event, ))
+            thread.start()
 
 
 def _classname(obj):

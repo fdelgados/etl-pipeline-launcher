@@ -24,6 +24,7 @@ class FileLogger(Logger):
 
         formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: %(message)s')
         file_handler = logging.FileHandler(f'{settings.logs_dir()}/{logfile}.log')
+        logging.StreamHandler()
         file_handler.setFormatter(formatter)
 
         logger.addHandler(file_handler)

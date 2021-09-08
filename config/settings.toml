@@ -3,6 +3,8 @@ id = "fc050f989329b47f861e5760c713c820"
 root_dir = "/"
 logs_dir = "/log"
 contexts_dir = "/src"
+timezones.es = "Europe/Madrid"
+timezones.it = "Europe/Rome"
 
 [identity_access]
 token_issuer = "http://localhost"

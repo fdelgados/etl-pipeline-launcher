@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+
+<services>
+    <service id="shared.application.event_store.listener.store_event_on_publish"
+             class="shared.application.event_store.listener.StoreEventOnPublish">
+        <argument name="event_store" value="shared.domain.service.event.event_store" type="service" />
+    </service>
+</services>

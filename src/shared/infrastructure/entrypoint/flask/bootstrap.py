@@ -1,16 +1,21 @@
 from __future__ import annotations
 
+import os
+import time
 from importlib import util
 
 from shared import settings
 from shared.infrastructure.logging.file.logger import FileLogger
 from shared.infrastructure.messaging.rabbitmq.connector import RabbitMqConnector
-from cli.run_workers import consume
+from bin.run_workers import consume
 
 
 class Bootstrap:
     def __init__(self):
         self.logger = FileLogger()
+
+        os.environ['TZ'] = settings.time_zone()
+        time.tzset()
 
     def generate_db_maps(self) -> Bootstrap:
         self.logger.info('Generating database tables mappings')

@@ -1,3 +1,2 @@
 ["etl_pipeline.launcher.pipelines"]
-pipeline_launched.start_etl = "etl/infrastructure/command/foo"
-pipeline_launched.notify_user = "etl/infrastructure/command/bar"
+pipeline_launched.start_etl = "etl:start_etl"

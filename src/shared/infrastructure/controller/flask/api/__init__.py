@@ -1,5 +1,5 @@
 from flask_restx import Resource
-from flask import current_app
+from shared import Application
 from shared import ApiBaseError,  settings
 from http import HTTPStatus
 
@@ -8,7 +8,7 @@ class BaseController(Resource):
     def __init__(self, api=None, *args, **kwargs):
         super().__init__(api, *args, **kwargs)
 
-        self._container = current_app.container
+        self._container = Application.container()
 
     def service(self, service_id: str):
         return self._container.get(service_id)

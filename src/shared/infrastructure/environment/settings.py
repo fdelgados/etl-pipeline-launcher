@@ -24,6 +24,11 @@ class Settings:
         for subscribed_events_file in subscribed_events_files:
             self._dict_merge(self._subscribed_events, toml.load(subscribed_events_file))
 
+        self._commands = {}
+        commands_files = glob.glob(f'{services_dir}**/commands.toml')
+        for commands_file in commands_files:
+            self._dict_merge(self._commands, toml.load(commands_file))
+
     def _dict_merge(self, dct, merge_dct) -> None:
         for k, v in merge_dct.items():
             if k in dct and isinstance(dct[k], dict) and isinstance(merge_dct[k], collections.Mapping):
@@ -121,6 +126,15 @@ class Settings:
 
         return self._subscribed_events.get(exchange, {}).get(event, {})
 
+    def redis_host(self):
+        return self._get('redis', 'host')
+
+    def redis_port(self):
+        return self._get('redis', 'port')
+
+    def command(self, command: str):
+        return self._commands.get('commands', {}).get(command)
+
     def _app_root_dir(self) -> str:
         return self._get('application', 'root_dir')
 
@@ -174,6 +188,9 @@ class Settings:
 
     def assets_dir(self):
         return self._get('application', 'assets_dir')
+
+    def time_zone(self, country: str = 'es'):
+        return self._get('application', 'timezones').get(country)
 
 
 settings = Settings(os.environ.get('FLASK_ENV', 'development'))

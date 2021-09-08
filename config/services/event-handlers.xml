@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 
 <events>
-    <event class="launcher.pipeline.domain.event.PipelineLaunched">
-        <handler id="launcher.pipeline.application.subscribers.notify_pipeline_launch_request" />
+    <event class="launcher.pipeline.domain.event.pipeline_launched.PipelineLaunched">
+        <handler id="shared.application.event_store.listener.store_event_on_publish" />
+        <handler id="launcher.pipeline.application.extract.listeners.pipeline_launched_listener" />
+    </event>
+    <event class="launcher.pipeline.domain.event.extraction_started.ExtractionStarted">
+        <handler id="shared.application.event_store.listener.store_event_on_publish" />
+    </event>
+    <event class="launcher.pipeline.domain.event.extraction_completed.ExtractionCompleted">
+        <handler id="shared.application.event_store.listener.store_event_on_publish" />
+        <handler id="launcher.pipeline.application.transform_load.listeners.transform_data_on_extraction_completed" />
+    </event>
+    <event class="launcher.pipeline.domain.event.page_requested.PageRequested">
+        <handler id="shared.application.event_store.listener.store_event_on_publish" />
     </event>
 </events>

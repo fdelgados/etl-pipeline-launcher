@@ -1,6 +1,5 @@
 from flask import Flask
 from flask_restx import Api
-from pydic import create_container
 from launcher.pipeline.infrastructure.controller.flask.api.pipeline import pipeline_api
 
 from launcher.shared.infrastructure.controller.flask.api import launcher_api
@@ -14,10 +13,6 @@ bootstrap.generate_db_maps().run_workers()
 bootstrap.logger.info('Bootstrapping Flask application')
 
 app = Flask(__name__)
-app.container = create_container(
-    settings.services_files(),
-    settings.event_handlers_file()
-)
 app.config.from_mapping(settings.flask_config())
 
 bootstrap.logger.info('Bootstrapping API')
