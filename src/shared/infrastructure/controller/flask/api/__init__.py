@@ -1,6 +1,6 @@
 from flask_restx import Resource
 from shared import Application
-from shared import ApiBaseError,  settings
+from shared import ApiBaseError, ApiErrorCodes,  settings
 from http import HTTPStatus
 
 
@@ -12,6 +12,19 @@ class BaseController(Resource):
 
     def service(self, service_id: str):
         return self._container.get(service_id)
+
+    @classmethod
+    def api_generic_error(cls, error: Exception):
+        status_code = HTTPStatus.INTERNAL_SERVER_ERROR
+        error_data = {
+            'error': {
+                'message': str(error),
+                'code': ApiErrorCodes.GENERIC_ERROR,
+                'status': status_code
+            }
+        }
+
+        return error_data, status_code
 
     @classmethod
     def api_error(cls, error: ApiBaseError, status_code: int):

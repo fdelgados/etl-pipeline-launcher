@@ -3,6 +3,7 @@ export COMPOSE_DOCKER_CLI_BUILD=1
 export DOCKER_BUILDKIT=1
 
 all: down build up
+reload: down up
 
 build:
 	docker-compose -f docker-compose.yml -f docker-compose.dev.yml build
@@ -32,7 +33,7 @@ black:
 	black -l 86 $$(find * -name '*.py')
 
 run-workers:
-	docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d workers
+	docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d worker
 
 reload-workers:
-	docker-compose restart workers
+	docker-compose restart worker

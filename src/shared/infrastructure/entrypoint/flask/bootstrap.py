@@ -6,8 +6,6 @@ from importlib import util
 
 from shared import settings
 from shared.infrastructure.logging.file.logger import FileLogger
-from shared.infrastructure.messaging.rabbitmq.connector import RabbitMqConnector
-from bin.run_workers import consume
 
 
 class Bootstrap:
@@ -36,13 +34,3 @@ class Bootstrap:
                 continue
 
         return self
-
-    def run_workers(self):
-        connector = RabbitMqConnector(self.logger)
-        connection = connector.connect()
-        connection_channel = connection.channel()
-
-        exchanges = settings.subscribed_events()
-
-        for subscribed_exchange, listening_routing_keys in exchanges.items():
-            consume(subscribed_exchange, listening_routing_keys, self.logger, connection_channel)

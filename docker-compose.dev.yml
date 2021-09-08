@@ -3,14 +3,19 @@ version: "3"
 services:
   application:
     environment:
-      - FLASK_DEBUG=1
+      - ENVIRONMENT=development
       - FLASK_ENV=development
+      - FLASK_DEBUG=1
     volumes:
-      - ./src:/src
-      - ./tests:/tests
-      - ./config:/config
+      - ./src:/var/www/src
+      - ./tests:/var/www/tests
+      - ./config:/var/www/config
       - ./export:/export
       - ./log:/log
-      - ./bin:/bin
+      - ./bin:/var/www/bin
     ports:
       - "5000:5000"
+
+  worker:
+    environment:
+      - ENVIRONMENT=development

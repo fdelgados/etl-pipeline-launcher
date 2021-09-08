@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import argparse
 import os.path
 import subprocess
 import threading
@@ -7,6 +8,7 @@ from pika import exceptions
 from typing import Dict, Any
 import json
 
+from shared.infrastructure.logging.file.logger import FileLogger
 from shared.domain.service.logging.logger import Logger
 from shared.infrastructure.messaging.rabbitmq.connector import RabbitMqConnector
 from shared import settings
@@ -113,79 +115,69 @@ def consume(exchange_name: str, routing_keys: Dict, logger: Logger, channel) -> 
         logger.info(' [*] Consumer stopped')
 
 
-if __name__ == '__main__':
-    import argparse
-    from shared.infrastructure.logging.file.logger import FileLogger
+exchanges = settings.subscribed_events()
+connection_settings = settings.rabbit_connection_settings()
+file_logger = FileLogger()
+connector = RabbitMqConnector(file_logger)
 
-    _DEFAULT_ENVIRONMENT = 'development'
-    _DEFAULT_HOST = 'localhost'
-    _DEFAULT_PORT = 5672
-    _DEFAULT_VIRTUAL_HOST = '/'
+_DEFAULT_ENVIRONMENT = os.environ.get('ENVIRONMENT')
 
-    parser = argparse.ArgumentParser(
-        description='Run message workers',
-        usage='python etl.py',
-        add_help=False
-    )
+parser = argparse.ArgumentParser(
+    description='Run message workers',
+    usage='python etl.py',
+    add_help=False
+)
 
-    parser.add_argument(
-        '-e', '--environment',
-        dest='environment',
-        help=f'Environment. Default: {_DEFAULT_ENVIRONMENT}',
-        default=_DEFAULT_ENVIRONMENT,
-        metavar=''
-    )
+parser.add_argument(
+    '-e', '--environment',
+    dest='environment',
+    help=f'Environment. Default: {_DEFAULT_ENVIRONMENT}',
+    default=_DEFAULT_ENVIRONMENT,
+    metavar=''
+)
 
-    parser.add_argument(
-        '-w', '--worker',
-        dest='worker',
-        help='Worker name',
-        default=None,
-        metavar=''
-    )
+parser.add_argument(
+    '-w', '--worker',
+    dest='worker',
+    help='Worker name',
+    default=None,
+    metavar=''
+)
 
-    parser.add_argument(
-        '-h', '--host',
-        dest='host',
-        help=f'Host name. Default: {_DEFAULT_HOST}',
-        default=_DEFAULT_HOST,
-        metavar=''
-    )
+parser.add_argument(
+    '-h', '--host',
+    dest='host',
+    help=f"Host name. Default: {connection_settings.get('host')}",
+    default=connection_settings.get('host'),
+    metavar=''
+)
 
-    parser.add_argument(
-        '-p', '--port',
-        dest='port',
-        help=f'Connection port. Default: {_DEFAULT_PORT}',
-        default=_DEFAULT_PORT,
-        metavar=''
-    )
+parser.add_argument(
+    '-p', '--port',
+    dest='port',
+    help=f"Connection port. Default: {connection_settings.get('port')}",
+    default=connection_settings.get('port'),
+    metavar=''
+)
 
-    parser.add_argument(
-        '-v', '--virtual-host',
-        dest='virtual_host',
-        help=f'Virtual host. Default: {_DEFAULT_VIRTUAL_HOST}',
-        default=_DEFAULT_VIRTUAL_HOST,
-        metavar=''
-    )
+parser.add_argument(
+    '-v', '--virtual-host',
+    dest='virtual_host',
+    help=f"Virtual host. Default: {connection_settings.get('vhost', '/')}",
+    default=connection_settings.get('vhost', '/'),
+    metavar=''
+)
 
-    args = parser.parse_args()
+args = parser.parse_args()
 
-    file_logger = FileLogger()
-    connector = RabbitMqConnector(file_logger)
+connection = connector.connect({
+    'user': connection_settings.get('user'),
+    'password': connection_settings.get('password'),
+    'host': args.host,
+    'port': args.port,
+    'vhost': args.virtual_host
+})
+connection_channel = connection.channel()
 
-    connection_settings = settings.rabbit_connection_settings()
-    updated_connection_settings = {
-        'user': connection_settings.get('user'),
-        'password': connection_settings.get('password'),
-        'host': args.host,
-        'port': args.port,
-        'vhost': args.virtual_host
-    }
-
-    connection = connector.connect(updated_connection_settings)
-    connection_channel = connection.channel()
-
-    exchanges = settings.rabbit_subscribe_exchanges()
-
-    for subscribed_exchange, listening_routing_keys in exchanges.items():
-        consume(subscribed_exchange, listening_routing_keys, file_logger, connection_channel)
+for subscribed_exchange, listening_routing_keys in exchanges.items():
+    consume(subscribed_exchange, listening_routing_keys, file_logger, connection_channel)

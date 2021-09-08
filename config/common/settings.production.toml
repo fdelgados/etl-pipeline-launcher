@@ -10,3 +10,6 @@ host = "etl-pipeline-launcher-mysql"
 [database.launcher]
   user = "launcher"
   password = "wTUbtEmk2S6R"
+
+[flask]
+flask_env = "production"

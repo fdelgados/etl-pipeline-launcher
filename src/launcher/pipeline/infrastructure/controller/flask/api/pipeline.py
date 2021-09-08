@@ -26,6 +26,11 @@ def handle_value_error(error):
     return BaseController.api_error(error, HTTPStatus.BAD_REQUEST)
 
 
+@pipeline_api.errorhandler(Exception)
+def handle_generic_error(error):
+    return BaseController.api_generic_error(error)
+
+
 @pipeline_api.route('')
 class PipelineController(BaseController):
     def post(self):

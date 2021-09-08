@@ -13,18 +13,20 @@ class Settings:
         self._environment = environment
         self._country = country
 
-        self._config = toml.load('/config/common/settings.toml')
-        common_environment_config = toml.load(f'/config/common/settings.{self._environment}.toml')
+        configs_dir = '/var/www/config'
+
+        self._config = toml.load(f'{configs_dir}/common/settings.toml')
+        common_environment_config = toml.load(f'{configs_dir}/common/settings.{self._environment}.toml')
 
         self._dict_merge(self._config, common_environment_config)
 
-        country_config = toml.load(f'/config/{self._country}/settings.toml')
+        country_config = toml.load(f'{configs_dir}/{self._country}/settings.toml')
         self._dict_merge(self._config, country_config)
 
-        country_environment_config = toml.load(f'/config/{self._country}/settings.{self._environment}.toml')
+        country_environment_config = toml.load(f'{configs_dir}/{self._country}/settings.{self._environment}.toml')
         self._dict_merge(self._config, country_environment_config)
 
-        services_dir = os.path.join(self._app_root_dir(), 'config/services/')
+        services_dir = os.path.join(configs_dir, 'services/')
 
         self._subscribed_events = {}
         subscribed_events_files = glob.glob(f'{services_dir}**/subscribed-events.toml')
@@ -117,14 +119,6 @@ class Settings:
 
         return exchanges.get('publish')
 
-    def rabbit_subscribe_exchanges(self):
-        exchanges = self._config.get('rabbitmq').get('exchanges')
-
-        if not exchanges:
-            return []
-
-        return exchanges.get('subscribe')
-
     def subscribed_events(self):
         return self._subscribed_events
 
@@ -152,12 +146,12 @@ class Settings:
         return list(filter(lambda context: '.' not in context, find_packages(where=contexts_dir)))
 
     def services_files(self) -> List:
-        services_dir = os.path.join(self._app_root_dir(), 'config/services/')
+        services_dir = os.path.join(self._configs_dir(), 'services/')
 
         return glob.glob(f'{services_dir}**/*-services.xml')
 
     def event_handlers_file(self) -> str:
-        return os.path.join(self._app_root_dir(), 'config/services/', 'event-handlers.xml')
+        return os.path.join(self._configs_dir(), 'services/', 'event-handlers.xml')
 
     def public_key(self) -> str:
         with open(self._get('identity_access', 'public_key_file')) as fp:
@@ -191,6 +185,9 @@ class Settings:
     def logs_dir(self):
         return self._get('application', 'logs_dir')
 
+    def _configs_dir(self):
+        return self._get('application', 'configs_dir')
+
     def templates_dir(self):
         return self._get('application', 'templates_dir')
 
@@ -202,6 +199,6 @@ class Settings:
 
 
 settings = Settings(
-    os.environ.get('FLASK_ENV', 'development'),
+    os.environ.get('ENVIRONMENT', 'development'),
     os.environ.get('COUNTRY', 'es')
 )

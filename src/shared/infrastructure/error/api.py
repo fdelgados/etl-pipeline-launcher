@@ -21,6 +21,7 @@ class ErrorCodes(IntEnum):
 
         return obj
 
+    GENERIC_ERROR = 1000, 'Application error'
     MISSING_REQUEST_PARAMETER = 1001, 'Missing request parameter'
     INVALID_REQUEST_PARAMETER = 1002, 'Invalid request parameter'
 
