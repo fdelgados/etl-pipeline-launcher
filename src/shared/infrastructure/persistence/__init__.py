@@ -22,24 +22,6 @@ class SessionBuilder:
 
 
 @contextmanager
-def persistent_session_scope(dsn: str):
-    Session = SessionBuilder.build(dsn)
-    session = Session()
-
-    try:
-        yield session
-
-        session.commit()
-    except Exception:
-        session.rollback()
-
-        raise
-    finally:
-        session.close()
-        Session.remove()
-
-
-@contextmanager
 def session_scope(dsn: str):
     Session = SessionBuilder.build(dsn)
     session = Session()
@@ -63,12 +45,14 @@ class Repository(BaseRepository):
         return create_engine(self._dsn)
 
     def add(self, aggregate: AggregateRoot) -> None:
-        with persistent_session_scope(self._dsn) as session:
+        with session_scope(self._dsn) as session:
             session.add(aggregate)
+            session.commit()
 
     def save(self, aggregate: AggregateRoot) -> None:
-        with persistent_session_scope(self._dsn) as session:
+        with session_scope(self._dsn) as session:
             session.add(aggregate)
+            session.commit()
 
     def find(self, **kwargs) -> AggregateRoot:
         with session_scope(self._dsn) as session:

@@ -2,11 +2,10 @@
 
 <services>
     <service id="launcher.pipeline.infrastructure.persistence.sqlalchemy.repository.sql_alchemy_pipeline_repository"
-             class="launcher.pipeline.infrastructure.persistence.sqlalchemy.repository.SqlAlchemyPipelineRepository" />
-
+             class="launcher.pipeline.infrastructure.persistence.pipeline.sqlalchemy.pipeline_repository.PipelineRepositoryImpl" />
 
     <service id="launcher.pipeline.infrastructure.persistence.sqlalchemy.repository.sql_alchemy_page_repository"
-             class="launcher.pipeline.infrastructure.persistence.sqlalchemy.repository.SqlAlchemyPageRepository" />
+             class="launcher.pipeline.infrastructure.persistence.page.sqlalchemy.page_repository.PageRepositoryImpl" />
 
     <service id="launcher.pipeline.infrastructure.scraping.beautiful_soup.scraper.beautiful_soup_web_scraper"
              class="launcher.pipeline.infrastructure.scraping.beautiful_soup.scraper.BeautifulSoupWebScraper">

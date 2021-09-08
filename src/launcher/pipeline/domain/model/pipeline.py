@@ -6,8 +6,7 @@ from typing import Dict, Optional, List
 from datetime import datetime
 from coolname import generate
 
-from shared_context.domain.model import AggregateRoot, Uuid
-from shared.infrastructure.persistence import Repository
+from shared_context.domain.model import AggregateRoot, Uuid, Repository
 from launcher.pipeline.domain.event.pipeline_launched import PipelineLaunched
 
 
