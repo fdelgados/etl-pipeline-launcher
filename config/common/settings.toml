@@ -40,6 +40,8 @@ connection.port = 5672
 connection.vhost = "/"
 
 [mongodb]
+connection.host = "mongodb-server"
+connection.port = 27017
 
 [flask]
 error_include_message = false

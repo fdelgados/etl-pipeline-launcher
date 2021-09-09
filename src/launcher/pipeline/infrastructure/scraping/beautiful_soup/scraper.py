@@ -285,12 +285,15 @@ class BeautifulSoupSitemapScraper(SitemapScraper):
 
     def retrieve_urls(
         self,
-        sitemap_urls: Dict,
+        sitemaps: List,
         max_urls: int = 100
     ) -> List[Dict]:
 
-        for sitemap_url, properties in sitemap_urls.items():
-            child_sitemap_urls = self._sitemaps_urls(sitemap_url, properties)
+        for sitemap in sitemaps:
+            url = sitemap.get('url')
+            sitemaps_url_pattern = sitemap.get('sitemaps_url_pattern', None)
+
+            child_sitemap_urls = self._sitemaps_urls(url, sitemaps_url_pattern)
             for child_sitemap_url in child_sitemap_urls:
                 self._retrieve_from_sitemap(child_sitemap_url, max_urls)
 
@@ -299,9 +302,9 @@ class BeautifulSoupSitemapScraper(SitemapScraper):
 
         return list(self.__urls.items())
 
-    def _sitemaps_urls(self, sitemap_url: str, properties: Dict):
-        if properties.get('root', False):
-            return self._retrieve_sitemaps_from_root(sitemap_url, properties.get('sitemaps_url_pattern'))
+    def _sitemaps_urls(self, sitemap_url: str, sitemaps_url_pattern: Optional[str]):
+        if sitemaps_url_pattern:
+            return self._retrieve_sitemaps_from_root(sitemap_url, sitemaps_url_pattern)
 
         return [sitemap_url]
 

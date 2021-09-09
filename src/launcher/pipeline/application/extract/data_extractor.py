@@ -29,7 +29,7 @@ from launcher.pipeline.domain.model.page import Page, PageRepository
 class ExtractDataCommand:
     tenant_id: str
     pipeline_id: str
-    sitemap_urls: Dict
+    sitemaps: List
     url_pattern: str = field(default=None)
     custom_request_headers: dict = field(default_factory={})
     selector_mapping: dict = field(default_factory={})
@@ -64,7 +64,7 @@ class DataExtractor:
         )
 
         urls = self._retrieve_urls(
-            pipeline.sitemaps_urls,
+            pipeline.sitemaps,
             pipeline.url_address_pattern,
             limit=100 if settings.is_development() else 0
         )
@@ -105,17 +105,14 @@ class DataExtractor:
 
     def _retrieve_urls(
         self,
-        sitemaps_url: Dict,
+        sitemaps: List,
         url_pattern: str = None,
         limit: int = 0
     ) -> List[Tuple[str, str]]:
 
         formatted_urls = []
 
-        urls = self._sitemap_scraper.retrieve_urls(
-            sitemaps_url,
-            max_urls=limit
-        )
+        urls = self._sitemap_scraper.retrieve_urls(sitemaps, max_urls=limit)
 
         for url, data in urls:
             if url_pattern and not re.fullmatch(url_pattern, url):
@@ -127,39 +124,6 @@ class DataExtractor:
 
         return formatted_urls
 
-    # def _save_page_content(self, page: Page):
-    #     try:
-    #         if page.is_unmodified():
-    #             self._page_repository.update_status(page.address, page.status_code, page.status)
-    #
-    #             return
-    #
-    #         self._page_repository.save(page)
-    #
-    #         extra_info = self._extra_info(page)
-    #         page_extracted = PageExtracted(
-    #             self._report_id,
-    #             page.address,
-    #             page.status_code,
-    #             page.status,
-    #             page.h1,
-    #             page.title,
-    #             page.is_canonical,
-    #             page.is_indexable,
-    #             page.final_address,
-    #             page.last_extracted_on,
-    #             str(extra_info['id']) if extra_info['id'] is not None else None,
-    #             str(extra_info['center_id']) if extra_info['center_id'] is not None else None,
-    #             extra_info['center_name'],
-    #             extra_info['methodology_id'],
-    #             extra_info['country']
-    #         )
-    #
-    #         self._event_publisher.dispatch(page_extracted)
-    #
-    #     except UnableToSavePageException as error:
-    #         self._log_error(page.address, str(error))
-
     def _extra_info(self, page: Page):
         default_info = {
             'id': None,
@@ -170,7 +134,7 @@ class DataExtractor:
         }
 
         if not bool(page.datalayer):
-            self._logger.warning('Unable to access to {} datalayer'.format(page.address))
+            self._logger.warning('Unable to access to {} datalayer'.format(page.url))
 
             return default_info
 

@@ -1,2 +1,5 @@
 [application]
 timezone = "Europe/Rome"
+
+[mongodb]
+databases.web_corpus = "web_corpus_it"

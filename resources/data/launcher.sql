@@ -67,7 +67,7 @@ CREATE TABLE `pipelines`
     `selector_mapping` JSON DEFAULT NULL,
     `excluded_tags` JSON DEFAULT NULL,
     `excluded_selectors` JSON DEFAULT NULL,
-    `sitemaps_urls` JSON NOT NULL,
+    `sitemaps` JSON NOT NULL,
     `url_address_pattern` VARCHAR(255) DEFAULT NULL,
     `started_on` DATETIME NOT NULL,
     `completed_on` DATETIME DEFAULT NULL,

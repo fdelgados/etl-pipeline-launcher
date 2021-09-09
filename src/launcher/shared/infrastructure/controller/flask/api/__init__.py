@@ -12,6 +12,11 @@ launcher_api = Namespace(
 
 @launcher_api.route('/')
 class Launcher(BaseController):
+    @launcher_api.doc(
+        responses={
+            int(HTTPStatus.OK): 'Health check OK'
+        }
+    )
     def get(self):
         return make_response(
             jsonify(

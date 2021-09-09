@@ -34,7 +34,7 @@ class LauncherMapping(Orm):
             Column('tenant_id', String(36), nullable=False),
             Column('name', String(60), nullable=False),
             Column('launched_by', String(30), nullable=False),
-            Column('sitemaps_urls', JSON, nullable=False),
+            Column('sitemaps', JSON, nullable=False),
             Column('description', String(200), nullable=True),
             Column('request_headers', JSON, nullable=True),
             Column('selector_mapping', JSON, nullable=True),

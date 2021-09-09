@@ -10,7 +10,7 @@ class PipelineLaunchedListener:
         command = ExtractDataCommand(
             event.tenant_id,
             event.pipeline_id,
-            event.sitemap_urls,
+            event.sitemaps,
             event.url_pattern,
             event.custom_request_header,
             event.selector_mapping,

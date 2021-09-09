@@ -34,7 +34,6 @@ class DomainEventPublisher:
         event_handlers = Application.container().event_handlers(domain_event_name)
 
         for subscriber in event_handlers:
-            # subscriber.handle(domain_event)
             thread = threading.Thread(target=subscriber.handle, args=(domain_event, ))
             thread.start()
 

@@ -21,7 +21,7 @@ class Pipeline(AggregateRoot):
         tenant_id: str,
         name: str,
         launched_by: str,
-        sitemaps_urls: Dict,
+        sitemaps: List,
         description: Optional[str] = None,
         request_headers: Optional[Dict] = None,
         selector_mapping: Optional[Dict] = None,
@@ -41,7 +41,7 @@ class Pipeline(AggregateRoot):
         self._selector_mapping = None if not selector_mapping else selector_mapping
         self._excluded_tags = None if not excluded_tags else excluded_tags
         self._excluded_selectors = None if not excluded_selectors else excluded_selectors
-        self._sitemaps_urls = sitemaps_urls
+        self._sitemaps = sitemaps
         self._url_address_pattern = url_address_pattern
         self._custom_request_fields = None if not custom_request_fields else custom_request_fields
 
@@ -50,7 +50,7 @@ class Pipeline(AggregateRoot):
             self._pipeline_id.value,
             self._name,
             self._launched_by,
-            self._sitemaps_urls,
+            self._sitemaps,
             self._request_headers,
             self._selector_mapping,
             self._excluded_tags,
@@ -76,8 +76,8 @@ class Pipeline(AggregateRoot):
         return self._name
 
     @property
-    def sitemaps_urls(self) -> Dict:
-        return self._sitemaps_urls
+    def sitemaps(self) -> List:
+        return self._sitemaps
 
     @property
     def url_address_pattern(self) -> Optional[str]:

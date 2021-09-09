@@ -11,7 +11,7 @@ from launcher.pipeline.domain.model.pipeline import Pipeline, PipelineId, Pipeli
 
 @dataclass(frozen=True)
 class PipelineLauncherCommand:
-    sitemap_urls: dict
+    sitemaps: list
     custom_request_headers: dict = field(default_factory={})
     selector_mapping: dict = field(default_factory={})
     excluded_tags: List[str] = field(default_factory=[])
@@ -34,7 +34,7 @@ class PipelineLauncher:
             user.tenant_id(),
             self._pipeline_repository.generate_unique_name(),
             user.username(),
-            command.sitemap_urls,
+            command.sitemaps,
             command.description,
             command.custom_request_headers,
             command.selector_mapping,
@@ -54,7 +54,7 @@ class PipelineLauncher:
 class CommandValidator:
     @staticmethod
     def validate(command: PipelineLauncherCommand):
-        if not command.sitemap_urls:
+        if not command.sitemaps:
             raise MissingRequestParamsException(
                 "Parameter 'sitemapUrl' must be provided."
             )

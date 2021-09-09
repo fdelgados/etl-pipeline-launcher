@@ -11,6 +11,10 @@ host = "etl-pipeline-launcher-mysql"
   user = "launcher"
   password = "wTUbtEmk2S6R"
 
+[mongodb]
+connection.username = "launcher"
+connection.password = "wTUbtEmk2S6R"
+
 [flask]
 flask_env = "development"
 flask_debug = true

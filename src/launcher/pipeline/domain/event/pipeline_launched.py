@@ -9,7 +9,7 @@ class PipelineLaunched(DomainEvent):
         pipeline_id: str,
         name: str,
         launched_by: str,
-        sitemap_urls: Dict,
+        sitemaps: List,
         custom_request_headers: Optional[Dict],
         selector_mapping: Optional[Dict],
         excluded_tags: Optional[List],
@@ -24,7 +24,7 @@ class PipelineLaunched(DomainEvent):
         self._pipeline_id = pipeline_id
         self._name = name
         self._launched_by = launched_by
-        self._sitemap_urls = sitemap_urls
+        self._sitemaps = sitemaps
         self._custom_request_headers = custom_request_headers
         self._selector_mapping = selector_mapping
         self._excluded_tags = excluded_tags
@@ -46,8 +46,8 @@ class PipelineLaunched(DomainEvent):
         return self._launched_by
 
     @property
-    def sitemap_urls(self) -> Dict:
-        return self._sitemap_urls
+    def sitemaps(self) -> List:
+        return self._sitemaps
 
     @property
     def custom_request_header(self) -> Optional[Dict]:

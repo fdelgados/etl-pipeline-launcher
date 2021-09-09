@@ -108,6 +108,12 @@ class Settings:
             database_config.get('name')
         )
 
+    def mongodb_connection_settings(self) -> str:
+        return self._config.get('mongodb').get('connection')
+
+    def mongodb_databases(self):
+        return self._config.get('mongodb').get('databases')
+
     def rabbit_connection_settings(self):
         return self._config.get('rabbitmq').get('connection')
 

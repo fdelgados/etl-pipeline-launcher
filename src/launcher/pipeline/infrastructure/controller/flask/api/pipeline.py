@@ -1,34 +1,12 @@
 from flask import make_response, request
-from flask_restx import Namespace
 from http import HTTPStatus
 
 from shared.infrastructure.controller.flask.api import BaseController
 
-from shared.infrastructure.security import AuthorizationError, ExpiredTokenException
 from shared import settings
-from launcher.shared.application.errors import InvalidRequestParamsException
 from launcher.pipeline.application.launch.pipeline_launcher import PipelineLauncher, PipelineLauncherCommand
 
-pipeline_api = Namespace(
-    'pipeline',
-    description='ETL pipeline launcher'
-)
-
-
-@pipeline_api.errorhandler(AuthorizationError)
-@pipeline_api.errorhandler(ExpiredTokenException)
-def handle_authorization_error(error):
-    return BaseController.api_error(error, HTTPStatus.UNAUTHORIZED)
-
-
-@pipeline_api.errorhandler(InvalidRequestParamsException)
-def handle_value_error(error):
-    return BaseController.api_error(error, HTTPStatus.BAD_REQUEST)
-
-
-@pipeline_api.errorhandler(Exception)
-def handle_generic_error(error):
-    return BaseController.api_generic_error(error)
+from . import pipeline_api
 
 
 @pipeline_api.route('')
@@ -37,7 +15,7 @@ class PipelineController(BaseController):
         params = request.get_json()
 
         command = PipelineLauncherCommand(
-            params.get("sitemapUrls"),
+            params.get("sitemaps"),
             params.get("customRequestHeaders"),
             params.get("selectorMapping"),
             params.get("excludedTags"),

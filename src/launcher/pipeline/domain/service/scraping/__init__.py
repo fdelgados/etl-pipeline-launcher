@@ -29,7 +29,7 @@ class Scraper(metaclass=abc.ABCMeta):
 class SitemapScraper(metaclass=abc.ABCMeta):
     def retrieve_urls(
         self,
-        sitemap_urls: Dict,
+        sitemaps: List,
         max_urls: int = 0
     ) -> List[Dict]:
         raise NotImplementedError

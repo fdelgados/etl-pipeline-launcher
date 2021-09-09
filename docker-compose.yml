@@ -97,6 +97,7 @@ services:
   mongo:
     image: mongo:3.1
     container_name: etl-pipeline-launcher-mongodb
+    hostname: mongodb-server
     restart: always
     networks:
       etl_pipeline_launcher:
