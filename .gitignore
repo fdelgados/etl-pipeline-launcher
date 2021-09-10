@@ -1,5 +1,5 @@
 out
 redis-data
-.mysql-data
+.mysql-data*
 export
 log

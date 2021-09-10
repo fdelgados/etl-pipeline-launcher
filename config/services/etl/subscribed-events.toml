@@ -1,2 +1,2 @@
-["etl_pipeline.launcher.pipelines"]
+["etl_pipeline.corpus.pipelines"]
 pipeline_launched.start_etl = "etl:start_etl"

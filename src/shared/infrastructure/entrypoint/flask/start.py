@@ -1,9 +1,9 @@
 from flask import Flask
 from flask_restx import Api
 
-from launcher.pipeline.infrastructure.controller.flask.api.pipeline import pipeline_api
+from corpus.etl.infrastructure.controller.flask.api.etl import etl_api
 
-from launcher.shared.infrastructure.controller.flask.api import launcher_api, Launcher
+# from corpus.shared.infrastructure.controller.flask.api import launcher_api, Launcher
 from shared import settings
 
 from bootstrap import Bootstrap
@@ -21,5 +21,5 @@ api = Api(
     title=settings.api_title(),
     version=settings.api_version_str()
 )
-api.add_namespace(launcher_api, path=settings.api_prefix())
-api.add_namespace(pipeline_api, path=settings.api_prefix('pipelines'))
+# api.add_namespace(launcher_api, path=settings.api_prefix())
+api.add_namespace(etl_api, path=settings.api_prefix('etls'))

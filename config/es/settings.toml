@@ -3,3 +3,10 @@ timezone = "Europe/Madrid"
 
 [mongodb]
 databases.web_corpus = "web_corpus_es"
+
+[database]
+host = "web-corpus-es"
+[database.corpus]
+  name = "corpus_es"
+  user = "corpus_es"
+  password = "wTUbtEmk2S6R"

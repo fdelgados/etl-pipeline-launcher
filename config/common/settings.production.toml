@@ -5,11 +5,5 @@ baseurl = "http://localhost"
 token_issuer = "http://localhost"
 public_key_file = "/export/certs/identity_access.pem"
 
-[database]
-host = "etl-pipeline-launcher-mysql"
-[database.launcher]
-  user = "launcher"
-  password = "wTUbtEmk2S6R"
-
 [flask]
 flask_env = "production"

@@ -3,6 +3,14 @@ from __future__ import annotations
 from enum import IntEnum
 
 
+__all__ = [
+    'ErrorCodes',
+    'ApiBaseError',
+    'InvalidRequestParamsException',
+    'MissingRequestParamsException'
+]
+
+
 class ApiBaseError(RuntimeError):
     def __init__(self, error: ErrorCodes, details: str = "") -> None:
         self.code = int(error.value)
@@ -10,6 +18,16 @@ class ApiBaseError(RuntimeError):
 
         if details:
             self.message = "{}. {}".format(self.message, details)
+
+
+class InvalidRequestParamsException(ApiBaseError):
+    def __init__(self, details: str = "") -> None:
+        super().__init__(ErrorCodes.INVALID_REQUEST_PARAMETER, details)
+
+
+class MissingRequestParamsException(ApiBaseError):
+    def __init__(self, details: str = "") -> None:
+        super().__init__(ErrorCodes.MISSING_REQUEST_PARAMETER, details)
 
 
 class ErrorCodes(IntEnum):

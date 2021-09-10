@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+
+<services>
+    <service id="corpus.etl.infrastructure.persistence.etl.sqlalchemy.etl_repository.etl_repository_impl"
+             class="corpus.etl.infrastructure.persistence.etl.sqlalchemy.etl_repository.EtlRepositoryImpl" />
+
+    <service id="corpus.etl.infrastructure.persistence.page.sqlalchemy.page_repository.page_repository_impl"
+             class="corpus.etl.infrastructure.persistence.page.sqlalchemy.page_repository.PageRepositoryImpl"/>
+
+    <service id="corpus.etl.infrastructure.persistence.page.mongodb.page_repository.mongo_db_page_repository"
+             class="corpus.etl.infrastructure.persistence.page.mongodb.page_repository.MongoDbPageRepository">
+        <argument name="database" value="web_corpus" type="parameter" />
+        <argument name="collection" value="pages" type="parameter" />
+    </service>
+
+    <service id="corpus.etl.infrastructure.content.beautiful_soup.page_retriever.page_retriever_impl"
+             class="corpus.etl.infrastructure.content.beautiful_soup.page_retriever.PageRetrieverImpl">
+        <argument name="cache" value="shared.domain.service.caching.cache.cache" type="service" />
+    </service>
+
+    <service id="corpus.etl.infrastructure.content.beautiful_soup.url_source.url_source_impl"
+             class="corpus.etl.infrastructure.content.beautiful_soup.url_source.UrlSourceImpl" />
+</services>

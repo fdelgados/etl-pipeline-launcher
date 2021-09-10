@@ -9,10 +9,6 @@ configs_dir = "/var/www/config"
 token_issuer = "http://localhost"
 public_key_file = "/export/certs/identity_access.pem"
 
-[database]
-[database.launcher]
-  name = "launcher"
-
 [api]
 title = "ETL Pipeline Launcher API"
 port = 5000
@@ -23,12 +19,12 @@ doc_path = "/api/doc"
 include_default_error_message = false
 
 [mailhog]
-host = "etl-pipeline-launcher-mail"
+host = "web-corpus-builder-mail"
 smtp_port = 11025
 http_port = 18025
 
 [redis]
-host = "etl-pipeline-launcher-redis"
+host = "web-corpus-builder-redis"
 port = 6379
 
 [rabbitmq]

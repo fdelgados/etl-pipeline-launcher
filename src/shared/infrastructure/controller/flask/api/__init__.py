@@ -1,6 +1,6 @@
 from flask_restx import Resource
 from shared import Application
-from shared import ApiBaseError, ApiErrorCodes,  settings
+from shared import ApiBaseError, ErrorCodes,  settings
 from http import HTTPStatus
 
 
@@ -19,7 +19,7 @@ class BaseController(Resource):
         error_data = {
             'error': {
                 'message': str(error),
-                'code': ApiErrorCodes.GENERIC_ERROR,
+                'code': ErrorCodes.GENERIC_ERROR,
                 'status': status_code
             }
         }

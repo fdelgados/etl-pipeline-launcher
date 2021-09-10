@@ -1,7 +1,6 @@
 from pydic import create_container
 from .infrastructure.environment.settings import settings
-from .infrastructure.error.api import ErrorCodes as ApiErrorCodes
-from .infrastructure.error.api import ApiBaseError
+from .infrastructure.error.api import *
 
 
 class Application:

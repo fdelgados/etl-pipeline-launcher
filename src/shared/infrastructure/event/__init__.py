@@ -9,17 +9,22 @@ __all__ = ['DomainEvent', 'DomainEventPublisher']
 
 
 class DomainEvent(BaseDomainEvent, metaclass=abc.ABCMeta):
-    def __init__(self, pipeline_id: str, aggregate_id: Optional[Any] = None):
-        self._pipeline_id = pipeline_id
+    _EVENT_NAME = None
+
+    def __init__(self, etl_id: str, aggregate_id: Optional[Any] = None):
+        self._etl_id = etl_id
 
         if not aggregate_id:
-            aggregate_id = self._pipeline_id
+            aggregate_id = self._etl_id
 
         super().__init__(aggregate_id)
 
     @property
-    def pipeline_id(self):
-        return self._pipeline_id
+    def etl_id(self):
+        return self._etl_id
+
+    def event_name(self) -> str:
+        return self._EVENT_NAME
 
 
 class DomainEventPublisher:

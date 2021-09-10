@@ -9,7 +9,7 @@ build:
 	docker-compose -f docker-compose.yml -f docker-compose.dev.yml build
 
 up:
-	docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d mysql application rabbitmq redis mailhog mongo mongo-express
+	docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d database-es database-it application rabbitmq redis mailhog mongo mongo-express
 
 down:
 	docker-compose -f docker-compose.yml -f docker-compose.dev.yml down --remove-orphans

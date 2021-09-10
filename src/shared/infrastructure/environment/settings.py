@@ -167,18 +167,20 @@ class Settings:
         return self._get('identity_access', 'token_issuer')
 
     def db_mapping_classes(self):
-        src_dir = os.path.join(self._app_root_dir(), 'src')
+        contexts_dir = self._config.get('application').get('contexts_dir')
 
         context_mapping_files = {}
         mapping_modules = []
         for context in self.contexts():
-            mapping_files = glob.glob(f'{src_dir}/{context}/infrastructure/persistence/sqlalchemy/mapping.py')
-            mapping_files.extend(glob.glob(f'{src_dir}/{context}/**/infrastructure/persistence/sqlalchemy/mapping.py'))
+            mapping_files = glob.glob(
+                f'{contexts_dir}/{context}/shared/infrastructure/persistence/sqlalchemy/mapping.py'
+            )
+
             context_mapping_files[context] = mapping_files
 
         for context, files in context_mapping_files.items():
             for file in files:
-                module_name = file.replace(f'{src_dir}/', '').replace('/', '.')
+                module_name = file.replace(f'{contexts_dir}/', '').replace('/', '.')
                 module_name = re.sub(r'\.py$', '', module_name)
                 module_name = '{}.{}Mapping'.format(module_name, context.capitalize())
                 mapping_modules.append(module_name)

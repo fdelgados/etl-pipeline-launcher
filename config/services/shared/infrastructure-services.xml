@@ -16,10 +16,5 @@
              class="shared.infrastructure.caching.redis.cache.RedisCache" />
 
     <service id="shared.infrastructure.event.sqlalchemy.event_store.sql_alchemy_event_store"
-             class="shared.infrastructure.event.sqlalchemy.event_store.SqlAlchemyEventStore">
-            <argument name="host" value="etl-pipeline-launcher-mysql" type="parameter" />
-            <argument name="user" value="launcher" type="parameter" />
-            <argument name="password" value="wTUbtEmk2S6R" type="parameter" />
-            <argument name="db_name" value="launcher" type="parameter" />
-    </service>
+             class="shared.infrastructure.event.sqlalchemy.event_store.SqlAlchemyEventStore" />
 </services>

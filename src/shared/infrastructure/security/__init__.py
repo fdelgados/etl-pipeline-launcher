@@ -3,8 +3,8 @@ from flask import request
 import credential_shield as cs
 
 from shared import settings
-from shared import ApiErrorCodes, ApiBaseError
-from shared.domain.user import User
+from shared import ErrorCodes, ApiBaseError
+from shared.domain.model.user.user import User
 
 
 class AuthorizationError(ApiBaseError):
@@ -21,7 +21,7 @@ def authorization_required(scope: str):
         def decorated_function(self, *args, **kwargs):
             auth_header = request.headers.get('Authorization')
             if not auth_header:
-                raise AuthorizationError(ApiErrorCodes.ACCESS_TOKEN_NOT_PROVIDED)
+                raise AuthorizationError(ErrorCodes.ACCESS_TOKEN_NOT_PROVIDED)
 
             token_validator = cs.TokenValidator(
                 settings.application_id(),
@@ -39,9 +39,9 @@ def authorization_required(scope: str):
 
                 return func(self, user, *args, **kwargs)
             except cs.ExpiredTokenException:
-                raise ExpiredTokenException(ApiErrorCodes.ACCESS_TOKEN_EXPIRED)
+                raise ExpiredTokenException(ErrorCodes.ACCESS_TOKEN_EXPIRED)
             except cs.CredentialShieldException as error:
-                raise AuthorizationError(ApiErrorCodes.AUTHORIZATION_FAILED, details=str(error))
+                raise AuthorizationError(ErrorCodes.AUTHORIZATION_FAILED, details=str(error))
 
         return decorated_function
 

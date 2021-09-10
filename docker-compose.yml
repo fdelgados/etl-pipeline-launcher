@@ -1,19 +1,39 @@
 version: "3"
 
 services:
-  mysql:
+  database-es:
     build:
       context: ./docker/mysql
       dockerfile: Dockerfile
-    container_name: etl-pipeline-launcher-mysql
+    container_name: web-corpus-builder-database-es
+    hostname: web-corpus-es
     image: mysql-server:latest
     networks:
-      etl_pipeline_launcher:
+      web_corpus_builder:
         ipv4_address: 10.5.0.3
     volumes:
-      - ./.mysql-data:/var/lib/mysql/
+      - ./.mysql-data-es:/var/lib/mysql/
     ports:
       - "33060:3306"
+    environment:
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_ROOT_PASSWORD=HyMn4q6UR6wa
+    command: --default-authentication-plugin=mysql_native_password
+
+  database-it:
+    build:
+      context: ./docker/mysql
+      dockerfile: Dockerfile
+    container_name: web-corpus-builder-database-it
+    hostname: web-corpus-it
+    image: mysql-server:latest
+    networks:
+      web_corpus_builder:
+        ipv4_address: 10.5.0.10
+    volumes:
+      - ./.mysql-data-it:/var/lib/mysql/
+    ports:
+      - "33006:3306"
     environment:
       - MYSQL_ROOT_HOST=%
       - MYSQL_ROOT_PASSWORD=HyMn4q6UR6wa
@@ -24,14 +44,15 @@ services:
       context: .
       dockerfile: ./docker/application/Dockerfile
     depends_on:
-      - mysql
+      - database-es
+      - database-it
       - rabbitmq
       - redis
       - mailhog
       - mongo
       - mongo-express
     networks:
-      etl_pipeline_launcher:
+      web_corpus_builder:
         ipv4_address: 10.5.0.2
     environment:
       - PYTHONDONTWRITEBYTECODE=1
@@ -46,18 +67,19 @@ services:
       dockerfile: ./docker/application/Dockerfile
     command: /var/www/bin/run_workers.py
     depends_on:
-      - mysql
+      - database-es
+      - database-it
       - rabbitmq
       - redis
       - mailhog
       - mongo
       - mongo-express
     networks:
-      etl_pipeline_launcher:
+      web_corpus_builder:
         ipv4_address: 10.5.0.9
 
   rabbitmq:
-    container_name: etl-pipeline-launcher-rabbitmq
+    container_name: web-corpus-builder-rabbitmq
     hostname: rabbitmq-server
     image: rabbitmq:3-management-alpine
     restart: unless-stopped
@@ -65,19 +87,19 @@ services:
       - RABBITMQ_USER=admin
       - RABBITMQ_PASSWORD=yvPZ6j9n4ZyhXJV2
     networks:
-      etl_pipeline_launcher:
+      web_corpus_builder:
         ipv4_address: 10.5.0.5
     ports:
       - "5672:5672"
       - "15672:15672"
 
   redis:
-    container_name: etl-pipeline-launcher-redis
+    container_name: web-corpus-builder-redis
     image: redis:alpine
     command: [ "redis-server", "--appendonly", "yes" ]
     hostname: redis
     networks:
-      etl_pipeline_launcher:
+      web_corpus_builder:
         ipv4_address: 10.5.0.4
     ports:
       - "6379:6379"
@@ -85,44 +107,48 @@ services:
       - ./redis-data:/redis-data
 
   mailhog:
-    container_name: etl-pipeline-launcher-mail
+    container_name: web-corpus-builder-mail
     image: mailhog/mailhog
     networks:
-      etl_pipeline_launcher:
+      web_corpus_builder:
         ipv4_address: 10.5.0.6
     ports:
       - "11025:1025"
       - "18025:8025"
 
   mongo:
-    image: mongo:3.1
-    container_name: etl-pipeline-launcher-mongodb
+    build:
+      context: ./docker/mongodb
+      dockerfile: Dockerfile
+    image: mongo:5.0-focal
+    container_name: web-corpus-builder-mongodb
     hostname: mongodb-server
     restart: always
     networks:
-      etl_pipeline_launcher:
+      web_corpus_builder:
         ipv4_address: 10.5.0.7
     ports:
       - "27017:27017"
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=example
+      - MONGO_INITDB_ROOT_PASSWORD=aC4tYp9RUSWwvc5g
 
   mongo-express:
     image: mongo-express:0.32
-    container_name: etl-pipeline-launcher-mongo-express
+    container_name: web-corpus-builder-mongo-express
     restart: always
     networks:
-      etl_pipeline_launcher:
+      web_corpus_builder:
         ipv4_address: 10.5.0.8
     ports:
       - "8081:8081"
     environment:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=root
-      - ME_CONFIG_MONGODB_ADMINPASSWORD=example
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=aC4tYp9RUSWwvc5g
+      - ME_CONFIG_MONGODB_URL=mongodb://root:aC4tYp9RUSWwvc5g@mongo:27017/
 
 networks:
-  etl_pipeline_launcher:
+  web_corpus_builder:
     driver: bridge
     ipam:
       config:
