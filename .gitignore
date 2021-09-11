@@ -3,3 +3,5 @@ redis-data
 .mysql-data*
 export
 log
+tests/.hypothesis
+src/.hypothesis

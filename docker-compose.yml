@@ -52,12 +52,17 @@ services:
       - mongo
       - mongo-express
     networks:
-      web_corpus_builder:
-        ipv4_address: 10.5.0.2
+      - web_corpus_builder
+#        ipv4_address: 10.5.0.2
     environment:
       - PYTHONDONTWRITEBYTECODE=1
       - FLASK_APP=shared/infrastructure/entrypoint/flask/start.py
       - PYTHONUNBUFFERED=1
+    entrypoint:
+      - flask
+      - run
+      - --host=0.0.0.0
+      - --port=5000
     ports:
       - "5000:5000"
 

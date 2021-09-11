@@ -9,9 +9,12 @@ cryptography==3.4.7
 coolname~=1.1.0
 ddd-shared-fdelgados==0.3.7
 pydic-fdelgados==0.0.5
+Faker==8.12.1
 Flask==2.0.1
 flask-restx==0.5.0
+freezegun==1.1.0
 greenlet==1.1.0
+hypothesis==6.21.0
 icdiff==1.9.1
 idna==3.2
 iniconfig==1.1.1
@@ -26,6 +29,7 @@ mypy==0.910
 mypy-extensions==0.4.3
 lxml==4.6.3
 packaging==21.0
+parameterized==0.8.1
 pika==1.2.0
 pluggy==0.13.1
 pprintpp==0.4.0

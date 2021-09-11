@@ -12,6 +12,7 @@ class Url:
     _URL_PATTERN = r'^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+$'
 
     def __init__(self, address: str):
+        self._address = None
         self._ensure_is_valid_url(address)
 
         self._address = address
@@ -56,7 +57,7 @@ class Url:
         return self.address
 
     def __repr__(self) -> str:
-        return '<Url: {}>'.format(self.address)
+        return '<Url: {}>'.format(self.address if self.address else 'Invalid URL')
 
     def __eq__(self, other: Url) -> bool:
         return self.address == other.address
