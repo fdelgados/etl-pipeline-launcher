@@ -6,3 +6,4 @@ log
 tests/.hypothesis
 src/.hypothesis
 .venv
+.pytest_cache
