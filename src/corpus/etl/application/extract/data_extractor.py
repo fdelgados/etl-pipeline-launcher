@@ -8,6 +8,7 @@ from tqdm import tqdm
 
 from shared import settings
 from shared.domain.service.logging.logger import Logger
+from shared.infrastructure.event import DomainEventPublisher
 
 from corpus.etl.domain.model.etl import EtlId, Etl, EtlRepository
 from corpus.etl.domain.model.url import Url
@@ -17,7 +18,6 @@ from corpus.etl.domain.service.content.page_retriever import (
     RetrievalError,
 )
 from corpus.etl.domain.service.content.url_source import UrlSource
-from shared.infrastructure.event import DomainEventPublisher
 from corpus.etl.domain.event.extraction_started import ExtractionStarted
 from corpus.etl.domain.event.extraction_completed import ExtractionCompleted
 from corpus.etl.domain.model.page import PageRepository
