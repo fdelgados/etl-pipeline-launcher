@@ -6,7 +6,7 @@ setup(
     author_mail="fdelgados@gmail.com",
     version="0.1",
     packages=find_namespace_packages(
-        where='src',
+        where="src",
     ),
     package_dir={"": "src"},
 )

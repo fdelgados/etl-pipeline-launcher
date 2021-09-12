@@ -18,20 +18,20 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 class UrlSourceImpl(UrlSource):
-    PARSER = 'xml'
+    PARSER = "xml"
 
     def __init__(self):
         self.__urls: Dict = {}
 
     def retrieve(self, max_urls: int = 0, **kwargs) -> List[Url]:
-        sitemaps = kwargs.get('sitemaps')
+        sitemaps = kwargs.get("sitemaps")
 
         if not sitemaps:
-            raise UrlSourceError('You must provide a sitemap list')
+            raise UrlSourceError("You must provide a sitemap list")
 
         for sitemap in sitemaps:
-            url = sitemap.get('url')
-            sitemaps_url_pattern = sitemap.get('sitemaps_url_pattern', None)
+            url = sitemap.get("url")
+            sitemaps_url_pattern = sitemap.get("sitemaps_url_pattern", None)
 
             child_sitemap_urls = self._sitemaps_urls(url, sitemaps_url_pattern)
             for child_sitemap_url in child_sitemap_urls:
@@ -44,20 +44,24 @@ class UrlSourceImpl(UrlSource):
 
     def _sitemaps_urls(self, sitemap_url: str, sitemaps_url_pattern: Optional[str]):
         if sitemaps_url_pattern:
-            return self._retrieve_sitemaps_from_root(sitemap_url, sitemaps_url_pattern)
+            return self._retrieve_sitemaps_from_root(
+                sitemap_url, sitemaps_url_pattern
+            )
 
         return [sitemap_url]
 
-    def _retrieve_sitemaps_from_root(self, sitemap_url: str, sitemaps_url_pattern: Optional[str] = None):
+    def _retrieve_sitemaps_from_root(
+        self, sitemap_url: str, sitemaps_url_pattern: Optional[str] = None
+    ):
         sitemap_urls = []
         try:
             root_sitemap_response = urlopen(sitemap_url)
             soup = BeautifulSoup(root_sitemap_response, self.PARSER)
 
-            sitemap_nodes = soup.find_all('sitemap')
+            sitemap_nodes = soup.find_all("sitemap")
 
             for node in sitemap_nodes:
-                url = node.find('loc').string
+                url = node.find("loc").string
 
                 if not sitemaps_url_pattern:
                     sitemap_urls.append(url)
@@ -77,10 +81,10 @@ class UrlSourceImpl(UrlSource):
             sitemap_response = urlopen(sitemap_url)
             soup = BeautifulSoup(sitemap_response, self.PARSER)
 
-            nodes = soup.find_all('url')
+            nodes = soup.find_all("url")
 
             for node in nodes:
-                address = str(node.find('loc').string)
+                address = str(node.find("loc").string)
 
                 self.__urls[address] = Url(address)
 

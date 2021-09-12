@@ -7,19 +7,19 @@ class Logger(metaclass=abc.ABCMeta):
         if subclass is not Logger:
             return NotImplementedError
 
-        if not hasattr(subclass, 'debug') or not callable(subclass.debug):
+        if not hasattr(subclass, "debug") or not callable(subclass.debug):
             return NotImplementedError
 
-        if not hasattr(subclass, 'info') or not callable(subclass.info):
+        if not hasattr(subclass, "info") or not callable(subclass.info):
             return NotImplementedError
 
-        if not hasattr(subclass, 'warning') or not callable(subclass.warning):
+        if not hasattr(subclass, "warning") or not callable(subclass.warning):
             return NotImplementedError
 
-        if not hasattr(subclass, 'error') or not callable(subclass.error):
+        if not hasattr(subclass, "error") or not callable(subclass.error):
             return NotImplementedError
 
-        if not hasattr(subclass, 'critical') or not callable(subclass.critical):
+        if not hasattr(subclass, "critical") or not callable(subclass.critical):
             return NotImplementedError
 
     @abc.abstractmethod

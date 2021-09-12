@@ -10,8 +10,7 @@ class Application:
     def container(cls):
         if not cls._container:
             cls._container = create_container(
-                settings.services_files(),
-                settings.event_handlers_file()
+                settings.services_files(), settings.event_handlers_file()
             )
 
         return cls._container

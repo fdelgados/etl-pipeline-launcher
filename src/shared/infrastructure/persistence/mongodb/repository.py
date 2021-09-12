@@ -16,10 +16,10 @@ class BaseMongoDbRepository(MongoDbRepository, metaclass=abc.ABCMeta):
         super().__init__(
             databases.get(database),
             collection,
-            connection_settings.get('username'),
-            connection_settings.get('password'),
-            host=connection_settings.get('host'),
-            port=connection_settings.get('port')
+            connection_settings.get("username"),
+            connection_settings.get("password"),
+            host=connection_settings.get("host"),
+            port=connection_settings.get("port"),
         )
 
     def save(self, aggregate: AggregateRoot) -> None:

@@ -9,7 +9,7 @@ class InvalidUrlException(Exception):
 
 
 class Url:
-    _URL_PATTERN = r'^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+$'
+    _URL_PATTERN = r"^http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+$"
 
     def __init__(self, address: str):
         self._address = None
@@ -20,7 +20,7 @@ class Url:
 
     def _ensure_is_valid_url(self, address: str):
         if not re.search(self._URL_PATTERN, address):
-            raise InvalidUrlException('Invalid Url')
+            raise InvalidUrlException("Invalid Url")
 
     @property
     def address(self) -> str:
@@ -57,7 +57,7 @@ class Url:
         return self.address
 
     def __repr__(self) -> str:
-        return '<Url: {}>'.format(self.address if self.address else 'Invalid URL')
+        return "<Url: {}>".format(self.address if self.address else "Invalid URL")
 
     def __eq__(self, other: Url) -> bool:
         return self.address == other.address

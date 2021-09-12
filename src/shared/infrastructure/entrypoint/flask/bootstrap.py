@@ -12,13 +12,13 @@ class Bootstrap:
     def __init__(self):
         self.logger = FileLogger()
 
-        os.environ['TZ'] = settings.time_zone()
+        os.environ["TZ"] = settings.time_zone()
         time.tzset()
 
     def generate_db_maps(self) -> Bootstrap:
-        self.logger.info('Generating database tables mappings')
+        self.logger.info("Generating database tables mappings")
         for mapping_class in settings.db_mapping_classes():
-            module_name, class_name = mapping_class.rsplit('.', 1)
+            module_name, class_name = mapping_class.rsplit(".", 1)
 
             try:
                 spec = util.find_spec(module_name)
@@ -29,7 +29,7 @@ class Bootstrap:
                 mapper = class_()
                 mapper.start_mappers()
 
-                self.logger.info('Database tables mappings generated')
+                self.logger.info("Database tables mappings generated")
             except (ModuleNotFoundError, AttributeError):
                 continue
 

@@ -1,6 +1,6 @@
 from flask_restx import Resource
 from shared import Application
-from shared import ApiBaseError, ErrorCodes,  settings
+from shared import ApiBaseError, ErrorCodes, settings
 from http import HTTPStatus
 
 
@@ -17,10 +17,10 @@ class BaseController(Resource):
     def api_generic_error(cls, error: Exception):
         status_code = HTTPStatus.INTERNAL_SERVER_ERROR
         error_data = {
-            'error': {
-                'message': str(error),
-                'code': ErrorCodes.GENERIC_ERROR,
-                'status': status_code
+            "error": {
+                "message": str(error),
+                "code": ErrorCodes.GENERIC_ERROR,
+                "status": status_code,
             }
         }
 
@@ -29,16 +29,18 @@ class BaseController(Resource):
     @classmethod
     def api_error(cls, error: ApiBaseError, status_code: int):
         error_data = {
-            'error': {
-                'message': error.message,
-                'code': error.code,
-                'status': status_code
+            "error": {
+                "message": error.message,
+                "code": error.code,
+                "status": status_code,
             }
         }
 
         headers = {}
 
         if status_code == HTTPStatus.UNAUTHORIZED:
-            headers["WWW-Authenticate"] = f"Bearer realm=\"{settings.api_title()}\", charset=\"UTF-8\""
+            headers[
+                "WWW-Authenticate"
+            ] = f'Bearer realm="{settings.api_title()}", charset="UTF-8"'
 
         return error_data, status_code, headers

@@ -1,5 +1,8 @@
 from corpus.etl.domain.event.etl_started import EtlStarted
-from corpus.etl.application.extract.data_extractor import ExtractDataCommand, DataExtractor
+from corpus.etl.application.extract.data_extractor import (
+    ExtractDataCommand,
+    DataExtractor,
+)
 
 
 class ExtractDataOnEtlStarted:
@@ -16,8 +19,7 @@ class ExtractDataOnEtlStarted:
             event.selector_mapping,
             event.excluded_tags,
             event.excluded_selectors,
-            event.custom_fields
+            event.custom_fields,
         )
 
         self._extract_data_service.extract(command)
-

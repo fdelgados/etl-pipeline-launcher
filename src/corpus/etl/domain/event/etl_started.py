@@ -3,7 +3,7 @@ from shared.infrastructure.event import DomainEvent
 
 
 class EtlStarted(DomainEvent):
-    _EVENT_NAME = 'etl_started'
+    _EVENT_NAME = "etl_started"
 
     def __init__(
         self,
@@ -18,7 +18,7 @@ class EtlStarted(DomainEvent):
         excluded_selectors: Optional[List],
         description: Optional[str],
         custom_fields: Optional[Dict],
-        url_pattern: Optional[str]
+        url_pattern: Optional[str],
     ):
         super().__init__(etl_id)
 

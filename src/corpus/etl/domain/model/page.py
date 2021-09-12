@@ -11,7 +11,14 @@ from .etl import EtlId
 
 
 class Page(AggregateRoot):
-    def __init__(self, url: Url, etl_id: EtlId, status_code: int, status: str, modified_on: datetime):
+    def __init__(
+        self,
+        url: Url,
+        etl_id: EtlId,
+        status_code: int,
+        status: str,
+        modified_on: datetime,
+    ):
         self._url = url
         self._status_code = status_code
         self._status = status
@@ -29,7 +36,7 @@ class Page(AggregateRoot):
             self._url.address,
             self._status_code,
             self._status,
-            self._modified_on
+            self._modified_on,
         )
 
         self.record_event(page_requested)
@@ -137,14 +144,14 @@ class Page(AggregateRoot):
         self._content = content
 
     def content_text(self) -> str:
-        return ' '.join([text_piece for _, text_piece in self._content.items()])
+        return " ".join([text_piece for _, text_piece in self._content.items()])
 
     @property
     def modified_on(self) -> datetime:
         return self._modified_on
 
     def __repr__(self):
-        return '<Page {} ({})>'.format(self._url.address, self._status_code)
+        return "<Page {} ({})>".format(self._url.address, self._status_code)
 
     def __str__(self):
         return self._url.address

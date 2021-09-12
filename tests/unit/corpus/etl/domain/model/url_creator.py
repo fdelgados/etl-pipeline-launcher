@@ -8,10 +8,10 @@ class UrlCreator(EntityBuilder):
     def __init__(self):
         super().__init__()
 
-        self._address = 'https://www.google.com'
+        self._address = "https://www.google.com"
 
     def as_invalid(self) -> UrlCreator:
-        self._address = 'foo'
+        self._address = "foo"
 
         return self
 

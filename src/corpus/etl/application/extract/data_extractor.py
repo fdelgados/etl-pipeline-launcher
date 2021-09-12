@@ -50,23 +50,20 @@ class DataExtractor:
         self._progress_bar = progress_bar
 
     def extract(self, command: ExtractDataCommand) -> None:
-        self._log('info', 'Start content extraction')
+        self._log("info", "Start content extraction")
 
         etl: Etl = self._etl_repository.etl_of_tenant_and_id(
-            command.tenant_id,
-            EtlId(command.etl_id)
+            command.tenant_id, EtlId(command.etl_id)
         )
 
         urls = self._retrieve_urls(
             etl.sitemaps,
             etl.url_address_pattern,
-            limit=100 if settings.is_development() else 0
+            limit=100 if settings.is_development() else 0,
         )
         number_of_urls = len(urls)
 
-        DomainEventPublisher.publish(
-            [ExtractionStarted(etl.id.value)]
-        )
+        DomainEventPublisher.publish([ExtractionStarted(etl.id.value)])
 
         def scrape(url: Url):
             try:
@@ -76,30 +73,32 @@ class DataExtractor:
 
                 DomainEventPublisher.publish(page.events())
             except RetrievalError as error:
-                self._log('error', f'{url}: {str(error)}')
+                self._log("error", f"{url}: {str(error)}")
             except PageRetrieverFatalError as error:
-                self._log('critical', f'{url}: {str(error)}')
+                self._log("critical", f"{url}: {str(error)}")
 
                 raise
 
-        with parallel_backend('threading', n_jobs=multiprocessing.cpu_count()):
+        with parallel_backend("threading", n_jobs=multiprocessing.cpu_count()):
             Parallel()(
                 delayed(scrape)(url)
-                for url in tqdm(urls, ascii=' #', desc='Extracting content from URLs')
+                for url in tqdm(urls, ascii=" #", desc="Extracting content from URLs")
             )
 
-        DomainEventPublisher.publish([
-            ExtractionCompleted(command.etl_id, number_of_urls)
-        ])
+        DomainEventPublisher.publish(
+            [ExtractionCompleted(command.etl_id, number_of_urls)]
+        )
 
-    def _retrieve_urls(self, sitemaps: List, url_pattern: str = None, limit: int = 0) -> List[Url]:
+    def _retrieve_urls(
+        self, sitemaps: List, url_pattern: str = None, limit: int = 0
+    ) -> List[Url]:
         valid_urls = []
 
         urls = self._url_source.retrieve(max_urls=limit, sitemaps=sitemaps)
 
         for url in urls:
             if url_pattern and not re.fullmatch(url_pattern, url.address):
-                self._logger.warning('Invalid URL: {}'.format(url))
+                self._logger.warning("Invalid URL: {}".format(url))
 
                 continue
 
@@ -108,11 +107,13 @@ class DataExtractor:
         return valid_urls
 
     def _log(self, level: str, message: str):
-        message = f'{self.__class__.__module__}.{self.__class__.__qualname__}: {message}'
+        message = (
+            f"{self.__class__.__module__}.{self.__class__.__qualname__}: {message}"
+        )
 
-        if level == 'warning':
+        if level == "warning":
             self._logger.warning(message)
-        elif level == 'error':
+        elif level == "error":
             self._logger.error(message)
-        elif level == 'critical':
+        elif level == "critical":
             self._logger.critical(message)

@@ -44,7 +44,7 @@ class PageCreator(EntityBuilder):
             EtlId(),
             self._status,
             self._status_code,
-            self.fake.date_time_this_month()
+            self.fake.date_time_this_month(),
         )
 
         if self._canonical_url:

@@ -5,3 +5,4 @@ export
 log
 tests/.hypothesis
 src/.hypothesis
+.venv

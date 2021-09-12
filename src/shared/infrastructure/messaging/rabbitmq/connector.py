@@ -10,22 +10,23 @@ class RabbitMqConnector:
         self._logger = logger
         self._connection = None
 
-    def connect(self, connection_settings: Optional[Dict] = None) -> pika.BlockingConnection:
+    def connect(
+        self, connection_settings: Optional[Dict] = None
+    ) -> pika.BlockingConnection:
         if not connection_settings:
             connection_settings = settings.rabbit_connection_settings()
 
         credentials = pika.PlainCredentials(
-            connection_settings.get('user'),
-            connection_settings.get('password')
+            connection_settings.get("user"), connection_settings.get("password")
         )
 
         try:
             self._connection = pika.BlockingConnection(
                 pika.ConnectionParameters(
-                    host=connection_settings.get('host'),
-                    port=connection_settings.get('port'),
-                    virtual_host=connection_settings.get('vhost', '/'),
-                    credentials=credentials
+                    host=connection_settings.get("host"),
+                    port=connection_settings.get("port"),
+                    virtual_host=connection_settings.get("vhost", "/"),
+                    credentials=credentials,
                 )
             )
 

@@ -25,7 +25,7 @@ class EtlStarter:
     def __init__(self, etl_repository: EtlRepository):
         self._etl_repository = etl_repository
 
-    @security.authorization_required('start:etl')
+    @security.authorization_required("start:etl")
     def start(self, user: User, command: EtlStarterCommand) -> EtlId:
         CommandValidator.validate(command)
 
@@ -41,7 +41,7 @@ class EtlStarter:
             command.excluded_tags,
             command.excluded_selectors,
             command.url_address_pattern,
-            command.custom_fields
+            command.custom_fields,
         )
 
         self._etl_repository.add(etl)

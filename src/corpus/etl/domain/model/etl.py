@@ -10,7 +10,7 @@ from shared_context.domain.model import AggregateRoot, Uuid, Repository
 from corpus.etl.domain.event.etl_started import EtlStarted
 
 
-__all__ = ['EtlId', 'Etl', 'EtlRepository']
+__all__ = ["EtlId", "Etl", "EtlRepository"]
 
 
 class EtlId(Uuid):
@@ -31,7 +31,7 @@ class Etl(AggregateRoot):
         excluded_tags: Optional[List] = None,
         excluded_selectors: Optional[List] = None,
         url_address_pattern: Optional[str] = None,
-        custom_request_fields: Optional[Dict] = None
+        custom_request_fields: Optional[Dict] = None,
     ):
         self._etl_id = etl_id
         self._tenant_id = tenant_id
@@ -43,10 +43,14 @@ class Etl(AggregateRoot):
         self._completed_on = None
         self._selector_mapping = None if not selector_mapping else selector_mapping
         self._excluded_tags = None if not excluded_tags else excluded_tags
-        self._excluded_selectors = None if not excluded_selectors else excluded_selectors
+        self._excluded_selectors = (
+            None if not excluded_selectors else excluded_selectors
+        )
         self._sitemaps = sitemaps
         self._url_address_pattern = url_address_pattern
-        self._custom_request_fields = None if not custom_request_fields else custom_request_fields
+        self._custom_request_fields = (
+            None if not custom_request_fields else custom_request_fields
+        )
 
         event = EtlStarted(
             self._tenant_id,
@@ -60,7 +64,7 @@ class Etl(AggregateRoot):
             self._excluded_selectors,
             self._description,
             self._custom_request_fields,
-            self._url_address_pattern
+            self._url_address_pattern,
         )
         self._started_on = event.occurred_on
 
@@ -111,7 +115,7 @@ class Etl(AggregateRoot):
         self._completed_on = datetime.now()
 
     def __repr__(self):
-        return 'Etl <{}>'.format(self._etl_id.value)
+        return "Etl <{}>".format(self._etl_id.value)
 
 
 class EtlRepository(Repository, metaclass=abc.ABCMeta):
@@ -125,4 +129,4 @@ class EtlRepository(Repository, metaclass=abc.ABCMeta):
 
     @staticmethod
     def generate_unique_name() -> str:
-        return ' '.join(x.capitalize() for x in generate(2))
+        return " ".join(x.capitalize() for x in generate(2))

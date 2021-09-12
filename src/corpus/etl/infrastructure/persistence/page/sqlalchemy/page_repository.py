@@ -2,19 +2,16 @@ import json
 from sqlalchemy import text
 from shared import settings
 from shared_context.infrastructure.persistence.sqlalchemy import Repository
-from corpus.etl.domain.model.page import (
-    PageRepository,
-    Page
-)
+from corpus.etl.domain.model.page import PageRepository, Page
 
 
 class PageRepositoryImpl(PageRepository, Repository):
     def __init__(self):
-        super().__init__(Page, settings.database_dsn('corpus'))
+        super().__init__(Page, settings.database_dsn("corpus"))
 
     def save(self, page: Page) -> None:
         connection = self.create_connection()
-        sentence = '''INSERT INTO web_corpus (
+        sentence = """INSERT INTO web_corpus (
                                 address,
                                 status_code,
                                 status,
@@ -40,7 +37,7 @@ class PageRepositoryImpl(PageRepository, Repository):
                             final_address = :final_address,
                             canonical_address = :canonical_address,
                             datalayer = :datalayer,
-                            modified_on = :modified_on'''
+                            modified_on = :modified_on"""
         with connection.connect() as conn:
             try:
                 conn.start(
@@ -52,10 +49,14 @@ class PageRepositoryImpl(PageRepository, Repository):
                     title=page.title,
                     content=json.dumps(page.content, ensure_ascii=False),
                     is_indexable=page.is_indexable,
-                    final_address=None if not page.final_url else page.final_url.address,
-                    canonical_address=None if not page.canonical_url else page.canonical_url.address,
+                    final_address=None
+                    if not page.final_url
+                    else page.final_url.address,
+                    canonical_address=None
+                    if not page.canonical_url
+                    else page.canonical_url.address,
                     datalayer=json.dumps(page.datalayer, ensure_ascii=False),
-                    modified_on=page.modified_on
+                    modified_on=page.modified_on,
                 )
             except Exception as error:
-                raise Exception(f'{page.url.address}: {str(error)}')
+                raise Exception(f"{page.url.address}: {str(error)}")

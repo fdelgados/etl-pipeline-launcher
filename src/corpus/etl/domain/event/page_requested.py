@@ -4,7 +4,7 @@ from shared.infrastructure.event import DomainEvent
 
 
 class PageRequested(DomainEvent):
-    _EVENT_NAME = 'page_requested'
+    _EVENT_NAME = "page_requested"
 
     def __init__(
         self,
@@ -12,7 +12,7 @@ class PageRequested(DomainEvent):
         address: str,
         status_code: int,
         status: str,
-        modified_on: datetime
+        modified_on: datetime,
     ):
 
         self._address = address

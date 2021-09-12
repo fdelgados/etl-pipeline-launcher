@@ -9,7 +9,7 @@ from shared.domain.service.logging.logger import Logger
 
 
 class FileLogger(Logger):
-    def __init__(self, name: str = 'application', logfile: Optional[str] = None):
+    def __init__(self, name: str = "application", logfile: Optional[str] = None):
         self._name = name
         logger = self._logger
 
@@ -22,8 +22,8 @@ class FileLogger(Logger):
 
         logger.setLevel(level)
 
-        formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: %(message)s')
-        file_handler = logging.FileHandler(f'{settings.logs_dir()}/{logfile}.log')
+        formatter = logging.Formatter("%(asctime)s :: %(levelname)s :: %(message)s")
+        file_handler = logging.FileHandler(f"{settings.logs_dir()}/{logfile}.log")
         logging.StreamHandler()
         file_handler.setFormatter(formatter)
 
@@ -57,5 +57,6 @@ class FileLogger(Logger):
         tb = traceback.TracebackException(exc_type, exc_value, exc_tb)
         stack = tb.stack[0]
 
-        return f'{message}. File {stack.filename}, line {stack.lineno} in <{stack.name}>'
-
+        return (
+            f"{message}. File {stack.filename}, line {stack.lineno} in <{stack.name}>"
+        )

@@ -24,7 +24,7 @@ def _on_message(ch, method, _, message):
     process = subprocess.Popen(
         _build_command(command, message),
         stdout=subprocess.PIPE,
-        universal_newlines=True
+        universal_newlines=True,
     )
 
     while True:
@@ -46,17 +46,17 @@ def _on_message(ch, method, _, message):
 
 
 def _build_command(command_name, message):
-    executable = os.path.join(os.path.dirname(__file__), 'console.py')
+    executable = os.path.join(os.path.dirname(__file__), "console.py")
 
-    command = ['python', executable, command_name]
-    decoded_message = json.loads(message.decode('utf-8'))
-    metadata = decoded_message.get('metadata', {})
-    body = decoded_message.get('body', {})
+    command = ["python", executable, command_name]
+    decoded_message = json.loads(message.decode("utf-8"))
+    metadata = decoded_message.get("metadata", {})
+    body = decoded_message.get("body", {})
 
     def quote(val: Any):
-        chars = [' ']
+        chars = [" "]
         if isinstance(val, list):
-            val = ','.join(val)
+            val = ",".join(val)
 
         if any(char in val for char in chars):
             return f'"{val}"'
@@ -76,43 +76,43 @@ def _build_command(command_name, message):
 
 
 def consume(exchange_name: str, routing_keys: Dict, logger: Logger, channel) -> None:
-    logger.info(' [*] Connecting to server...')
+    logger.info(" [*] Connecting to server...")
 
     try:
-        channel.exchange_declare(exchange=exchange_name, exchange_type='direct', durable=True)
+        channel.exchange_declare(
+            exchange=exchange_name, exchange_type="direct", durable=True
+        )
 
         for routing_key, queues in routing_keys.items():
             for queue in queues.items():
                 queue_prefix = queue[0]
 
-                queue_name = f'{queue_prefix}.on.{routing_key}'
+                queue_name = f"{queue_prefix}.on.{routing_key}"
 
                 result = channel.queue_declare(queue=queue_name, durable=True)
                 queue_name = result.method.queue
                 channel.queue_bind(
-                    queue=queue_name,
-                    exchange=exchange_name,
-                    routing_key=routing_key
+                    queue=queue_name, exchange=exchange_name, routing_key=routing_key
                 )
 
                 channel.basic_consume(
                     queue_name,
                     on_message_callback=_on_message,
                     consumer_tag=queue_prefix,
-                    auto_ack=False
+                    auto_ack=False,
                 )
 
-        logger.info(' [*] Waiting for messages')
+        logger.info(" [*] Waiting for messages")
 
         channel.basic_qos(prefetch_count=1)
 
         thread = threading.Thread(target=channel.start_consuming)
         thread.start()
     except exceptions.ConnectionClosedByBroker:
-        logger.error(' [x] Connection closed by broker')
+        logger.error(" [x] Connection closed by broker")
     except KeyboardInterrupt:
         channel.stop_consuming()
-        logger.info(' [*] Consumer stopped')
+        logger.info(" [*] Consumer stopped")
 
 
 exchanges = settings.subscribed_events()
@@ -120,64 +120,66 @@ connection_settings = settings.rabbit_connection_settings()
 file_logger = FileLogger()
 connector = RabbitMqConnector(file_logger)
 
-_DEFAULT_ENVIRONMENT = os.environ.get('ENVIRONMENT')
+_DEFAULT_ENVIRONMENT = os.environ.get("ENVIRONMENT")
 
 parser = argparse.ArgumentParser(
-    description='Run message workers',
-    usage='python etl.py',
-    add_help=False
+    description="Run message workers", usage="python etl.py", add_help=False
 )
 
 parser.add_argument(
-    '-e', '--environment',
-    dest='environment',
-    help=f'Environment. Default: {_DEFAULT_ENVIRONMENT}',
+    "-e",
+    "--environment",
+    dest="environment",
+    help=f"Environment. Default: {_DEFAULT_ENVIRONMENT}",
     default=_DEFAULT_ENVIRONMENT,
-    metavar=''
+    metavar="",
 )
 
 parser.add_argument(
-    '-w', '--worker',
-    dest='worker',
-    help='Worker name',
-    default=None,
-    metavar=''
+    "-w", "--worker", dest="worker", help="Worker name", default=None, metavar=""
 )
 
 parser.add_argument(
-    '-h', '--host',
-    dest='host',
+    "-h",
+    "--host",
+    dest="host",
     help=f"Host name. Default: {connection_settings.get('host')}",
-    default=connection_settings.get('host'),
-    metavar=''
+    default=connection_settings.get("host"),
+    metavar="",
 )
 
 parser.add_argument(
-    '-p', '--port',
-    dest='port',
+    "-p",
+    "--port",
+    dest="port",
     help=f"Connection port. Default: {connection_settings.get('port')}",
-    default=connection_settings.get('port'),
-    metavar=''
+    default=connection_settings.get("port"),
+    metavar="",
 )
 
 parser.add_argument(
-    '-v', '--virtual-host',
-    dest='virtual_host',
+    "-v",
+    "--virtual-host",
+    dest="virtual_host",
     help=f"Virtual host. Default: {connection_settings.get('vhost', '/')}",
-    default=connection_settings.get('vhost', '/'),
-    metavar=''
+    default=connection_settings.get("vhost", "/"),
+    metavar="",
 )
 
 args = parser.parse_args()
 
-connection = connector.connect({
-    'user': connection_settings.get('user'),
-    'password': connection_settings.get('password'),
-    'host': args.host,
-    'port': args.port,
-    'vhost': args.virtual_host
-})
+connection = connector.connect(
+    {
+        "user": connection_settings.get("user"),
+        "password": connection_settings.get("password"),
+        "host": args.host,
+        "port": args.port,
+        "vhost": args.virtual_host,
+    }
+)
 connection_channel = connection.channel()
 
 for subscribed_exchange, listening_routing_keys in exchanges.items():
-    consume(subscribed_exchange, listening_routing_keys, file_logger, connection_channel)
+    consume(
+        subscribed_exchange, listening_routing_keys, file_logger, connection_channel
+    )

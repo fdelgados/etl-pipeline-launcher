@@ -14,12 +14,12 @@ bootstrap.generate_db_maps()
 app = Flask(__name__)
 app.config.from_mapping(settings.flask_config())
 
-bootstrap.logger.info('Bootstrapping API')
+bootstrap.logger.info("Bootstrapping API")
 api = Api(
     app,
     doc=settings.api_doc_path(),
     title=settings.api_title(),
-    version=settings.api_version_str()
+    version=settings.api_version_str(),
 )
 # api.add_namespace(launcher_api, path=settings.api_prefix())
-api.add_namespace(etl_api, path=settings.api_prefix('etls'))
+api.add_namespace(etl_api, path=settings.api_prefix("etls"))

@@ -4,10 +4,10 @@ from enum import IntEnum
 
 
 __all__ = [
-    'ErrorCodes',
-    'ApiBaseError',
-    'InvalidRequestParamsException',
-    'MissingRequestParamsException'
+    "ErrorCodes",
+    "ApiBaseError",
+    "InvalidRequestParamsException",
+    "MissingRequestParamsException",
 ]
 
 
@@ -39,13 +39,16 @@ class ErrorCodes(IntEnum):
 
         return obj
 
-    GENERIC_ERROR = 1000, 'Application error'
-    MISSING_REQUEST_PARAMETER = 1001, 'Missing request parameter'
-    INVALID_REQUEST_PARAMETER = 1002, 'Invalid request parameter'
+    GENERIC_ERROR = 1000, "Application error"
+    MISSING_REQUEST_PARAMETER = 1001, "Missing request parameter"
+    INVALID_REQUEST_PARAMETER = 1002, "Invalid request parameter"
 
-    AUTHORIZATION_FAILED = 2001, 'Authorization failed'
-    ACCESS_TOKEN_EXPIRED = 2002, 'Access token has expired. You can use the refresh token to obtain a new one'
-    ACCESS_TOKEN_NOT_PROVIDED = 2003, 'Access token not provided'
+    AUTHORIZATION_FAILED = 2001, "Authorization failed"
+    ACCESS_TOKEN_EXPIRED = (
+        2002,
+        "Access token has expired. You can use the refresh token to obtain a new one",
+    )
+    ACCESS_TOKEN_NOT_PROVIDED = 2003, "Access token not provided"
 
     def __str__(self):
         return self._message

@@ -4,7 +4,7 @@ from typing import Optional, List
 from corpus.etl.domain.model.url import Url
 
 
-__all__ = ['UrlSource', 'UrlSourceError']
+__all__ = ["UrlSource", "UrlSourceError"]
 
 
 class UrlSourceError(RuntimeError):

@@ -2,7 +2,7 @@ from shared.infrastructure.event import DomainEvent
 
 
 class ExtractionCompleted(DomainEvent):
-    _EVENT_NAME = 'extraction_completed'
+    _EVENT_NAME = "extraction_completed"
 
     def __init__(self, etl_id: str, number_of_urls: int):
         self._number_of_urls = number_of_urls

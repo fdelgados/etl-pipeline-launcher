@@ -20,12 +20,14 @@ class RabbitMqEventPublisher(EventPublisher):
 
         try:
             channel = connection.channel()
-            channel.exchange_declare(exchange=publisher, exchange_type='direct', durable=True)
+            channel.exchange_declare(
+                exchange=publisher, exchange_type="direct", durable=True
+            )
             channel.basic_publish(
                 exchange=publisher,
                 routing_key=event.event_name(),
                 body=self._build_message(event),
-                properties=pika.BasicProperties(delivery_mode=2)
+                properties=pika.BasicProperties(delivery_mode=2),
             )
         except (exceptions.AMQPError, ValueError) as error:
             self._logger.error(str(error))
@@ -36,10 +38,8 @@ class RabbitMqEventPublisher(EventPublisher):
 
     def _build_message(self, event: DomainEvent):
         message = {
-            'metadata': {
-                'environment': settings.environment()
-            },
-            'body': json.loads(event.serialize())
+            "metadata": {"environment": settings.environment()},
+            "body": json.loads(event.serialize()),
         }
 
         return json.dumps(message).encode()

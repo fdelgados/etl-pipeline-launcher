@@ -5,7 +5,7 @@ from corpus.etl.domain.model.page import Page
 from corpus.etl.domain.model.url import Url
 
 
-__all__ = ['PageRetriever', 'RetrievalError', 'PageRetrieverFatalError']
+__all__ = ["PageRetriever", "RetrievalError", "PageRetrieverFatalError"]
 
 
 class PageRetrieverFatalError(RuntimeError):

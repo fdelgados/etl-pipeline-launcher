@@ -8,10 +8,7 @@ from shared.infrastructure.controller.flask.api import BaseController
 from corpus.etl.application.start.start_etl import EtlStarter, EtlStarterCommand
 
 
-etl_api = Namespace(
-    'etl',
-    description='ETL pipeline starter'
-)
+etl_api = Namespace("etl", description="ETL pipeline starter")
 
 
 @etl_api.errorhandler(AuthorizationError)
@@ -25,7 +22,7 @@ def handle_value_error(error):
     return BaseController.api_error(error, HTTPStatus.BAD_REQUEST)
 
 
-@etl_api.route('')
+@etl_api.route("")
 class EtlController(BaseController):
     def post(self):
         params = request.get_json()
@@ -38,11 +35,11 @@ class EtlController(BaseController):
             params.get("excludedSelectors"),
             params.get("description"),
             params.get("customFields"),
-            params.get("urlPattern")
+            params.get("urlPattern"),
         )
 
         launcher_service: EtlStarter = self.service(
-            'corpus.etl.application.start.start_etl.etl_starter'
+            "corpus.etl.application.start.start_etl.etl_starter"
         )
 
         etl_id = launcher_service.start(command)

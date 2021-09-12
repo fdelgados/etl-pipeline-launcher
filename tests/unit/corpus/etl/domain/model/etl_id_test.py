@@ -16,5 +16,3 @@ class EtlIdTest(unittest.TestCase):
         etl_id = EtlId(str(uuid))
 
         self.assertTrue(etl_id == EtlId(str(uuid)))
-
-

@@ -22,7 +22,7 @@ class TqdmLoggingHandler(logging.Handler):
 
 
 class ProgressBarLogger(Logger):
-    def __init__(self, name: str = 'application'):
+    def __init__(self, name: str = "application"):
         self._name = name
         logger = self._logger
 
@@ -57,7 +57,7 @@ class ProgressBarLogger(Logger):
     def write(self, x):
         # Avoid print() second call (useless \n)
         if len(x.rstrip()) > 0:
-            tqdm.tqdm.write(x, file=self.file, end='')
+            tqdm.tqdm.write(x, file=self.file, end="")
 
     def flush(self):
         return getattr(self.file, "flush", lambda: None)()

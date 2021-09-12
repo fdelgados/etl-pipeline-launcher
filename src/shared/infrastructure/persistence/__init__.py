@@ -14,15 +14,15 @@ class MongoDbRepository(Repository, metaclass=abc.ABCMeta):
         collection: str,
         username: str,
         password: str,
-        host: Optional[str] = 'localhost',
-        port: Optional[int] = 27017
+        host: Optional[str] = "localhost",
+        port: Optional[int] = 27017,
     ):
         self._client = MongoClient(
             host=host,
             port=port,
             username=username,
             password=password,
-            authSource=database
+            authSource=database,
         )
         self._collection = collection
 
@@ -61,8 +61,8 @@ class BaseMongoDbRepository(MongoDbRepository, metaclass=abc.ABCMeta):
         super().__init__(
             databases.get(database),
             collection,
-            connection_settings.get('username'),
-            connection_settings.get('password'),
-            host=connection_settings.get('host'),
-            port=connection_settings.get('port')
+            connection_settings.get("username"),
+            connection_settings.get("password"),
+            host=connection_settings.get("host"),
+            port=connection_settings.get("port"),
         )
