@@ -9,8 +9,8 @@ logging.getLogger().setLevel(logging.INFO)
 parser = argparse.ArgumentParser(prog="LINT")
 
 parser.add_argument(
-    '-p',
-    '--path',
+    "-p",
+    "--path",
     nargs="+",
     help=(
         "path to directory you want to run pylint | "
@@ -36,7 +36,9 @@ args = parser.parse_args()
 path = list(args.path)
 threshold = float(args.threshold)
 
-logging.info("PyLint Starting | Path: {} | Threshold: {} ".format(' '.join(path), threshold))
+logging.info(
+    "PyLint Starting | Path: {} | Threshold: {} ".format(" ".join(path), threshold)
+)
 
 results = Run(path, do_exit=False)
 

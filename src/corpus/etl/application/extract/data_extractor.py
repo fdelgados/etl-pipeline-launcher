@@ -11,7 +11,11 @@ from shared.domain.service.logging.logger import Logger
 
 from corpus.etl.domain.model.etl import EtlId, Etl, EtlRepository
 from corpus.etl.domain.model.url import Url
-from corpus.etl.domain.service.content.page_retriever import PageRetriever, PageRetrieverFatalError, RetrievalError
+from corpus.etl.domain.service.content.page_retriever import (
+    PageRetriever,
+    PageRetrieverFatalError,
+    RetrievalError,
+)
 from corpus.etl.domain.service.content.url_source import UrlSource
 from shared.infrastructure.event import DomainEventPublisher
 from corpus.etl.domain.event.extraction_started import ExtractionStarted
