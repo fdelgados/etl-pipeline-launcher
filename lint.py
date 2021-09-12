@@ -11,13 +11,13 @@ parser = argparse.ArgumentParser(prog="LINT")
 parser.add_argument(
     "-p",
     "--path",
+    nargs="+",
     help=(
         "path to directory you want to run pylint | "
         "Default: %(default)s | "
         "Type: %(type)s "
     ),
     default="./",
-    type=str,
 )
 
 parser.add_argument(
@@ -33,12 +33,12 @@ parser.add_argument(
 )
 
 args = parser.parse_args()
-path = str(args.path)
+path = list(args.path)
 threshold = float(args.threshold)
 
-logging.info("PyLint Starting | Path: {} | Threshold: {} ".format(path, threshold))
+logging.info("PyLint Starting | Path: {} | Threshold: {} ".format(' '.join(path), threshold))
 
-results = Run([path], do_exit=False)
+results = Run(path, do_exit=False)
 
 final_score = results.linter.stats["global_note"]
 
