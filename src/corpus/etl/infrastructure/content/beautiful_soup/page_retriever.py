@@ -268,9 +268,9 @@ class MarkupParser:
 
     def datalayer(self) -> Dict:
         try:
-            script_text = self.markup.find(
-                string=re.compile(r"var\s+dataLayer")
-            ).split("= ", 1)[1]
+            script_text = self.markup.find(string=re.compile(r"var\s+dataLayer")).split(
+                "= ", 1
+            )[1]
 
             return loads(script_text[: script_text.find("];")] + "]")[0]
         except decoder.JSONDecodeError:

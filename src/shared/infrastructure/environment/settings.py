@@ -33,14 +33,10 @@ class Settings:
         services_dir = os.path.join(configs_dir, "services/")
 
         self._subscribed_events = {}
-        subscribed_events_files = glob.glob(
-            f"{services_dir}**/subscribed-events.toml"
-        )
+        subscribed_events_files = glob.glob(f"{services_dir}**/subscribed-events.toml")
 
         for subscribed_events_file in subscribed_events_files:
-            self._dict_merge(
-                self._subscribed_events, toml.load(subscribed_events_file)
-            )
+            self._dict_merge(self._subscribed_events, toml.load(subscribed_events_file))
 
         self._commands = {}
         commands_files = glob.glob(f"{services_dir}**/commands.toml")

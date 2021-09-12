@@ -12,9 +12,7 @@ class PageTest(unittest.TestCase):
         events = page.events()
 
         self.assertEqual(len(events), 1, "Page should have an event")
-        self.assertIsInstance(
-            events[0], PageRequested, "Event should be PageRequested"
-        )
+        self.assertIsInstance(events[0], PageRequested, "Event should be PageRequested")
 
     def test_if_redirected_url_is_not_fully_indexable(self) -> None:
         page = PageCreator().with_redirection().build()
