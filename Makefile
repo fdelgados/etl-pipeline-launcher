@@ -29,9 +29,6 @@ e2e-tests: up
 logs:
 	docker-compose -f docker-compose.yml -f docker-compose.dev.yml logs --tail=25 application
 
-black:
-	black -l 86 $$(find * -name '*.py')
-
 run-workers:
 	docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d worker
 
