@@ -9,7 +9,7 @@ logging.getLogger().setLevel(logging.INFO)
 parser = argparse.ArgumentParser(prog="LINT")
 
 parser.add_argument(
-    "-p",
+    '-p',
     "--path",
     nargs="+",
     help=(
