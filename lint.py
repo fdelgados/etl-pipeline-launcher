@@ -10,7 +10,7 @@ parser = argparse.ArgumentParser(prog="LINT")
 
 parser.add_argument(
     '-p',
-    "--path",
+    '--path',
     nargs="+",
     help=(
         "path to directory you want to run pylint | "
