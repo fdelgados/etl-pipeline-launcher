@@ -400,3 +400,7 @@ exclude-protected=_asdict,_fields,_replace,_source,_make
 # Exceptions that will emit a warning when being caught. Defaults to
 # "Exception"
 overgeneral-exceptions=Exception
+
+[pre-commit-hook]
+command=custom_pylint
+disable=E0401, C0301
