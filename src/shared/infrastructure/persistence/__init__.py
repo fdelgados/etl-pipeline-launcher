@@ -3,8 +3,8 @@ from typing import List, Optional
 
 from pymongo import MongoClient
 
-from shared import settings
 from shared_context.domain.model import Repository, AggregateRoot
+from shared import settings
 
 
 class MongoDbRepository(Repository, metaclass=abc.ABCMeta):

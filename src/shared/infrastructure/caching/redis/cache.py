@@ -1,6 +1,6 @@
-import redis
 from typing import Any
 from datetime import timedelta
+import redis
 
 from shared import settings
 

@@ -1,12 +1,12 @@
 from flask import Flask
 from flask_restx import Api
 
+from bootstrap import Bootstrap
 from corpus.etl.infrastructure.controller.flask.api.etl import etl_api
 
 # from corpus.shared.infrastructure.controller.flask.api import launcher_api, Launcher
 from shared import settings
 
-from bootstrap import Bootstrap
 
 bootstrap = Bootstrap()
 bootstrap.generate_db_maps()
