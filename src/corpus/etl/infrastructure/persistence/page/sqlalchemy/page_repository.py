@@ -1,7 +1,7 @@
 import json
 from sqlalchemy import text
-from shared import settings
 from shared_context.infrastructure.persistence.sqlalchemy import Repository
+from shared import settings
 from corpus.etl.domain.model.page import PageRepository, Page
 
 

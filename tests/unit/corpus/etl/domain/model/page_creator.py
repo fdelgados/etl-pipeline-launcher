@@ -4,10 +4,10 @@ from http import HTTPStatus
 
 from typing import Optional
 
-from .. import EntityBuilder
 from corpus.etl.domain.model.page import Page
 from corpus.etl.domain.model.url import Url
 from corpus.etl.domain.model.etl import EtlId
+from .. import EntityBuilder
 
 
 class PageCreator(EntityBuilder):

@@ -4,25 +4,29 @@ import os
 import re
 from typing import Optional, List, Dict
 from datetime import datetime
-import requests
 from http import HTTPStatus
-import pytz
 from time import sleep
-
-import urllib3
 from urllib.robotparser import RobotFileParser
 from urllib.parse import urlparse
+from json import loads, decoder
+import requests
+import pytz
+
+import urllib3
 
 from bs4 import BeautifulSoup
-from json import loads, decoder
 
 from shared import settings
+from shared.domain.service.caching.cache import Cache
 from corpus.etl.domain.model.page import Page
 from corpus.etl.domain.model.url import Url
 from corpus.etl.domain.model.etl import Etl
-from corpus.etl.domain.service.content.page_retriever import PageRetriever
+from corpus.etl.domain.service.content.page_retriever import (
+    PageRetriever,
+    RetrievalError,
+    PageRetrieverFatalError,
+)
 
-from shared.domain.service.caching.cache import Cache
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 

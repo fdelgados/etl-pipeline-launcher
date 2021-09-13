@@ -1,12 +1,11 @@
 import json
-import re
 import pika
 from pika import exceptions
 
+from shared_context.domain.events import DomainEvent
 from shared import settings
 from shared.domain.service.messaging.publisher import EventPublisher
 from shared.domain.service.logging.logger import Logger
-from shared_context.domain.events import DomainEvent
 from .connector import RabbitMqConnector
 
 

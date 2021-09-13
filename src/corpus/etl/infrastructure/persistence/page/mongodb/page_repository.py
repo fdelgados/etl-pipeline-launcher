@@ -4,7 +4,7 @@ from shared.infrastructure.persistence.mongodb.repository import BaseMongoDbRepo
 
 
 class MongoDbPageRepository(PageRepository, BaseMongoDbRepository):
-    def save(self, page: Page) -> None:
+    def add(self, page: Page) -> None:
         self.collection.update_one(
             {"address": page.url.address},
             {

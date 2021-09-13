@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from .. import EntityBuilder
 from corpus.etl.domain.model.url import Url
+from .. import EntityBuilder
 
 
 class UrlCreator(EntityBuilder):

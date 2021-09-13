@@ -1,6 +1,6 @@
+from typing import Optional, Dict
 import pika
 from pika import exceptions
-from typing import Optional, Dict
 from shared import settings
 from shared.domain.service.logging.logger import Logger
 

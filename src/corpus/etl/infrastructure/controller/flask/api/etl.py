@@ -1,6 +1,6 @@
+from http import HTTPStatus
 from flask import make_response, request
 from flask_restx import Namespace
-from http import HTTPStatus
 
 from shared import settings, InvalidRequestParamsException
 from shared.infrastructure.security import AuthorizationError, ExpiredTokenException

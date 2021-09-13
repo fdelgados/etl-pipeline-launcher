@@ -10,8 +10,8 @@ import urllib3
 from bs4 import BeautifulSoup
 
 from corpus.etl.domain.model.url import Url, InvalidUrlException
-from corpus.etl.domain.service.content.page_retriever import *
-from corpus.etl.domain.service.content.url_source import *
+from corpus.etl.domain.service.content.page_retriever import PageRetrieverFatalError
+from corpus.etl.domain.service.content.url_source import UrlSource, UrlSourceError
 
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)

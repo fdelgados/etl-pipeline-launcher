@@ -1,7 +1,7 @@
+from http import HTTPStatus
 from flask_restx import Resource
 from shared import Application
 from shared import ApiBaseError, ErrorCodes, settings
-from http import HTTPStatus
 
 
 class BaseController(Resource):

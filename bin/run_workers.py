@@ -4,9 +4,9 @@ import argparse
 import os.path
 import subprocess
 import threading
-from pika import exceptions
 from typing import Dict, Any
 import json
+from pika import exceptions
 
 from shared.infrastructure.logging.file.logger import FileLogger
 from shared.domain.service.logging.logger import Logger

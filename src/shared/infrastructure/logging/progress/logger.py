@@ -1,17 +1,11 @@
-import tqdm
-import sys
 import logging
-
-from typing import Optional
+import tqdm
 
 from shared import settings
 from shared.domain.service.logging.logger import Logger
 
 
 class TqdmLoggingHandler(logging.Handler):
-    def __init__(self, level=logging.NOTSET):
-        super().__init__(level)
-
     def emit(self, record):
         try:
             msg = self.format(record)

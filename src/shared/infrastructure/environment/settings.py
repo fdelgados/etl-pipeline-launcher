@@ -44,15 +44,15 @@ class Settings:
             self._dict_merge(self._commands, toml.load(commands_file))
 
     def _dict_merge(self, dct, merge_dct) -> None:
-        for k, v in merge_dct.items():
+        for key in merge_dct.keys():
             if (
-                k in dct
-                and isinstance(dct[k], dict)
-                and isinstance(merge_dct[k], collections.abc.Mapping)
+                key in dct
+                and isinstance(dct[key], dict)
+                and isinstance(merge_dct[key], collections.abc.Mapping)
             ):
-                self._dict_merge(dct[k], merge_dct[k])
+                self._dict_merge(dct[key], merge_dct[key])
             else:
-                dct[k] = merge_dct[k]
+                dct[key] = merge_dct[key]
 
     def environment(self) -> str:
         return self._environment
@@ -174,7 +174,7 @@ class Settings:
         return os.path.join(self._configs_dir(), "services/", "event-handlers.xml")
 
     def public_key(self) -> str:
-        with open(self._get("identity_access", "public_key_file")) as fp:
+        with open(self._get("identity_access", "public_key_file"), encoding='utf8') as fp:
             return fp.read()
 
     def token_issuer(self) -> str:
