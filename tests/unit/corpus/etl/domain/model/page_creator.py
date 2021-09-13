@@ -13,7 +13,6 @@ from .. import EntityBuilder
 class PageCreator(EntityBuilder):
     def __init__(self):
         super().__init__()
-
         self._status = HTTPStatus.OK
         self._status_code = HTTPStatus.OK.phrase
         self._canonical_url = None
