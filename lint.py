@@ -45,7 +45,7 @@ path = list(args.path)
 threshold = float(args.threshold)
 
 logger.info(
-    "PyLint Starting | Path: {} | Threshold: {} ".format(" ".join(path), threshold)
+    "PyLint Starting | Threshold: {} | Files:\n* {} ".format(threshold, "\n* ".join(path))
 )
 
 results = Run(path, do_exit=False)
