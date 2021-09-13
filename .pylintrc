@@ -403,4 +403,4 @@ overgeneral-exceptions=Exception
 
 [pre-commit-hook]
 command=custom_pylint
-disable=E0401, C0301
+disable=E0401, C0301, R0801
