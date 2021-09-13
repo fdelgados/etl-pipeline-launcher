@@ -1,7 +1,0 @@
-#/bin/sh
-
-black ./
-
-python lint.py --path ./src ./tests ./bin
-
-make test
