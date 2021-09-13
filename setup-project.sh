@@ -4,7 +4,16 @@ mkdir -p resources/git/hooks
 
 git config core.hooksPath resources/git/hooks
 
-echo $'#/bin/sh\n\nblack ./\n\npython lint.py --path ./src ./tests ./bin\n\nmake test' > resources/git/hooks/pre-commit
+PRE_COMMIT_HOOK=$'#/bin/sh\n
+MODIFIED_FILES=$(git diff --stat --cached --name-only -- `find . -name \'*.py\'` 2>&1)
+if [ ! -z "$MODIFIED_FILES" ]
+then
+    black $MODIFIED_FILES
+    python lint.py --path $MODIFIED_FILES --threshold=9
+    make test
+fi'
+
+echo "$PRE_COMMIT_HOOK" > resources/git/hooks/pre-commit
 
 chmod a+x resources/git/hooks/pre-commit
 
