@@ -50,6 +50,14 @@ CREATE INDEX `event_store_event_name_index`
 CREATE INDEX `event_store_aggregate_id_index`
     ON event_store (`aggregate_id`);
 
+ALTER TABLE `event_store`
+ADD COLUMN `etl_id` CHAR(36)
+GENERATED ALWAYS AS (
+    event_data ->> "$.etl_id"
+);
+CREATE INDEX `event_store_event_data_index`
+    ON event_store (`etl_id`);
+
 DROP TABLE IF EXISTS `etls`;
 CREATE TABLE `etls`
 (
