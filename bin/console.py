@@ -13,7 +13,7 @@ from shared.infrastructure.entrypoint.command import ConsoleCommand, Input
 def _parse_input_args(arguments: List):
     input_args = {}
     for argument in arguments:
-        argument_name, value = argument.split('=')
+        argument_name, value = argument.split("=")
         argument_name = argument_name.lstrip("-").replace("-", "_")
         value = value.strip('"')
 
