@@ -58,11 +58,11 @@ services:
       - PYTHONDONTWRITEBYTECODE=1
       - FLASK_APP=shared/infrastructure/entrypoint/flask/start.py
       - PYTHONUNBUFFERED=1
-    entrypoint:
-      - flask
-      - run
-      - --host=0.0.0.0
-      - --port=5000
+#    entrypoint:
+#      - flask
+#      - run
+#      - --host=0.0.0.0
+#      - --port=5000
     ports:
       - "5000:5000"
 
