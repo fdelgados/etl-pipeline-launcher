@@ -1,30 +1,7 @@
 import threading
-import abc
-from typing import List, Optional, Any
-from shared_context.domain.events import DomainEvent as BaseDomainEvent
+from typing import List
+from shared_context.domain.events import DomainEvent
 from shared import Application
-
-
-__all__ = ["DomainEvent", "DomainEventPublisher"]
-
-
-class DomainEvent(BaseDomainEvent, metaclass=abc.ABCMeta):
-    _EVENT_NAME = None
-
-    def __init__(self, etl_id: str, aggregate_id: Optional[Any] = None):
-        self._etl_id = etl_id
-
-        if not aggregate_id:
-            aggregate_id = self._etl_id
-
-        super().__init__(aggregate_id)
-
-    @property
-    def etl_id(self):
-        return self._etl_id
-
-    def event_name(self) -> str:
-        return self._EVENT_NAME
 
 
 class DomainEventPublisher:

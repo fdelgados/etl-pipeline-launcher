@@ -1,5 +1,5 @@
 from typing import List, Dict, Optional
-from shared.infrastructure.event import DomainEvent
+from shared_context.domain.events import DomainEvent
 
 
 class EtlStarted(DomainEvent):
@@ -35,6 +35,9 @@ class EtlStarted(DomainEvent):
         self._custom_fields = custom_fields
         self._url_pattern = url_pattern
 
+    def event_name(self) -> str:
+        return self._EVENT_NAME
+
     @property
     def tenant_id(self) -> str:
         return self._tenant_id
@@ -42,6 +45,10 @@ class EtlStarted(DomainEvent):
     @property
     def name(self) -> str:
         return self._name
+
+    @property
+    def etl_id(self) -> str:
+        return self._etl_id
 
     @property
     def launched_by(self) -> str:

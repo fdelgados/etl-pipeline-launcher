@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from shared.infrastructure.event import DomainEvent
+from shared_context.domain.events import DomainEvent
 
 
 class PageRequested(DomainEvent):
@@ -14,13 +14,20 @@ class PageRequested(DomainEvent):
         status: str,
         modified_on: datetime,
     ):
-
+        self._etl_id = etl_id
         self._address = address
         self._status_code = status_code
         self._status = status
         self._modified_on = modified_on
 
-        super().__init__(etl_id, address)
+        super().__init__(address)
+
+    def event_name(self) -> str:
+        return self._EVENT_NAME
+
+    @property
+    def etl_id(self) -> str:
+        return self._etl_id
 
     @property
     def address(self) -> str:

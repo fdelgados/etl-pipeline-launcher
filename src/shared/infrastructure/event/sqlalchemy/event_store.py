@@ -12,13 +12,12 @@ class SqlAlchemyEventStore(EventStore, DbalService):
 
     def store(self, event: DomainEvent):
         sentence = """
-            INSERT INTO event_store (etl_id, occurred_on, event_data, event_name, aggregate_id)
-            VALUES (:etl_id, :occurred_on, :event_data, :event_name, :aggregate_id)
+            INSERT INTO event_store (occurred_on, event_data, event_name, aggregate_id)
+            VALUES (:occurred_on, :event_data, :event_name, :aggregate_id)
         """
 
         self.execute(
             sentence,
-            etl_id=event.etl_id,
             occurred_on=event.occurred_on,
             event_data=event.serialize(),
             event_name=event.event_name(),

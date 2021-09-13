@@ -37,7 +37,6 @@ DROP TABLE IF EXISTS `event_store`;
 CREATE TABLE `event_store`
 (
     `id`           INT AUTO_INCREMENT,
-    `etl_id` CHAR(36) NOT NULL,
     `aggregate_id` VARCHAR(255) NOT NULL,
     `event_name`   VARCHAR(100) NOT NULL,
     `event_data`   JSON         NOT NULL,
@@ -50,9 +49,6 @@ CREATE INDEX `event_store_event_name_index`
 
 CREATE INDEX `event_store_aggregate_id_index`
     ON event_store (`aggregate_id`);
-
-CREATE INDEX `event_store_etl_id_index`
-    ON event_store (`etl_id`);
 
 DROP TABLE IF EXISTS `etls`;
 CREATE TABLE `etls`
