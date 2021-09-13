@@ -174,7 +174,9 @@ class Settings:
         return os.path.join(self._configs_dir(), "services/", "event-handlers.xml")
 
     def public_key(self) -> str:
-        with open(self._get("identity_access", "public_key_file"), encoding='utf8') as fp:
+        with open(
+            self._get("identity_access", "public_key_file"), encoding="utf8"
+        ) as fp:
             return fp.read()
 
     def token_issuer(self) -> str:

@@ -1,6 +1,6 @@
 import uuid
 
-import sqlalchemy.types as types
+from sqlalchemy import types
 
 from corpus.etl.domain.model.etl import EtlId
 
