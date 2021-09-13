@@ -5,8 +5,8 @@ from shared import ApiBaseError, ErrorCodes, settings
 
 
 class BaseController(Resource):
-    def __init__(self, api=None, *args, **kwargs):
-        super().__init__(api, *args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(None, *args, **kwargs)
 
         self._container = Application.container()
 

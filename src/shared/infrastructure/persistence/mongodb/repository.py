@@ -2,10 +2,9 @@ import abc
 
 from typing import List
 
-from shared import settings
-
 from shared_context.domain.model import AggregateRoot
 from shared_context.infrastructure.persistence.mongodb import MongoDbRepository
+from shared import settings
 
 
 class BaseMongoDbRepository(MongoDbRepository, metaclass=abc.ABCMeta):
