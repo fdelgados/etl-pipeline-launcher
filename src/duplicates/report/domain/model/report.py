@@ -21,7 +21,7 @@ class Report(AggregateRoot):
         name: str,
         created_by: User,
         k_shingle_size: KShingleSize,
-        similarity_threshold: SimilarityThreshold
+        similarity_threshold: SimilarityThreshold,
     ):
         self._id = report_id
         self._name = name
@@ -41,7 +41,7 @@ class Report(AggregateRoot):
             self._name,
             self._created_by.username(),
             self._k_shingle_size.value,
-            self._similarity_threshold.value
+            self._similarity_threshold.value,
         )
 
         self._started_on = report_created.occurred_on

@@ -6,10 +6,7 @@ from shared.domain.service.logging.logger import Logger
 from shared.domain.model.user.user import User
 from duplicates.shared.domain.model.similarity_threshold import SimilarityThreshold
 from duplicates.shared.domain.model.k_shingle_size import KShingleSize
-from duplicates.report.domain.model.report import (
-    Report,
-    ReportRepository
-)
+from duplicates.report.domain.model.report import Report, ReportRepository
 
 
 @dataclass(frozen=True)
@@ -32,7 +29,7 @@ class ReportCreator:
             self._report_repository.generate_unique_name(),
             user,
             KShingleSize(command.k_shingle_size),
-            SimilarityThreshold(command.similarity_threshold)
+            SimilarityThreshold(command.similarity_threshold),
         )
 
         self._report_repository.save(report)

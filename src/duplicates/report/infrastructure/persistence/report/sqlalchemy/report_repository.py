@@ -1,8 +1,5 @@
 from shared_context.infrastructure.persistence.sqlalchemy import Repository
-from duplicates.report.domain.model.report import (
-    ReportRepository,
-    Report
-)
+from duplicates.report.domain.model.report import ReportRepository, Report
 
 from shared import settings
 

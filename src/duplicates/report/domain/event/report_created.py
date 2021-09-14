@@ -2,7 +2,7 @@ from shared_context.domain.events import DomainEvent
 
 
 class ReportCreated(DomainEvent):
-    _EVENT_NAME = 'report_created'
+    _EVENT_NAME = "report_created"
 
     def __init__(
         self,
@@ -10,7 +10,7 @@ class ReportCreated(DomainEvent):
         name: str,
         created_by: str,
         k_shingle_size: int,
-        similarity_threshold: float
+        similarity_threshold: float,
     ):
         super().__init__()
 

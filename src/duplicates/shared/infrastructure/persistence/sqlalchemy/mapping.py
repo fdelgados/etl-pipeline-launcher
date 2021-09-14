@@ -8,7 +8,7 @@ from duplicates.report.domain.model.report import Report
 from duplicates.shared.infrastructure.persistence.sqlalchemy.type import (
     ReportIdType,
     KShingleSizeType,
-    SimilarityThresholdType
+    SimilarityThresholdType,
 )
 
 
@@ -38,7 +38,5 @@ class DuplicatesMapping(Orm):
             Report,
             reports_table,
             column_prefix="_",
-            properties={
-                "_report_id": reports_table.c.id
-            }
+            properties={"_report_id": reports_table.c.id},
         )
