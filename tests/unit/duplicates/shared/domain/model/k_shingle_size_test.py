@@ -19,14 +19,8 @@ class KShingleSizeTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             KShingleSize(KShingleSize.max() + 1)
 
-    @given(
-        st.integers(
-            min_value=KShingleSize.min(), max_value=KShingleSize.max()
-        )
-    )
-    def test_if_it_not_raise_an_exception_when_value_is_valid(
-        self, value: int
-    ) -> None:
+    @given(st.integers(min_value=KShingleSize.min(), max_value=KShingleSize.max()))
+    def test_if_it_not_raise_an_exception_when_value_is_valid(self, value: int) -> None:
         k_shingle_size = KShingleSize(value)
 
         self.assertTrue(
