@@ -5,8 +5,8 @@ timezone = "Europe/Madrid"
 databases.web_corpus = "web_corpus_es"
 
 [database]
-host = "web-corpus-es"
+host = "nlp.mysql.emagister.com"
 [database.corpus]
-  name = "corpus_es"
-  user = "corpus_es"
+  name = "corpus"
+  user = "corpus"
   password = "wTUbtEmk2S6R"

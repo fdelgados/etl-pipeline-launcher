@@ -9,9 +9,13 @@ from setuptools import find_packages
 
 
 class Settings:
-    def __init__(self, environment: str = "development", country: str = "es"):
+    def __init__(self, site: str, environment: Optional[str] = "development"):
         self._environment = environment
-        self._country = country
+
+        if not site:
+            raise ValueError("A site name must be provided")
+
+        self._site = site
 
         configs_dir = "/var/www/config"
 
@@ -22,11 +26,11 @@ class Settings:
 
         self._dict_merge(self._config, common_environment_config)
 
-        country_config = toml.load(f"{configs_dir}/{self._country}/settings.toml")
+        country_config = toml.load(f"{configs_dir}/{self._site}/settings.toml")
         self._dict_merge(self._config, country_config)
 
         country_environment_config = toml.load(
-            f"{configs_dir}/{self._country}/settings.{self._environment}.toml"
+            f"{configs_dir}/{self._site}/settings.{self._environment}.toml"
         )
         self._dict_merge(self._config, country_environment_config)
 
@@ -62,6 +66,9 @@ class Settings:
 
     def is_development(self) -> bool:
         return self._environment == "development"
+
+    def site(self) -> str:
+        return self._site
 
     def flask_config(self) -> Dict:
         if not self._config.get("flask"):
@@ -170,8 +177,10 @@ class Settings:
 
         return glob.glob(f"{services_dir}**/*-services.xml")
 
-    def event_handlers_file(self) -> str:
-        return os.path.join(self._configs_dir(), "services/", "event-handlers.xml")
+    def event_handlers_files(self) -> str:
+        services_dir = os.path.join(self._configs_dir(), "services/")
+
+        return glob.glob(f"{services_dir}**/event-handlers.xml")
 
     def public_key(self) -> str:
         with open(
@@ -223,5 +232,5 @@ class Settings:
 
 
 settings = Settings(
-    os.environ.get("ENVIRONMENT", "development"), os.environ.get("COUNTRY", "es")
+    os.environ.get("SITE"), os.environ.get("ENVIRONMENT", "development")
 )

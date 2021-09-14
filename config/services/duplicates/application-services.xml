@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+
+<services>
+    <service id="duplicates.report.application.create.report_creator"
+             class="duplicates.report.application.create.report_creator.ReportCreator">
+        <argument name="logger" value="shared.domain.service.logging.logger.logger" type="service"/>
+        <argument name="report_repository" value="duplicates.report.domain.model.report.report_repository" type="service"/>
+    </service>
+</services>

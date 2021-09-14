@@ -1,9 +1,9 @@
 from dataclasses import dataclass, field
 from typing import List
 
-from shared.infrastructure.event import DomainEventPublisher
 from shared import MissingRequestParamsException
-from shared.infrastructure import security
+from shared.infrastructure.event import DomainEventPublisher
+from shared.infrastructure.security import authorization_required
 from shared.domain.model.user.user import User
 
 from corpus.etl.domain.model.etl import Etl, EtlId, EtlRepository
@@ -25,7 +25,7 @@ class EtlStarter:
     def __init__(self, etl_repository: EtlRepository):
         self._etl_repository = etl_repository
 
-    @security.authorization_required("start:etl")
+    @authorization_required("start:etl")
     def start(self, user: User, command: EtlStarterCommand) -> EtlId:
         CommandValidator.validate(command)
 

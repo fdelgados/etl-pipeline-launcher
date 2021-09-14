@@ -1,12 +1,12 @@
-CREATE USER 'corpus_es'@'%' IDENTIFIED BY 'wTUbtEmk2S6R';
+CREATE USER 'corpus'@'%' IDENTIFIED BY 'wTUbtEmk2S6R';
 
-CREATE DATABASE corpus_es CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE corpus CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-GRANT INSERT, SELECT, UPDATE, DELETE ON corpus_es.* TO 'corpus_es';
+GRANT INSERT, SELECT, UPDATE, DELETE ON corpus.* TO 'corpus';
 
 FLUSH PRIVILEGES;
 
-USE `corpus_es`;
+USE `corpus`;
 
 -- FUNCTIONS
 DELIMITER //

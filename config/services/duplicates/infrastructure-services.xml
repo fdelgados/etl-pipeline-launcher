@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+
+<services>
+    <service id="duplicates.report.infrastructure.persistence.report.sqlalchemy.report_repository"
+             class="duplicates.report.infrastructure.persistence.report.sqlalchemy.report_repository.ReportRepositoryImpl" />
+</services>

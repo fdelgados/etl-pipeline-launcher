@@ -9,12 +9,15 @@ from shared.domain.service.logging.logger import Logger
 
 
 class FileLogger(Logger):
-    def __init__(self, name: str = "application", logfile: Optional[str] = None):
+    def __init__(self, name: Optional[str] = None, logfile: Optional[str] = None):
+        if not name:
+            name = settings.site()
+
         self._name = name
         logger = self._logger
 
         if not logfile:
-            logfile = name
+            logfile = self._name
 
         level = logging.DEBUG
         if settings.is_production():

@@ -8,7 +8,6 @@ credential-shield-fdelgados==2.1.0
 cryptography==3.4.7
 coolname~=1.1.0
 ddd-shared-fdelgados==0.3.7
-pydic-fdelgados==0.0.5
 Faker==8.12.1
 Flask==2.0.1
 flask-restx==0.5.0
@@ -35,6 +34,7 @@ pluggy==0.13.1
 pprintpp==0.4.0
 psutil==5.8.0
 py==1.10.0
+pydic-fdelgados==0.0.6
 pymongo==3.12.0
 PyMySQL==0.9.3
 pyparsing==2.4.7

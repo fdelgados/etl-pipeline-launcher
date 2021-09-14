@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+
+<services>
+    <service id="duplicates.report.domain.model.report.report_repository"
+             alias="duplicates.report.infrastructure.persistence.report.sqlalchemy.report_repository"/>
+</services>

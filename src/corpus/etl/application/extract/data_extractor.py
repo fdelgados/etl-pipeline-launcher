@@ -7,6 +7,7 @@ from joblib import Parallel, delayed, parallel_backend
 from tqdm import tqdm
 
 from shared import settings
+from shared.infrastructure.security import authorization_required
 from shared.domain.service.logging.logger import Logger
 from shared.infrastructure.event import DomainEventPublisher
 
@@ -53,6 +54,7 @@ class DataExtractor:
         self._logger = logger
         self._progress_bar = progress_bar
 
+    @authorization_required("extract:data")
     def extract(self, command: ExtractDataCommand) -> None:
         self._log("info", "Start content extraction")
 

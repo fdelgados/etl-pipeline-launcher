@@ -17,7 +17,7 @@ class ConsoleCommand(metaclass=abc.ABCMeta):
     def __init__(self, environment: str):
         self._environment = environment
         self._container = create_container(
-            settings.services_files(), settings.event_handlers_file()
+            settings.services_files(), settings.event_handlers_files()
         )
 
     @property

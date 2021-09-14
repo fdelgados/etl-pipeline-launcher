@@ -1,0 +1,8 @@
+version: "3"
+
+services:
+  application-emagister.com:
+    environment:
+      - ENVIRONMENT=development
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
