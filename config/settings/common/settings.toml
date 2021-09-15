@@ -3,7 +3,7 @@ id = "fc050f989329b47f861e5760c713c820"
 root_dir = "/var/www"
 logs_dir = "/log"
 contexts_dir = "/var/www/src"
-configs_dir = "/var/www/config/settings"
+configs_dir = "/var/www/config"
 
 [identity_access]
 token_issuer = "http://localhost"

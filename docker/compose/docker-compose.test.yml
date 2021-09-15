@@ -2,7 +2,6 @@ version: "3"
 
 services:
   application:
-    container_name: nlp-application-test
     environment:
       - ENVIRONMENT=test
       - FLASK_ENV=test
@@ -12,7 +11,3 @@ services:
   worker:
     environment:
       - ENVIRONMENT=test
-networks:
-  default:
-    external:
-      name: nlp_net

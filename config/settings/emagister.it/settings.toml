@@ -5,6 +5,7 @@ timezone = "Europe/Rome"
 port = 5005
 
 [mongodb]
+connection.host = "mongodb-emagister.it"
 databases.web_corpus = "web_corpus_it"
 
 [database]
@@ -26,6 +27,3 @@ host = "redis-emagister.it"
 
 [rabbitmq]
 connection.host = "rabbitmq-emagister.it"
-
-[mongodb]
-connection.host = "mongodb-emagister.it"

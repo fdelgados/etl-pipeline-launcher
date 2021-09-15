@@ -7,6 +7,8 @@ services:
       dockerfile: Dockerfile
     image: mysql-server:latest
     command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - nlp_net
 
   application:
     build:
@@ -30,6 +32,8 @@ services:
       - FLASK_APP=shared/infrastructure/entrypoint/flask/start.py
       - PYTHONDONTWRITEBYTECODE=1
       - PYTHONUNBUFFERED=1
+    networks:
+      - nlp_net
 
   worker:
     build:
@@ -42,17 +46,25 @@ services:
       - mailhog
       - mongo
       - mongo-express
+    networks:
+      - nlp_net
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
     restart: unless-stopped
+    networks:
+      - nlp_net
 
   redis:
     image: redis:alpine
     command: [ "redis-server", "--appendonly", "yes" ]
+    networks:
+      - nlp_net
 
   mailhog:
     image: mailhog/mailhog
+    networks:
+      - nlp_net
 
   mongo:
     build:
@@ -60,11 +72,19 @@ services:
       dockerfile: Dockerfile
     image: mongo:5.0-focal
     restart: always
+    networks:
+      - nlp_net
 
   mongo-express:
     image: mongo-express:0.32
     restart: always
+    networks:
+      - nlp_net
 
 networks:
   nlp_net:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
+          gateway: 10.5.0.1

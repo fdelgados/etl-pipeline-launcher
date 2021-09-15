@@ -2,6 +2,7 @@
 timezone = "Europe/Madrid"
 
 [mongodb]
+connection.host = "mongodb-emagister.com"
 databases.web_corpus = "web_corpus_es"
 
 [database]
@@ -23,6 +24,3 @@ host = "redis-emagister.com"
 
 [rabbitmq]
 connection.host = "rabbitmq-emagister.com"
-
-[mongodb]
-connection.host = "mongodb-emagister.com"

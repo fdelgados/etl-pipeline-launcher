@@ -3,7 +3,6 @@ from typing import List
 
 from shared import MissingRequestParamsException
 from shared.infrastructure.event import DomainEventPublisher
-from shared.infrastructure.security import authorization_required
 from shared.domain.model.user.user import User
 
 from corpus.etl.domain.model.etl import Etl, EtlId, EtlRepository
@@ -11,6 +10,8 @@ from corpus.etl.domain.model.etl import Etl, EtlId, EtlRepository
 
 @dataclass(frozen=True)
 class EtlStarterCommand:
+    tenant_id: str
+    username: str
     sitemaps: list
     custom_request_headers: dict = field(default_factory={})
     selector_mapping: dict = field(default_factory={})
@@ -25,15 +26,14 @@ class EtlStarter:
     def __init__(self, etl_repository: EtlRepository):
         self._etl_repository = etl_repository
 
-    @authorization_required("start:etl")
-    def start(self, user: User, command: EtlStarterCommand) -> EtlId:
+    def start(self, command: EtlStarterCommand) -> EtlId:
         CommandValidator.validate(command)
 
         etl = Etl(
             self._etl_repository.generate_identifier(),
-            user.tenant_id(),
+            command.tenant_id,
             self._etl_repository.generate_unique_name(),
-            user.username(),
+            command.username,
             command.sitemaps,
             command.description,
             command.custom_request_headers,
@@ -44,7 +44,7 @@ class EtlStarter:
             command.custom_fields,
         )
 
-        self._etl_repository.add(etl)
+        self._etl_repository.save(etl)
 
         DomainEventPublisher.publish(etl.events())
 

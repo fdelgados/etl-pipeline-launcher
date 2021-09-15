@@ -17,34 +17,34 @@ class Settings:
 
         self._site = site
 
-        configs_dir = "/var/www/config/settings"
+        configs_dir = "/var/www/config"
+        settings_dir = f"{configs_dir}/settings"
+        services_dir = f"{configs_dir}/services"
 
-        self._config = toml.load(f"{configs_dir}/common/settings.toml")
+        self._config = toml.load(f"{settings_dir}/common/settings.toml")
         common_environment_config = toml.load(
-            f"{configs_dir}/common/settings.{self._environment}.toml"
+            f"{settings_dir}/common/settings.{self._environment}.toml"
         )
 
         self._dict_merge(self._config, common_environment_config)
 
         if not self.is_test():
-            country_config = toml.load(f"{configs_dir}/{self._site}/settings.toml")
+            country_config = toml.load(f"{settings_dir}/{self._site}/settings.toml")
             self._dict_merge(self._config, country_config)
 
             country_environment_config = toml.load(
-                f"{configs_dir}/{self._site}/settings.{self._environment}.toml"
+                f"{settings_dir}/{self._site}/settings.{self._environment}.toml"
             )
             self._dict_merge(self._config, country_environment_config)
 
-        services_dir = os.path.join(configs_dir, "services/")
-
         self._subscribed_events = {}
-        subscribed_events_files = glob.glob(f"{services_dir}**/subscribed-events.toml")
+        subscribed_events_files = glob.glob(f"{services_dir}/**/subscribed-events.toml")
 
         for subscribed_events_file in subscribed_events_files:
             self._dict_merge(self._subscribed_events, toml.load(subscribed_events_file))
 
         self._commands = {}
-        commands_files = glob.glob(f"{services_dir}**/commands.toml")
+        commands_files = glob.glob(f"{services_dir}/**/commands.toml")
         for commands_file in commands_files:
             self._dict_merge(self._commands, toml.load(commands_file))
 

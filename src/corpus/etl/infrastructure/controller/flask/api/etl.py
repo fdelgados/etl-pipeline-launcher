@@ -3,7 +3,7 @@ from flask import make_response, request
 from flask_restx import Namespace
 
 from shared import settings, InvalidRequestParamsException
-from shared.infrastructure.security import AuthorizationError, ExpiredTokenException
+from shared.infrastructure.security import authorization_required, AuthorizationError, ExpiredTokenException
 from shared.infrastructure.controller.flask.api import BaseController
 from corpus.etl.application.start.start_etl import EtlStarter, EtlStarterCommand
 
@@ -24,10 +24,13 @@ def handle_value_error(error):
 
 @etl_api.route("")
 class EtlController(BaseController):
-    def post(self):
+    @authorization_required("start:etl")
+    def post(self, user):
         params = request.get_json()
 
         command = EtlStarterCommand(
+            user.tenant_id(),
+            user.username(),
             params.get("sitemaps"),
             params.get("customRequestHeaders"),
             params.get("selectorMapping"),
