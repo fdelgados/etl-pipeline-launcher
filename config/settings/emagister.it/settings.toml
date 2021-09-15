@@ -13,3 +13,19 @@ host = "nlp.mysql.emagister.it"
   name = "corpus"
   user = "corpus"
   password = "wTUbtEmk2S6R"
+[database.duplicates]
+  name = "duplicates"
+  user = "duplicates"
+  password = "wTUbtEmk2S6R"
+
+[mail]
+host = "mail-emagister.it"
+
+[redis]
+host = "redis-emagister.it"
+
+[rabbitmq]
+connection.host = "rabbitmq-emagister.it"
+
+[mongodb]
+connection.host = "mongodb-emagister.it"

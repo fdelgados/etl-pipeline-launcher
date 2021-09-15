@@ -12,3 +12,7 @@ services:
   worker:
     environment:
       - ENVIRONMENT=test
+networks:
+  default:
+    external:
+      name: nlp_net

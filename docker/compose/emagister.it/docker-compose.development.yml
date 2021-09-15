@@ -9,3 +9,7 @@ services:
   worker:
     environment:
       - ENVIRONMENT=development
+networks:
+  default:
+    external:
+      name: nlp_net

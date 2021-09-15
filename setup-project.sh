@@ -10,7 +10,7 @@ if [ ! -z "$MODIFIED_FILES" ]
 then
     black $MODIFIED_FILES
     python lint.py --path $MODIFIED_FILES --threshold=9
-    make test
+    make unit-tests
 fi'
 
 echo "$PRE_COMMIT_HOOK" > resources/git/hooks/pre-commit
