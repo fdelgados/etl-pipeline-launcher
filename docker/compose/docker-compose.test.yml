@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  application:
+    container_name: nlp-application-test
+    environment:
+      - ENVIRONMENT=test
+      - FLASK_ENV=test
+      - FLASK_DEBUG=1
+    ports:
+      - "5000:5000"
+  worker:
+    environment:
+      - ENVIRONMENT=test

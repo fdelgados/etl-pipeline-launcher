@@ -1,11 +1,14 @@
 [application]
 timezone = "Europe/Rome"
 
+[api]
+port = 5005
+
 [mongodb]
 databases.web_corpus = "web_corpus_it"
 
 [database]
-host = "nlp.mysql.emagister.com"
+host = "nlp.mysql.emagister.it"
 [database.corpus]
   name = "corpus"
   user = "corpus"

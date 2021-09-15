@@ -1,49 +1,24 @@
 version: "3"
 
 services:
-  database-emagister.com:
-    build:
-      context: ../services/mysql
-      dockerfile: Dockerfile
+  database:
     container_name: nlp-database-emagister.com
     hostname: nlp.mysql.emagister.com
-    image: mysql-server:latest
-    networks:
-      - nlp_net
     volumes:
-      - ../../.mysql-data-es:/var/lib/mysql/
+      - ../../.mysql-data-emagister.com:/var/lib/mysql/
     ports:
-      - "33060:3306"
+      - "33006:3306"
     environment:
       - MYSQL_ROOT_HOST=%
       - MYSQL_ROOT_PASSWORD=HyMn4q6UR6wa
-    command: --default-authentication-plugin=mysql_native_password
 
-  application-emagister.com:
-    build:
-      context: ../..
-      dockerfile: docker/services/application/Dockerfile
+  application:
     container_name: nlp-application-emagister.com
-    depends_on:
-      - database-emagister.com
-      - rabbitmq
-      - redis
-      - mailhog
-      - mongo
-      - mongo-express
-    networks:
-      - nlp_net
     environment:
       - SITE=emagister.com
-      - FLASK_APP=shared/infrastructure/entrypoint/flask/start.py
-      - PYTHONDONTWRITEBYTECODE=1
-      - PYTHONUNBUFFERED=1
     ports:
       - "5000:5000"
-    volumes:
-      - ../../src:/var/www/src
-      - ../../tests:/var/www/tests
-      - ../../config:/var/www/config
-      - ../../export:/export
-      - ../../log:/log
-      - ../../bin:/var/www/bin
+
+  worker:
+    environment:
+      - SITE=emagister.com

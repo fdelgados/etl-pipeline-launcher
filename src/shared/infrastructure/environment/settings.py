@@ -17,7 +17,7 @@ class Settings:
 
         self._site = site
 
-        configs_dir = "/var/www/config"
+        configs_dir = "/var/www/config/settings"
 
         self._config = toml.load(f"{configs_dir}/common/settings.toml")
         common_environment_config = toml.load(
@@ -26,13 +26,14 @@ class Settings:
 
         self._dict_merge(self._config, common_environment_config)
 
-        country_config = toml.load(f"{configs_dir}/{self._site}/settings.toml")
-        self._dict_merge(self._config, country_config)
+        if not self.is_test():
+            country_config = toml.load(f"{configs_dir}/{self._site}/settings.toml")
+            self._dict_merge(self._config, country_config)
 
-        country_environment_config = toml.load(
-            f"{configs_dir}/{self._site}/settings.{self._environment}.toml"
-        )
-        self._dict_merge(self._config, country_environment_config)
+            country_environment_config = toml.load(
+                f"{configs_dir}/{self._site}/settings.{self._environment}.toml"
+            )
+            self._dict_merge(self._config, country_environment_config)
 
         services_dir = os.path.join(configs_dir, "services/")
 
@@ -66,6 +67,9 @@ class Settings:
 
     def is_development(self) -> bool:
         return self._environment == "development"
+
+    def is_test(self) -> bool:
+        return self._environment == "test"
 
     def site(self) -> str:
         return self._site

@@ -4,7 +4,10 @@ EXPOSE 5000
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
-    python3-pymysql
+    python3-pymysql \
+    bash \
+    bash-completion \
+    vim
 
 
 COPY requirements.txt /tmp/

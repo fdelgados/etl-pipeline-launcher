@@ -1,6 +1,41 @@
 version: "3"
 
 services:
+  database:
+    build:
+      context: ../services/mysql
+      dockerfile: Dockerfile
+    image: mysql-server:latest
+    networks:
+      - nlp_net
+    command: --default-authentication-plugin=mysql_native_password
+
+  application:
+    build:
+      context: ../..
+      dockerfile: docker/services/application/Dockerfile
+    container_name: nlp-application-emagister.com
+    depends_on:
+      - database
+      - rabbitmq
+      - redis
+      - mailhog
+      - mongo
+      - mongo-express
+    networks:
+      - nlp_net
+    volumes:
+      - ../../src:/var/www/src
+      - ../../tests:/var/www/tests
+      - ../../config:/var/www/config
+      - ../../export:/export
+      - ../../log:/log
+      - ../../bin:/var/www/bin
+    environment:
+      - FLASK_APP=shared/infrastructure/entrypoint/flask/start.py
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+
   worker:
     build:
       context: ../..
