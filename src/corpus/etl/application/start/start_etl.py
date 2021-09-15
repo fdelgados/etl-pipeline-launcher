@@ -3,7 +3,6 @@ from typing import List
 
 from shared import MissingRequestParamsException
 from shared.infrastructure.event import DomainEventPublisher
-from shared.domain.model.user.user import User
 
 from corpus.etl.domain.model.etl import Etl, EtlId, EtlRepository
 

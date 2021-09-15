@@ -3,7 +3,11 @@ from flask import make_response, request
 from flask_restx import Namespace
 
 from shared import settings, InvalidRequestParamsException
-from shared.infrastructure.security import authorization_required, AuthorizationError, ExpiredTokenException
+from shared.infrastructure.security import (
+    authorization_required,
+    AuthorizationError,
+    ExpiredTokenException,
+)
 from shared.infrastructure.controller.flask.api import BaseController
 from corpus.etl.application.start.start_etl import EtlStarter, EtlStarterCommand
 
