@@ -61,13 +61,13 @@ class PageRetrieverImpl(PageRetriever):
     def __init__(self, cache: Cache):
         self._cache = cache
 
-    def retrieve(self, url: Url, build: Build, config: Corpus) -> Page:
+    def retrieve(self, url: Url, build: Build, corpus: Corpus) -> Page:
         if self._DELAY > 0:
             sleep(self._DELAY)
 
         self._ensure_scraping_is_allowed(url)
 
-        headers = self._request_headers(config.request_headers)
+        headers = self._request_headers(corpus.request_headers)
         try:
             last_modified_on = self._last_extracted_date_cached(url)
 
@@ -88,7 +88,7 @@ class PageRetrieverImpl(PageRetriever):
                 response.status_code,
                 response.reason,
                 _date_to_local(response.headers.get("Date")),
-                config.name
+                corpus.name
             )
 
             self._ensure_is_a_valid_response(response)
@@ -106,7 +106,7 @@ class PageRetrieverImpl(PageRetriever):
                     last_response.status_code,
                     last_response.reason,
                     _date_to_local(response.headers.get("Date")),
-                    config.name
+                    corpus.name
                 )
 
                 page.final_url = Url(response.url)
@@ -126,11 +126,11 @@ class PageRetrieverImpl(PageRetriever):
             page.canonical_url = markup_parser.canonical_version()
             page.datalayer = markup_parser.datalayer()
 
-            blacklisted_tags = config.excluded_tags
+            blacklisted_tags = corpus.excluded_tags
             blacklisted_tags.extend(self._DEFAULT_BLACKLISTED_TAGS)
-            body = markup_parser.body(blacklisted_tags, config.excluded_selectors)
+            body = markup_parser.body(blacklisted_tags, corpus.excluded_selectors)
 
-            selector_mapping = config.selector_mapping or {}
+            selector_mapping = corpus.selector_mapping or {}
             page.content = self._build_content(body, **selector_mapping)
 
             return page

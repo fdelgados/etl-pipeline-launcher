@@ -47,12 +47,12 @@ class ExtractDataOnBuildStarted:
             event.tenant_id, BuildId(event.build_id)
         )
 
-        corpus_config: Corpus = self._corpus_repository.config_of_tenant_and_name(
+        corpus: Corpus = self._corpus_repository.config_of_tenant_and_name(
             build.tenant_id,
             build.corpus_name
         )
 
-        urls = self._retrieve_urls(corpus_config)
+        urls = self._retrieve_urls(corpus)
 
         DomainEventDispatcher.dispatch([
             UrlsRetrieved(build.tenant_id, build.id.value, len(urls))
@@ -60,7 +60,7 @@ class ExtractDataOnBuildStarted:
 
         def scrape(url: Url):
             try:
-                page = self._page_retriever.retrieve(url, build, corpus_config)
+                page = self._page_retriever.retrieve(url, build, corpus)
 
                 self._page_repository.save(page)
 
@@ -85,14 +85,14 @@ class ExtractDataOnBuildStarted:
 
         DomainEventDispatcher.dispatch(build.events())
 
-    def _retrieve_urls(self, corpus_config: Corpus) -> List[Url]:
+    def _retrieve_urls(self, corpus: Corpus) -> List[Url]:
         valid_urls = []
         limit = 100 if settings.is_development() else 0
 
-        urls = self._url_source.retrieve(max_urls=limit, sitemaps=corpus_config.sitemaps)
+        urls = self._url_source.retrieve(max_urls=limit, sitemaps=corpus.sitemaps)
 
         for url in urls:
-            if corpus_config.url_address_pattern and not re.fullmatch(corpus_config.url_address_pattern, url.address):
+            if corpus.url_address_pattern and not re.fullmatch(corpus.url_address_pattern, url.address):
                 self._logger.warning("Invalid URL: {}".format(url))
 
                 continue

@@ -19,5 +19,5 @@ class RetrievalError(RuntimeError):
 
 class PageRetriever(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def retrieve(self, url: Url, build: Build, config: Corpus) -> Page:
+    def retrieve(self, url: Url, build: Build, corpus: Corpus) -> Page:
         raise NotImplementedError
