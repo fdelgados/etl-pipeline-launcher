@@ -19,18 +19,20 @@ class Report(AggregateRoot):
         self,
         report_id: ReportId,
         name: str,
-        created_by: User,
+        creator: User,
         k_shingle_size: KShingleSize,
         similarity_threshold: SimilarityThreshold,
     ):
         self._id = report_id
         self._name = name
-        self._created_by = created_by
+        self._creator = creator
+        self._created_by = self._creator.username()
+        self._tenant_id = self._creator.tenant_id()
         self._k_shingle_size = k_shingle_size
         self._similarity_threshold = similarity_threshold
         self._completed_on = None
-        self._total_pages = None
-        self._duplicated_pages = None
+        self._total_pages = 0
+        self._duplicated_pages = 0
         self._duplication_ratio = None
         self._duplication_average = None
         self._duplication_median = None
@@ -39,7 +41,8 @@ class Report(AggregateRoot):
         report_created = ReportCreated(
             self._id.value,
             self._name,
-            self._created_by.username(),
+            self._created_by,
+            self._tenant_id,
             self._k_shingle_size.value,
             self._similarity_threshold.value,
         )
@@ -53,8 +56,16 @@ class Report(AggregateRoot):
         return self._id
 
     @property
-    def created_by(self) -> User:
+    def created_by(self) -> str:
         return self._created_by
+
+    @property
+    def tenant_id(self) -> str:
+        return self._tenant_id
+
+    @property
+    def creator(self) -> User:
+        return self._creator
 
     @property
     def k_shingle_size(self) -> KShingleSize:

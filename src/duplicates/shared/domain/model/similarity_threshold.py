@@ -35,6 +35,9 @@ class SimilarityThreshold:
     def value(self) -> float:
         return self._value
 
+    def __float__(self):
+        return self.value
+
     def __eq__(self, other: SimilarityThreshold) -> bool:
         if not isinstance(other, SimilarityThreshold):
             return False

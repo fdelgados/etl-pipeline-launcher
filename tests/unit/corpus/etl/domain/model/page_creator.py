@@ -4,9 +4,9 @@ from http import HTTPStatus
 
 from typing import Optional
 
-from corpus.etl.domain.model.page import Page
-from corpus.etl.domain.model.url import Url
-from corpus.etl.domain.model.etl import EtlId
+from corpus_builder.build.domain.model.page import Page
+from corpus_builder.build.domain.model.url import Url
+from corpus_builder.build.domain.model.build import BuildId
 from .. import EntityBuilder
 
 
@@ -40,7 +40,7 @@ class PageCreator(EntityBuilder):
     def build(self) -> Page:
         page = Page(
             Url(self._fake.url()),
-            EtlId(),
+            BuildId(),
             self._status,
             self._status_code,
             self.fake.date_time_this_month(),

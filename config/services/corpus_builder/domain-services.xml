@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+
+<services>
+    <service id="corpus_builder.build.domain.model.build.build_repository"
+             alias="corpus_builder.build.infrastructure.persistence.build.sqlalchemy.build_repository.build_repository_impl" />
+
+    <service id="corpus_builder.build.domain.model.page.page_repository"
+             alias="corpus_builder.build.infrastructure.persistence.page.mongodb.page_repository.mongo_db_page_repository" />
+
+    <service id="corpus_builder.build.domain.service.content.page_retriever.page_retriever"
+             alias="corpus_builder.build.infrastructure.content.beautiful_soup.page_retriever.page_retriever_impl" />
+
+    <service id="corpus_builder.build.domain.service.content.url_source.url_source"
+             alias="corpus_builder.build.infrastructure.content.beautiful_soup.url_source.url_source_impl" />
+
+    <service id="corpus_builder.corpus.domain.model.corpus.corpus_repository"
+             alias="corpus_builder.corpus.infrastructure.persistence.corpus.sqlalchemy.corpus_repository.corpus_repository_impl" />
+</services>

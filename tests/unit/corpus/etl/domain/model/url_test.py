@@ -1,7 +1,7 @@
 import unittest
 from parameterized import parameterized
 
-from corpus.etl.domain.model.url import InvalidUrlException
+from corpus_builder.build.domain.model.url import InvalidUrlException
 from .url_creator import UrlCreator
 
 

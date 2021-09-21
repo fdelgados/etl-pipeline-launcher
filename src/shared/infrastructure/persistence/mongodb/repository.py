@@ -8,13 +8,12 @@ from shared import settings
 
 
 class BaseMongoDbRepository(MongoDbRepository, metaclass=abc.ABCMeta):
-    def __init__(self, database: str, collection: str):
+    def __init__(self, database: str):
         connection_settings = settings.mongodb_connection_settings()
         databases = settings.mongodb_databases()
 
         super().__init__(
             databases.get(database),
-            collection,
             connection_settings.get("username"),
             connection_settings.get("password"),
             host=connection_settings.get("host"),

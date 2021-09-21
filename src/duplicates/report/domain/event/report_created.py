@@ -9,6 +9,7 @@ class ReportCreated(DomainEvent):
         report_id: str,
         name: str,
         created_by: str,
+        tenant_id: str,
         k_shingle_size: int,
         similarity_threshold: float,
     ):
@@ -17,6 +18,7 @@ class ReportCreated(DomainEvent):
         self._report_id = report_id
         self._name = name
         self._created_by = created_by
+        self._tenant_id = tenant_id
         self._k_shingle_size = k_shingle_size
         self._similarity_threshold = similarity_threshold
 
@@ -31,6 +33,10 @@ class ReportCreated(DomainEvent):
     @property
     def created_by(self) -> str:
         return self._created_by
+
+    @property
+    def tenant_id(self) -> str:
+        return self._tenant_id
 
     @property
     def k_shingle_size(self) -> int:

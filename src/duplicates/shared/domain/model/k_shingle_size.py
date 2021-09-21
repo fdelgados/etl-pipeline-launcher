@@ -32,6 +32,9 @@ class KShingleSize:
     def max() -> int:
         return KShingleSize._MAX_VALUE
 
+    def __int__(self):
+        return self.value
+
     def __eq__(self, other: KShingleSize) -> bool:
         if not isinstance(other, KShingleSize):
             return False

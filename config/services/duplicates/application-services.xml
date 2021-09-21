@@ -6,4 +6,7 @@
         <argument name="logger" value="shared.domain.service.logging.logger.logger" type="service"/>
         <argument name="report_repository" value="duplicates.report.domain.model.report.report_repository" type="service"/>
     </service>
+
+    <service id="duplicates.data.application.transform.data_transformer.transform_data_on_report_created"
+             class="duplicates.data.application.transform.data_transformer.TransformDataOnReportCreated"/>
 </services>

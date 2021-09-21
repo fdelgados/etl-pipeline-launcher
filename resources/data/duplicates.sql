@@ -1,4 +1,4 @@
-CREATE USER 'duplicates'@'%' IDENTIFIED BY 'wTUbtEmk2S6R';
+CREATE DATABASE IF NOT EXISTS duplicates CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE DATABASE duplicates CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -45,8 +45,8 @@ CREATE TABLE `reports`
     `similarity_threshold` DECIMAL(2, 1) NOT NULL,
     `started_on` DATETIME NOT NULL,
     `completed_on` DATETIME DEFAULT NULL,
-    `total_pages` INT DEFAULT NULL,
-    `duplicated_pages` INT DEFAULT NULL,
+    `total_pages` INT NOT NULL DEFAULT 0,
+    `duplicated_pages` INT NOT NULL DEFAULT 0,
     `duplication_ratio` DECIMAL(5, 2) DEFAULT NULL,
     `duplication_average` DECIMAL(5, 2) DEFAULT NULL,
     `duplication_median` DECIMAL(5, 2) DEFAULT NULL,

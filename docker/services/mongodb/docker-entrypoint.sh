@@ -354,29 +354,16 @@ if [ "$originalArgOne" = 'mongod' ]; then
 					roles: [ { role: 'root', db: $(_js_escape "$rootAuthDatabase") } ]
 				});
 
-        db=db.getSiblingDB('web_corpus_es');
-        db=db.getSiblingDB('web_corpus_it');
-
-        use web_corpus_es;
+				db=db.getSiblingDB('$MONGO_DATABASE_NAME');
+        use $MONGO_DATABASE_NAME;
         db.createUser({
-          user:  "web_corpus_es",
-          pwd: "GMJaX9wRj5XWNwh3",
+          user:  '$MONGO_DATABASE_USER',
+          pwd: '$MONGO_DATABASE_PASSWORD',
           roles: [{
-            role: "readWrite",
-            db: "web_corpus_es"
+            role: 'readWrite',
+            db: '$MONGO_DATABASE_NAME'
           }]
         });
-
-        use web_corpus_it;
-        db.createUser({
-          user: "web_corpus_it",
-          pwd: "5u2J5ebz4rRaA2Sy",
-          roles: [{
-            role: "readWrite",
-            db: "web_corpus_it"
-          }]
-        });
-
 			EOJS
 		fi
 

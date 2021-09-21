@@ -123,7 +123,7 @@ connector = RabbitMqConnector(file_logger)
 _DEFAULT_ENVIRONMENT = os.environ.get("ENVIRONMENT")
 
 parser = argparse.ArgumentParser(
-    description="Run message workers", usage="python etl.py", add_help=False
+    description="Run message workers", usage="python build.py", add_help=False
 )
 
 parser.add_argument(

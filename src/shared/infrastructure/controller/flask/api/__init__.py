@@ -1,10 +1,15 @@
+from typing import Optional, Dict
+
 from http import HTTPStatus
+from flask import make_response
 from flask_restx import Resource
 from shared import Application
 from shared import ApiBaseError, ErrorCodes, settings
 
 
 class BaseController(Resource):
+    _DEFAULT_STATUS_CODE = HTTPStatus.OK
+
     def __init__(self, *args, **kwargs):
         super().__init__(None, *args, **kwargs)
 
@@ -44,3 +49,22 @@ class BaseController(Resource):
             ] = f'Bearer realm="{settings.api_title()}", charset="UTF-8"'
 
         return error_data, status_code, headers
+
+    def response(
+        self,
+        status_code: Optional[int] = None,
+        headers: Optional[Dict] = None,
+        **kwargs
+    ):
+        payload = ""
+        if kwargs:
+            payload = kwargs
+
+        if not status_code:
+            status_code = self._DEFAULT_STATUS_CODE
+
+        response = make_response(payload, status_code)
+        if headers:
+            response.headers = headers
+
+        return response

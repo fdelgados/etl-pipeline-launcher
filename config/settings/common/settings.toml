@@ -10,13 +10,12 @@ token_issuer = "http://localhost"
 public_key_file = "/export/certs/identity_access.pem"
 
 [api]
-title = "ETL Pipeline Launcher API"
+title = "Corpus Builder API"
 port = 5000
-prefix = "/api/v{:d}"
+prefix = "/corpus-builder/api/v{:d}"
 version_str = "v{:d}"
 version = 1
-doc_path = "/api/doc"
-include_default_error_message = false
+doc_path = "/corpus-builder/api/doc"
 
 [mailhog]
 host = "nlp-mail"
@@ -24,11 +23,12 @@ smtp_port = 1025
 http_port = 8025
 
 [redis]
-host = "nlp-redis"
 port = 6379
+databases.cache = 0
+databases.corpus_config = 1
 
 [rabbitmq]
-exchanges.publish = "etl_pipeline"
+exchanges.publish = "build_pipeline"
 connection.host = "rabbitmq-server"
 connection.user = "guest"
 connection.password = "guest"

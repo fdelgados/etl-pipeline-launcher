@@ -1,6 +1,6 @@
 import unittest
 
-from corpus.etl.domain.event.page_requested import PageRequested
+from corpus_builder.build.domain.event.page_requested import PageRequested
 
 from .page_creator import PageCreator
 

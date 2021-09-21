@@ -9,6 +9,15 @@ from shared.domain.service.logging.logger import Logger
 from .connector import RabbitMqConnector
 
 
+def _build_message(event: DomainEvent):
+    message = {
+        "metadata": {"environment": settings.environment()},
+        "body": json.loads(event.serialize()),
+    }
+
+    return json.dumps(message).encode()
+
+
 class RabbitMqEventPublisher(EventPublisher):
     def __init__(self, logger: Logger):
         self._logger = logger
@@ -25,7 +34,7 @@ class RabbitMqEventPublisher(EventPublisher):
             channel.basic_publish(
                 exchange=publisher,
                 routing_key=event.event_name(),
-                body=self._build_message(event),
+                body=_build_message(event),
                 properties=pika.BasicProperties(delivery_mode=2),
             )
         except (exceptions.AMQPError, ValueError) as error:
@@ -34,14 +43,6 @@ class RabbitMqEventPublisher(EventPublisher):
             raise
         finally:
             self._disconnect()
-
-    def _build_message(self, event: DomainEvent):
-        message = {
-            "metadata": {"environment": settings.environment()},
-            "body": json.loads(event.serialize()),
-        }
-
-        return json.dumps(message).encode()
 
     def _connect(self):
         return self._connector.connect()

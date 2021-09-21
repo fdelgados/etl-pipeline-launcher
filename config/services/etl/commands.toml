@@ -1,2 +1,2 @@
 [commands]
-"etl:start_etl" = "etl.infrastructure.command.start_etl.StartEtl"
+"build:start_build" = "build.infrastructure.command.start_build.Startbuild_"

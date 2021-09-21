@@ -1,2 +1,2 @@
-["etl_pipeline.corpus.pipelines"]
-pipeline_launched.start_etl = "etl:start_etl"
+["build_pipeline.corpus.pipelines"]
+pipeline_launched.start_build = "build:start_build"

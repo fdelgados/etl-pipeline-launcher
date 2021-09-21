@@ -6,13 +6,13 @@ port = 5005
 
 [mongodb]
 connection.host = "mongodb-emagister.it"
-databases.web_corpus = "web_corpus_it"
+databases.web_corpus = "corpus_emagister_it"
 
 [database]
 host = "nlp.mysql.emagister.it"
-[database.corpus]
-  name = "corpus"
-  user = "corpus"
+[database.corpus_builder]
+  name = "corpus_builder"
+  user = "corpus_builder"
   password = "wTUbtEmk2S6R"
 [database.duplicates]
   name = "duplicates"

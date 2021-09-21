@@ -2,9 +2,10 @@ from flask import Flask
 from flask_restx import Api
 
 from bootstrap import Bootstrap
-from corpus.etl.infrastructure.controller.flask.api.etl import etl_api
+from corpus_builder.build.infrastructure.controller.flask.api.build import build_api
+from corpus_builder.corpus.infrastructure.controller.flask.api.corpus import corpus_api
+from duplicates.report.infrastructure.controller.flask.api.report import report_api
 
-# from corpus.shared.infrastructure.controller.flask.api import launcher_api, Launcher
 from shared import settings
 
 
@@ -21,5 +22,8 @@ api = Api(
     title=settings.api_title(),
     version=settings.api_version_str(),
 )
-# api.add_namespace(launcher_api, path=settings.api_prefix())
-api.add_namespace(etl_api, path=settings.api_prefix("etls"))
+
+api.add_namespace(build_api, path=settings.api_prefix("builds"))
+api.add_namespace(corpus_api, path=settings.api_prefix("corpora"))
+
+api.add_namespace(report_api, path=settings.api_prefix("reports"))

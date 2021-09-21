@@ -82,7 +82,7 @@ class Settings:
             key.upper(): value for (key, value) in self._config.get("flask").items()
         }
 
-    def _get(self, section: str, entry: str, default: Optional[str] = None) -> Any:
+    def _get(self, section: str, entry: str, default: Optional[Any] = None) -> Any:
         return self._config.get(section).get(entry, default)
 
     def application_id(self) -> str:
@@ -161,6 +161,16 @@ class Settings:
     def redis_port(self):
         return self._get("redis", "port")
 
+    def redis_database(self, database: str) -> int:
+        databases = self._get("redis", "databases")
+
+        database_number = databases.get(database)
+
+        if not database_number:
+            raise ValueError(f"{database} database does not exist")
+
+        return database_number
+
     def command(self, command: str):
         return self._commands.get("commands", {}).get(command)
 
@@ -208,10 +218,11 @@ class Settings:
             context_mapping_files[context] = mapping_files
 
         for context, files in context_mapping_files.items():
+            mapping_class_prefix = context.replace("_", " ").title().replace(" ", "")
             for file in files:
                 module_name = file.replace(f"{contexts_dir}/", "").replace("/", ".")
                 module_name = re.sub(r"\.py$", "", module_name)
-                module_name = "{}.{}Mapping".format(module_name, context.capitalize())
+                module_name = "{}.{}Mapping".format(module_name, mapping_class_prefix)
                 mapping_modules.append(module_name)
 
         return mapping_modules

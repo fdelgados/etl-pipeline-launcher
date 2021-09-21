@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+
+<services>
+    <service id="corpus_builder.build.application.start.start_build.build_starter"
+             class="corpus_builder.build.application.start.start_build.BuildStarter">
+        <argument name="build_repository" value="corpus_builder.build.domain.model.build.build_repository" type="service" />
+    </service>
+
+    <service id="corpus_builder.build.application.extract.data_extractor.extract_data_on_build_started"
+             class="corpus_builder.build.application.extract.data_extractor.ExtractDataOnBuildStarted">
+        <argument name="build_repository" value="corpus_builder.build.domain.model.build.build_repository" type="service"/>
+        <argument name="page_repository" value="corpus_builder.build.domain.model.page.page_repository" type="service"/>
+        <argument name="page_retriever" value="corpus_builder.build.domain.service.content.page_retriever.page_retriever" type="service"/>
+        <argument name="url_source" value="corpus_builder.build.domain.service.content.url_source.url_source" type="service"/>
+        <argument name="corpus_repository" value="corpus_builder.corpus.domain.model.corpus.corpus_repository" type="service"/>
+        <argument name="logger" value="shared.domain.service.logging.logger.logger" type="service"/>
+    </service>
+
+    <service id="corpus_builder.corpus.application.create.corpus_creator"
+             class="corpus_builder.corpus.application.create.corpus_creator.CorpusCreator">
+        <argument name="corpus_repository" value="corpus_builder.corpus.domain.model.corpus.corpus_repository" type="service" />
+    </service>
+
+    <service id="corpus_builder.build.application.update.update_build.update_total_pages_on_urls_retrieved"
+             class="corpus_builder.build.application.update.update_build.UpdateTotalPagesOnUrlsRetrieved">
+        <argument name="build_repository" value="corpus_builder.build.domain.model.build.build_repository" type="service"/>
+    </service>
+
+</services>

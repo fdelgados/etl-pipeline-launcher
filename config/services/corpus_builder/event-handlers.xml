@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+
+<events>
+    <event class="corpus_builder.build.domain.event.build_started.BuildStarted">
+        <handler id="shared.application.event_store.subscriber.store_event_on_publish" />
+        <handler id="corpus_builder.build.application.extract.data_extractor.extract_data_on_build_started" />
+    </event>
+    <event class="corpus_builder.build.domain.event.build_completed.BuildCompleted">
+        <handler id="shared.application.event_store.subscriber.store_event_on_publish" />
+    </event>
+
+    <event class="corpus_builder.build.domain.event.page_added.PageAdded">
+        <handler id="shared.application.event_store.subscriber.store_event_on_publish" />
+    </event>
+
+    <event class="corpus_builder.build.domain.event.urls_retrieved.UrlsRetrieved">
+        <handler id="shared.application.event_store.subscriber.store_event_on_publish" />
+        <handler id="corpus_builder.build.application.update.update_build.update_total_pages_on_urls_retrieved" />
+    </event>
+
+    <event class="corpus_builder.build.domain.event.extraction_failed.ExtractionFailed">
+        <handler id="shared.application.event_store.subscriber.store_event_on_publish" />
+    </event>
+</events>

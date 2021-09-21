@@ -8,7 +8,7 @@ from shared.domain.service.event.event_store import EventStore
 
 class SqlAlchemyEventStore(EventStore, DbalService):
     def __init__(self) -> None:
-        super().__init__(settings.database_dsn("corpus"))
+        super().__init__(settings.database_dsn("corpus_builder"))
 
     def store(self, event: DomainEvent):
         sentence = """

@@ -1,6 +1,7 @@
 out
 .redis-data*
 .mysql-data*
+.mongodb-data*
 export
 log
 tests/.hypothesis

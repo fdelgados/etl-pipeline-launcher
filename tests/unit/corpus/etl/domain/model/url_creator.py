@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from corpus.etl.domain.model.url import Url
+from corpus_builder.build.domain.model.url import Url
 from .. import EntityBuilder
 
 

@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 
 <services>
-    <service id="shared.infrastructure.messaging.rabbitmq.publisher.rabbit_mq_event_publisher"
-             class="shared.infrastructure.messaging.rabbitmq.publisher.RabbitMqEventPublisher">
-        <argument name="logger" value="shared.domain.service.logging.logger.logger" type="service"/>
-    </service>
-
     <service id="shared.infrastructure.logging.file.logger.file_logger"
              class="shared.infrastructure.logging.file.logger.FileLogger" />
-
-    <service id="shared.infrastructure.logging.progress.logger.progress_bar_logger"
-             class="shared.infrastructure.logging.progress.logger.ProgressBarLogger" />
 
     <service id="shared.infrastructure.caching.redis.cache.redis_cache"
              class="shared.infrastructure.caching.redis.cache.RedisCache" />
 
     <service id="shared.infrastructure.event.sqlalchemy.event_store.sql_alchemy_event_store"
              class="shared.infrastructure.event.sqlalchemy.event_store.SqlAlchemyEventStore" />
+
+    <service id="shared.infrastructure.messaging.rabbitmq.publisher.rabbitmq_event_publisher"
+             class="shared.infrastructure.messaging.rabbitmq.publisher.RabbitMqEventPublisher"/>
 </services>

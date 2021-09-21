@@ -32,8 +32,9 @@ def authorization_required(scope: str):
                     auth_header, settings.public_key()
                 )
                 user = User(token.tenant_id(), token.username(), token.user_email())
+                kwargs['user'] = user
 
-                return func(self, user, *args, **kwargs)
+                return func(self, *args, **kwargs)
             except cs.ExpiredTokenException:
                 raise ExpiredTokenException(ErrorCodes.ACCESS_TOKEN_EXPIRED)
             except cs.CredentialShieldException as error:

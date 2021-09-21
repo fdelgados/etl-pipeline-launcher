@@ -50,6 +50,11 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=aC4tYp9RUSWwvc5g
+      - MONGO_DATABASE_NAME=corpus_emagister_it
+      - MONGO_DATABASE_USER=corpus_emagister_it
+      - MONGO_DATABASE_PASSWORD=5u2J5ebz4rRaA2Sy
+    volumes:
+      - ../../.mongodb-data-emagister.it/mongo-init.js:/data/db
 
   mongo-express:
     ports:

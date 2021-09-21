@@ -6,5 +6,5 @@ token_issuer = "http://localhost"
 public_key_file = "/export/certs/identity_access.pem"
 
 [mongodb]
-connection.username = "web_corpus_es"
+connection.username = "corpus_emagister_com"
 connection.password = "GMJaX9wRj5XWNwh3"
