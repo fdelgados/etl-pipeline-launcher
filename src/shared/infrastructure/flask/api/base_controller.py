@@ -47,9 +47,13 @@ class BaseController(Resource):
         )
 
     @classmethod
-    def api_error(cls, error: ApiBaseError, status_code: int, from_error: Exception = None):
+    def api_error(
+        cls, error: ApiBaseError, status_code: int, from_error: Exception = None
+    ):
         error_name = type(error).__name__
-        error_hash = int(hashlib.sha256((str(time.time()) + error_name).encode()).hexdigest()[:8], 16)
+        error_hash = int(
+            hashlib.sha256((str(time.time()) + error_name).encode()).hexdigest()[:8], 16
+        )
         trace_id = f"ERR-{error_hash}"
         error_data = {
             "error": {
@@ -67,16 +71,16 @@ class BaseController(Resource):
                 "WWW-Authenticate"
             ] = f'Bearer realm="{settings.api_title()}", charset="UTF-8"'
 
-        logger: Logger = Application().container().get(
-            "shared.domain.service.logging.logger.logger"
+        logger: Logger = (
+            Application().container().get("shared.domain.service.logging.logger.logger")
         )
 
         message = "{} :: {} :: {} {} {}".format(
             trace_id,
             error_data["error"]["message"],
             error_name,
-            type(from_error).__name__ if from_error else '',
-            str(from_error) if from_error else '',
+            type(from_error).__name__ if from_error else "",
+            str(from_error) if from_error else "",
         )
 
         logger.error(message)

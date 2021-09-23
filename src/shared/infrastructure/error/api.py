@@ -41,7 +41,10 @@ class ErrorCodes(IntEnum):
 
     GENERIC_ERROR = 1000, "Application error"
     MISSING_REQUEST_PARAMETER = 1001, "Bad Request - Your request is missing parameters"
-    INVALID_REQUEST_PARAMETER = 1002, "Bad Request - Your request contains invalid parameters"
+    INVALID_REQUEST_PARAMETER = (
+        1002,
+        "Bad Request - Your request contains invalid parameters",
+    )
 
     AUTHORIZATION_FAILED = 2001, "Authorization failed"
     ACCESS_TOKEN_EXPIRED = (

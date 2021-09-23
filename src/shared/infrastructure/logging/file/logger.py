@@ -1,6 +1,4 @@
 import logging
-import traceback
-import sys
 
 from typing import Optional
 
