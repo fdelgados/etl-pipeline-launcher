@@ -10,6 +10,7 @@ from shared.infrastructure.security import (
 )
 from shared.infrastructure.flask.api.base_controller import BaseController
 from duplicates.report.application.create.report_creator import ReportCreatorCommand
+from duplicates.report.application.identity.next_identity import NextIdentityQuery
 
 report_api = Namespace("report", description="Near duplicates report generator")
 
@@ -31,12 +32,19 @@ class ReportController(BaseController):
     def post(self, user):
         params = request.get_json()
 
+        next_identity_query = self.ask(NextIdentityQuery())
+        report_id = next_identity_query.report_id
+
         command = ReportCreatorCommand(
-            params.get("similarity_threshold"), params.get("k_shingle_size"), user
+            report_id,
+            params.get("similarity_threshold"),
+            params.get("k_shingle_size"),
+            user,
         )
 
         self.dispatch(command)
 
         return self.response(
-            HTTPStatus.ACCEPTED, {"Location": f"{settings.api_url()}/reports/report_id"}
+            HTTPStatus.ACCEPTED,
+            {"Location": f"{settings.api_url()}/reports/{report_id}"},
         )
