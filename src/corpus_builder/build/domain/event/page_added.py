@@ -4,8 +4,6 @@ from shared.domain.event.event import DomainEvent
 
 
 class PageAdded(DomainEvent):
-    EVENT_NAME = "page_added"
-
     def __init__(
         self,
         tenant_id: str,

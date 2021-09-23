@@ -2,8 +2,6 @@ from shared.domain.event.event import DomainEvent
 
 
 class ReportCreated(DomainEvent):
-    EVENT_NAME = "report_created"
-
     def __init__(
         self,
         report_id: str,

@@ -2,8 +2,6 @@ from shared.domain.event.event import DomainEvent
 
 
 class BuildStarted(DomainEvent):
-    EVENT_NAME = "build_started"
-
     def __init__(
         self,
         tenant_id: str,

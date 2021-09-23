@@ -5,8 +5,6 @@ import abc
 
 
 class DomainEvent(metaclass=abc.ABCMeta):
-    EVENT_NAME = None
-
     def __init__(self, aggregate_id: Optional[Any] = None):
         self._occurred_on = datetime.now()
         self._aggregate_id = aggregate_id
