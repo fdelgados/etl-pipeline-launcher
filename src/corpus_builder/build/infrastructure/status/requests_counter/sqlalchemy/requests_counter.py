@@ -23,9 +23,7 @@ class RequestsCounterImpl(RequestsCounter):
             requests_events=(
                 ExtractionFailed.type_name(),
                 PageAdded.type_name(),
-            )
+            ),
         )
 
         return result.scalar()
-
-

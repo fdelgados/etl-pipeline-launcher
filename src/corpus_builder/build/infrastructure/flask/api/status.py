@@ -8,7 +8,9 @@ from shared.infrastructure.security import (
     ExpiredTokenException,
 )
 from shared.infrastructure.flask.api.base_controller import BaseController
-from corpus_builder.build.application.check_status.status_checker import StatusCheckerQuery
+from corpus_builder.build.application.check_status.status_checker import (
+    StatusCheckerQuery,
+)
 
 
 status_api = Namespace("status", description="Check corpus build status")
@@ -26,7 +28,7 @@ def handle_value_error(error):
 
 
 @status_api.errorhandler(Exception)
-def handle_value_error(error):
+def handle_generic_error(error):
     return BaseController.api_generic_error(error)
 
 
@@ -39,7 +41,4 @@ class GetBuildStatusController(BaseController):
 
         response = self.ask(query)
 
-        return self.response(
-            HTTPStatus.OK,
-            **response.to_dict()
-        )
+        return self.response(HTTPStatus.OK, **response.to_dict())

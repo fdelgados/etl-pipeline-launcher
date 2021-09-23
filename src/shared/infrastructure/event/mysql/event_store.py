@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List
 
 from shared.domain.event.event import DomainEvent
 from shared.domain.event.event_store import EventStore
