@@ -1,3 +1,5 @@
+import hashlib
+import time
 from typing import Optional, Dict
 
 from http import HTTPStatus
@@ -8,6 +10,7 @@ from shared import Application
 from shared import ApiBaseError, ErrorCodes, settings
 from shared.domain.bus.query import Query, QueryBus, Response
 from shared.domain.bus.command import Command, CommandBus
+from shared.domain.service.logging.logger import Logger
 
 
 class BaseController(Resource):
@@ -23,9 +26,9 @@ class BaseController(Resource):
         self._command_bus: CommandBus = self._container.get(
             "shared.domain.bus.command.command_bus"
         )
-
-    def service(self, service_id: str):
-        return self._container.get(service_id)
+        self._logger: Logger = self._container.get(
+            "shared.domain.service.logging.logger.logger"
+        )
 
     def dispatch(self, command: Command):
         self._command_bus.dispatch(command)
@@ -36,23 +39,24 @@ class BaseController(Resource):
     @classmethod
     def api_generic_error(cls, error: Exception):
         status_code = HTTPStatus.INTERNAL_SERVER_ERROR
-        error_data = {
-            "error": {
-                "message": str(error),
-                "code": ErrorCodes.GENERIC_ERROR,
-                "status": status_code,
-            }
-        }
 
-        return error_data, status_code
+        return cls.api_error(
+            ApiBaseError(ErrorCodes.GENERIC_ERROR),
+            status_code,
+            error,
+        )
 
     @classmethod
-    def api_error(cls, error: ApiBaseError, status_code: int):
+    def api_error(cls, error: ApiBaseError, status_code: int, from_error: Exception = None):
+        error_name = type(error).__name__
+        error_hash = int(hashlib.sha256((str(time.time()) + error_name).encode()).hexdigest()[:8], 16)
+        trace_id = f"ERR-{error_hash}"
         error_data = {
             "error": {
                 "message": error.message,
                 "code": error.code,
                 "status": status_code,
+                "trace_id": trace_id,
             }
         }
 
@@ -62,6 +66,20 @@ class BaseController(Resource):
             headers[
                 "WWW-Authenticate"
             ] = f'Bearer realm="{settings.api_title()}", charset="UTF-8"'
+
+        logger: Logger = Application().container().get(
+            "shared.domain.service.logging.logger.logger"
+        )
+
+        message = "{} :: {} :: {} {} {}".format(
+            trace_id,
+            error_data["error"]["message"],
+            error_name,
+            type(from_error).__name__ if from_error else '',
+            str(from_error) if from_error else '',
+        )
+
+        logger.error(message)
 
         return error_data, status_code, headers
 

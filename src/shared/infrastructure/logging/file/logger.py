@@ -43,23 +43,10 @@ class FileLogger(Logger):
         self._logger.info(message, *args)
 
     def warning(self, message: str, *args) -> None:
-        self._logger.warning(self._format_message(message), *args)
+        self._logger.warning(message, *args)
 
     def error(self, message: str, *args) -> None:
-        self._logger.error(self._format_message(message), *args)
+        self._logger.error(message, *args)
 
     def critical(self, message: str, *args) -> None:
-        self._logger.critical(self._format_message(message), *args)
-
-    def _format_message(self, message: str):
-        exc_type, exc_value, exc_tb = sys.exc_info()
-
-        if not exc_type and not exc_value and not exc_tb:
-            return message
-
-        tb = traceback.TracebackException(exc_type, exc_value, exc_tb)
-        stack = tb.stack[0]
-
-        return (
-            f"{message}. File {stack.filename}, line {stack.lineno} in <{stack.name}>"
-        )
+        self._logger.critical(message, *args)
