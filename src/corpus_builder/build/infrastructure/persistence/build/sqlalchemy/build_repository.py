@@ -1,8 +1,9 @@
 from typing import Optional
-from shared.infrastructure.persistence.sqlalchemy.repository import Repository
-from corpus_builder.build.domain.model.build import BuildRepository, Build, BuildId
 
 from shared import settings
+from shared.infrastructure.persistence.sqlalchemy.repository import Repository
+
+from corpus_builder.build.domain.model.build import BuildRepository, Build, BuildId
 
 
 class BuildRepositoryImpl(BuildRepository, Repository):

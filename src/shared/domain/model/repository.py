@@ -2,7 +2,7 @@ import abc
 
 from typing import List
 
-from .aggregate import AggregateRoot
+from shared.domain.model.aggregate import AggregateRoot
 
 
 class Repository(metaclass=abc.ABCMeta):

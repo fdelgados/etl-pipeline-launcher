@@ -2,7 +2,7 @@ import os
 import os.path
 from typing import List, Dict, Generator, Optional, Union, Any
 from importlib import util
-import xml.etree.ElementTree as ElementTree
+from xml.etree import ElementTree
 from dependency_injector import containers
 
 
@@ -119,8 +119,10 @@ def _import_cls(full_class_name: str):
     return getattr(module, class_name)
 
 
-def _create_service(services, service_container, service_provider_cls, id: str, info):
-    service_key = id.replace(".", "_")
+def _create_service(
+    services, service_container, service_provider_cls, service_id: str, info
+):
+    service_key = service_id.replace(".", "_")
     if hasattr(service_container, service_key):
         return getattr(service_container, service_key)
 

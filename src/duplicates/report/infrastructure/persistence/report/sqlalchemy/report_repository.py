@@ -1,7 +1,6 @@
+from shared import settings
 from shared.infrastructure.persistence.sqlalchemy.repository import Repository
 from duplicates.report.domain.model.report import ReportRepository, Report
-
-from shared import settings
 
 
 class ReportRepositoryImpl(ReportRepository, Repository):

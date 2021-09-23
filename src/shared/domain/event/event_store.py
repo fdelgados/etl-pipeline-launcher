@@ -16,7 +16,7 @@ def store_event(arg=None):
         @wraps(func)
         def decorated_function(self, domain_event: DomainEvent):
             if not domain_event or not isinstance(domain_event, DomainEvent):
-                return
+                return None
 
             caller_class_name = Utils.class_fullname(domain_event)
             context, _ = caller_class_name.split(".", maxsplit=1)
@@ -26,7 +26,7 @@ def store_event(arg=None):
             )
 
             if not event_store or not isinstance(event_store, EventStore):
-                return
+                return None
 
             event_store.append(domain_event)
 

@@ -1,6 +1,7 @@
+from sqlalchemy import create_engine, text, exc
+
 from shared import settings
 from shared.domain.service.persistence.dbal import DbalService, DbalServiceError
-from sqlalchemy import create_engine, text, exc
 
 
 class SqlAlchemyDbalService(DbalService):

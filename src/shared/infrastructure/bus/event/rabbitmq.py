@@ -27,7 +27,7 @@ class RabbitMqEventBus(EventBus):
         self._logger = logger
 
     @store_event
-    def _do_publish(self, event: DomainEvent) -> None:
+    def _do_publish(self, domain_event: DomainEvent) -> None:
         connection = self._connect()
 
         try:
@@ -37,8 +37,8 @@ class RabbitMqEventBus(EventBus):
             )
             channel.basic_publish(
                 exchange=self._exchange_name,
-                routing_key=event.event_name(),
-                body=_build_message(event),
+                routing_key=domain_event.event_name(),
+                body=_build_message(domain_event),
                 properties=pika.BasicProperties(delivery_mode=2),
             )
         except (exceptions.AMQPError, ValueError) as error:

@@ -1,3 +1,4 @@
+import re
 from .infrastructure.dependency_injection.container import create_container
 from .infrastructure.environment.settings import settings
 from .infrastructure.error.api import *
@@ -29,6 +30,4 @@ class Utils:
 
     @classmethod
     def camel_case_to_snake(cls, camel_case_string: str) -> str:
-        import re
-
         return re.sub(r"(?<!^)(?=[A-Z])", "_", camel_case_string).lower()

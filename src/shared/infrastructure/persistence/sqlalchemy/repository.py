@@ -1,10 +1,15 @@
 import threading
 from typing import List
 from contextlib import contextmanager
-from shared.domain.model.aggregate import AggregateRoot
-from shared.domain.model.repository import Repository as BaseRepository
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
+
+from shared.domain.model.aggregate import AggregateRoot
+from shared.domain.model.repository import Repository as BaseRepository
+
+
+class ScopedSessionError(RuntimeError):
+    pass
 
 
 class SessionBuilder:
@@ -12,7 +17,7 @@ class SessionBuilder:
     _lock = threading.Lock()
 
     @classmethod
-    def build(cls, dsn: str):
+    def build(cls, dsn: str) -> scoped_session:
         if not cls._session:
             with cls._lock:
                 if not cls._session:
@@ -20,6 +25,7 @@ class SessionBuilder:
                         bind=create_engine(dsn), expire_on_commit=False
                     )
                     cls._session = scoped_session(session_factory)
+
         return cls._session
 
 
@@ -30,8 +36,8 @@ def session_scope(dsn: str):
 
     try:
         yield session
-    except Exception:
-        raise
+    except Exception as error:
+        raise ScopedSessionError(str(error))
     finally:
         session.close()
         Session.remove()

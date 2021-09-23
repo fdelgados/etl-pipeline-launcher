@@ -27,6 +27,8 @@ class DomainEvent(metaclass=abc.ABCMeta):
             if isinstance(o, datetime):
                 return o.__str__()
 
+            return o
+
         properties = self.__sanitize_property_names()
 
         return json.dumps(properties, ensure_ascii=False, default=json_converter)
