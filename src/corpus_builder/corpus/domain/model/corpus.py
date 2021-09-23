@@ -1,7 +1,8 @@
 import abc
 from typing import Optional, List, Dict
 
-from shared_context import Repository, AggregateRoot
+from shared.domain.model.repository import Repository
+from shared.domain.model.aggregate import AggregateRoot
 
 
 class Corpus(AggregateRoot):
@@ -92,9 +93,9 @@ class Corpus(AggregateRoot):
 
 class CorpusRepository(Repository, metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def config_of_tenant_and_name(self, tenant_id: str, name: str) -> Optional[Corpus]:
+    def corpus_of_tenant_and_name(self, tenant_id: str, name: str) -> Optional[Corpus]:
         raise NotImplementedError
 
     @abc.abstractmethod
-    def configs_of_tenant(self, tenant_id: str) -> List[Corpus]:
+    def corpora_of_tenant(self, tenant_id: str) -> List[Corpus]:
         raise NotImplementedError

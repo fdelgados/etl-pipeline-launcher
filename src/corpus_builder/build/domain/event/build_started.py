@@ -1,8 +1,8 @@
-from shared_context.domain.events import DomainEvent
+from shared.domain.event.event import DomainEvent
 
 
 class BuildStarted(DomainEvent):
-    _EVENT_NAME = "build_started"
+    EVENT_NAME = "build_started"
 
     def __init__(
         self,
@@ -10,7 +10,7 @@ class BuildStarted(DomainEvent):
         build_id: str,
         name: str,
         started_by: str,
-        corpus_name: str
+        corpus_name: str,
     ):
         super().__init__(build_id)
 
@@ -19,9 +19,6 @@ class BuildStarted(DomainEvent):
         self._name = name
         self._started_by = started_by
         self._corpus_name = corpus_name
-
-    def event_name(self) -> str:
-        return self._EVENT_NAME
 
     @property
     def tenant_id(self) -> str:

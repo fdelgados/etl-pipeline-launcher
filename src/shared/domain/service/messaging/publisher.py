@@ -1,5 +1,5 @@
 import abc
-from shared_context.domain.events import DomainEvent
+from shared.domain.event.event import DomainEvent
 
 
 class EventPublisher(metaclass=abc.ABCMeta):

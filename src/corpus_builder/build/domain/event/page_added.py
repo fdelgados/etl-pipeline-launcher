@@ -1,10 +1,10 @@
 from datetime import datetime
 
-from shared_context.domain.events import DomainEvent
+from shared.domain.event.event import DomainEvent
 
 
 class PageAdded(DomainEvent):
-    _EVENT_NAME = "page_added"
+    EVENT_NAME = "page_added"
 
     def __init__(
         self,
@@ -14,7 +14,7 @@ class PageAdded(DomainEvent):
         status_code: int,
         status: str,
         modified_on: datetime,
-        corpus_name: str
+        corpus_name: str,
     ):
         self._tenant_id = tenant_id
         self._build_id = build_id
@@ -25,9 +25,6 @@ class PageAdded(DomainEvent):
         self._corpus_name = corpus_name
 
         super().__init__(address)
-
-    def event_name(self) -> str:
-        return self._EVENT_NAME
 
     @property
     def build_id(self) -> str:

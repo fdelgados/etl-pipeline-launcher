@@ -3,8 +3,11 @@ from typing import Optional, Dict
 from http import HTTPStatus
 from flask import make_response
 from flask_restx import Resource
+
 from shared import Application
 from shared import ApiBaseError, ErrorCodes, settings
+from shared.domain.bus.query import Query, QueryBus, Response
+from shared.domain.bus.command import Command, CommandBus
 
 
 class BaseController(Resource):
@@ -14,9 +17,21 @@ class BaseController(Resource):
         super().__init__(None, *args, **kwargs)
 
         self._container = Application.container()
+        self._query_bus: QueryBus = self._container.get(
+            "shared.domain.bus.query.query_bus"
+        )
+        self._command_bus: CommandBus = self._container.get(
+            "shared.domain.bus.command.command_bus"
+        )
 
     def service(self, service_id: str):
         return self._container.get(service_id)
+
+    def dispatch(self, command: Command):
+        self._command_bus.dispatch(command)
+
+    def ask(self, query: Query) -> Optional[Response]:
+        return self._query_bus.ask(query)
 
     @classmethod
     def api_generic_error(cls, error: Exception):
@@ -54,7 +69,7 @@ class BaseController(Resource):
         self,
         status_code: Optional[int] = None,
         headers: Optional[Dict] = None,
-        **kwargs
+        **kwargs,
     ):
         payload = ""
         if kwargs:
@@ -68,3 +83,13 @@ class BaseController(Resource):
             response.headers = headers
 
         return response
+
+
+def _classname(obj):
+    cls = type(obj)
+    module = cls.__module__
+    name = cls.__qualname__
+    if module is not None and module != "__builtin__":
+        name = f"{module}.{name}"
+
+    return name

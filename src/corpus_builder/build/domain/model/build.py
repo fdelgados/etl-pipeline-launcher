@@ -4,7 +4,9 @@ import abc
 
 from coolname import generate
 
-from shared_context.domain.model import AggregateRoot, Uuid, Repository
+from shared.domain.model.aggregate import AggregateRoot
+from shared.domain.model.value_object.unique_id import Uuid
+from shared.domain.model.repository import Repository
 from corpus_builder.build.domain.event.build_started import BuildStarted
 from corpus_builder.build.domain.event.build_completed import BuildCompleted
 
@@ -23,7 +25,7 @@ class Build(AggregateRoot):
         tenant_id: str,
         name: str,
         started_by: str,
-        corpus_name: str
+        corpus_name: str,
     ):
         self._build_id = build_id
         self._tenant_id = tenant_id
@@ -39,7 +41,7 @@ class Build(AggregateRoot):
             self._build_id.value,
             self._name,
             self._started_by,
-            self._corpus_name
+            self._corpus_name,
         )
         self._started_on = event.occurred_on
 

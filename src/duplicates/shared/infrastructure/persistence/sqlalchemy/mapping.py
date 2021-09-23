@@ -2,7 +2,7 @@ from sqlalchemy import Table, String, Column, Boolean, DateTime, Integer, Float
 
 from sqlalchemy.orm import registry
 
-from shared_context.infrastructure.persistence.sqlalchemy import Orm
+from shared.infrastructure.persistence.sqlalchemy.mapping import Mapping
 
 from duplicates.report.domain.model.report import Report
 from duplicates.shared.infrastructure.persistence.sqlalchemy.type import (
@@ -12,8 +12,8 @@ from duplicates.shared.infrastructure.persistence.sqlalchemy.type import (
 )
 
 
-class DuplicatesMapping(Orm):
-    def start_mappers(self) -> None:
+class DuplicatesMapping(Mapping):
+    def map_entities(self) -> None:
         mapper_registry = registry()
 
         reports_table = Table(

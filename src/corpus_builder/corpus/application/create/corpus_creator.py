@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List
-from shared_context import Command, CommandHandler
-from shared_context.application import Response
+from shared.domain.bus.command import Command, CommandHandler
 
 from corpus_builder.corpus.domain.model.corpus import CorpusRepository, Corpus
 
@@ -20,24 +19,16 @@ class CorpusCreatorCommand(Command):
     url_address_pattern: str = None
 
 
-@dataclass(frozen=True)
-class CorpusCreatorResponse(Response):
-    updated: bool
-
-
-class CorpusCreator(CommandHandler):
+class CorpusCreatorCommandHandler(CommandHandler):
     def __init__(self, corpus_repository: CorpusRepository):
         self._corpus_repository = corpus_repository
 
-    def handle(self, command: CorpusCreatorCommand) -> CorpusCreatorResponse:
-        is_update = True
-        corpus = self._corpus_repository.config_of_tenant_and_name(
-            command.tenant_id,
-            command.name
+    def handle(self, command: CorpusCreatorCommand) -> None:
+        corpus = self._corpus_repository.corpus_of_tenant_and_name(
+            command.tenant_id, command.name
         )
 
         if not corpus:
-            is_update = True
             corpus = Corpus(command.tenant_id, command.name)
 
         corpus.sitemaps = command.sitemaps
@@ -64,14 +55,3 @@ class CorpusCreator(CommandHandler):
             corpus.custom_request_fields = command.custom_fields
 
         self._corpus_repository.save(corpus)
-
-        return CorpusCreatorResponse(updated=is_update)
-
-    def _retrieve_corpus(self, tenant_id: str, name: str) -> Corpus:
-        corpus = self._corpus_repository.config_of_tenant_and_name(
-            tenant_id,
-            name
-        )
-
-        if not corpus:
-            return Corpus(tenant_id, name)

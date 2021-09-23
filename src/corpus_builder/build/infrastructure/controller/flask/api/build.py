@@ -9,7 +9,11 @@ from shared.infrastructure.security import (
     ExpiredTokenException,
 )
 from shared.infrastructure.controller.flask.api import BaseController
-from corpus_builder.build.application.start.start_build import BuildStarter, BuildStarterCommand
+from corpus_builder.build.application.start.start_build import StartBuildCommand
+from corpus_builder.build.application.identity.next_identity import (
+    NextIdentityQuery,
+    NextIdentityResponse,
+)
 
 
 build_api = Namespace("build", description="Corpus build starter")
@@ -27,27 +31,24 @@ def handle_value_error(error):
 
 
 @build_api.route("")
-class BuildController(BaseController):
+class PostBuildController(BaseController):
     @authorization_required("start:corpus-build")
     def post(self, user):
         params = request.get_json()
 
-        command = BuildStarterCommand(
-            user.tenant_id(),
-            user.username(),
-            params.get("corpusName")
+        build_id = self._generate_build_id()
+
+        command = StartBuildCommand(
+            build_id, user.tenant_id(), user.username(), params.get("corpusName")
         )
 
-        build_starter: BuildStarter = self.service(
-            "corpus_builder.build.application.start.start_build.build_starter"
-        )
-
-        build_id = build_starter.start(command)
+        self.dispatch(command)
 
         return self.response(
-            HTTPStatus.ACCEPTED,
-            {"Location": f"{settings.api_url()}/builds/{build_id}"}
+            HTTPStatus.ACCEPTED, {"Location": f"{settings.api_url()}/builds/{build_id}"}
         )
 
-    def get(self):
-        pass
+    def _generate_build_id(self) -> str:
+        response: NextIdentityResponse = self.ask(NextIdentityQuery())
+
+        return response.build_id

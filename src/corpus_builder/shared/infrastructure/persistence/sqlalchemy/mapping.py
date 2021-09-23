@@ -2,15 +2,15 @@ from sqlalchemy import Table, String, Column, Boolean, DateTime, Integer, JSON
 
 from sqlalchemy.orm import registry
 
-from shared_context.infrastructure.persistence.sqlalchemy import Orm
+from shared.infrastructure.persistence.sqlalchemy.mapping import Mapping
 
 from corpus_builder.build.domain.model.build import Build
 from corpus_builder.corpus.domain.model.corpus import Corpus
 from corpus_builder.shared.infrastructure.persistence.sqlalchemy.type import BuildIdType
 
 
-class CorpusBuilderMapping(Orm):
-    def start_mappers(self) -> None:
+class CorpusBuilderMapping(Mapping):
+    def map_entities(self) -> None:
 
         mapper_registry = registry()
 
@@ -29,7 +29,10 @@ class CorpusBuilderMapping(Orm):
         )
 
         mapper_registry.map_imperatively(
-            Build, build_table, column_prefix="_", properties={"_build_id": build_table.c.id}
+            Build,
+            build_table,
+            column_prefix="_",
+            properties={"_build_id": build_table.c.id},
         )
 
         corpus_table = Table(
@@ -47,6 +50,4 @@ class CorpusBuilderMapping(Orm):
             Column("custom_request_fields", JSON, nullable=True),
         )
 
-        mapper_registry.map_imperatively(
-            Corpus, corpus_table, column_prefix="_"
-        )
+        mapper_registry.map_imperatively(Corpus, corpus_table, column_prefix="_")

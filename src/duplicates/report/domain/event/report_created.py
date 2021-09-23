@@ -1,8 +1,8 @@
-from shared_context.domain.events import DomainEvent
+from shared.domain.event.event import DomainEvent
 
 
 class ReportCreated(DomainEvent):
-    _EVENT_NAME = "report_created"
+    EVENT_NAME = "report_created"
 
     def __init__(
         self,
@@ -45,6 +45,3 @@ class ReportCreated(DomainEvent):
     @property
     def similarity_threshold(self) -> float:
         return self._similarity_threshold
-
-    def event_name(self) -> str:
-        return self._EVENT_NAME

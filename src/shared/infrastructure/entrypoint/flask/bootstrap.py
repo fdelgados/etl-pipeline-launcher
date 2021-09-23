@@ -27,7 +27,7 @@ class Bootstrap:
 
                 class_ = getattr(module, class_name)
                 mapper = class_()
-                mapper.start_mappers()
+                mapper.map_entities()
 
                 self.logger.info("Database tables mappings generated")
             except (ModuleNotFoundError, AttributeError):

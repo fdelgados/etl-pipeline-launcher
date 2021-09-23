@@ -4,7 +4,7 @@ import credential_shield as cs
 
 from shared import settings
 from shared import ErrorCodes, ApiBaseError
-from shared.domain.model.user.user import User
+from shared.domain.model.entity.user import User
 
 
 class AuthorizationError(ApiBaseError):
@@ -32,7 +32,7 @@ def authorization_required(scope: str):
                     auth_header, settings.public_key()
                 )
                 user = User(token.tenant_id(), token.username(), token.user_email())
-                kwargs['user'] = user
+                kwargs["user"] = user
 
                 return func(self, *args, **kwargs)
             except cs.ExpiredTokenException:

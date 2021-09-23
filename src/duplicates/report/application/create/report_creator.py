@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 
-from shared_context import Command, CommandHandler
-from shared.infrastructure.event import DomainEventDispatcher
+from shared.domain.bus.command import Command, CommandHandler
+from shared.domain.bus.event import EventBus
 from shared.domain.service.logging.logger import Logger
-from shared.domain.model.user.user import User
+from shared.domain.model.entity.user import User
 from duplicates.shared.domain.model.similarity_threshold import SimilarityThreshold
 from duplicates.shared.domain.model.k_shingle_size import KShingleSize
 from duplicates.report.domain.model.report import Report, ReportRepository
@@ -16,10 +16,13 @@ class ReportCreatorCommand(Command):
     user: User
 
 
-class ReportCreator(CommandHandler):
-    def __init__(self, logger: Logger, report_repository: ReportRepository):
+class ReportCreatorCommandHandler(CommandHandler):
+    def __init__(
+        self, logger: Logger, report_repository: ReportRepository, event_bus: EventBus
+    ):
         self._logger = logger
         self._report_repository = report_repository
+        self._event_bus = event_bus
 
     def handle(self, command: ReportCreatorCommand):
         self._logger.info("Create a new pages near duplicates report")
@@ -34,6 +37,6 @@ class ReportCreator(CommandHandler):
 
         self._report_repository.save(report)
 
-        DomainEventDispatcher.dispatch(report.events())
+        self._event_bus.publish(*report.pull_events())
 
         return report.id

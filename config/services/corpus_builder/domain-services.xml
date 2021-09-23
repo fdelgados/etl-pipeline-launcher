@@ -15,4 +15,10 @@
 
     <service id="corpus_builder.corpus.domain.model.corpus.corpus_repository"
              alias="corpus_builder.corpus.infrastructure.persistence.corpus.sqlalchemy.corpus_repository.corpus_repository_impl" />
+
+    <service id="corpus_builder.domain.service.persistence.dbal.dbal_service"
+             alias="corpus_builder.infrastructure.persistence.sqlalchemy.dbal.sql_alchemy_dbal_service" />
+
+    <service id="corpus_builder.domain.event.event_store.event_store"
+             alias="corpus_builder.infrastructure.event.mysql.event_store.mysql_event_store" />
 </services>

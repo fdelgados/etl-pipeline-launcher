@@ -1,32 +1,44 @@
 import abc
 
-from typing import List
+from typing import List, Optional
 
-from shared_context.domain.model import AggregateRoot
-from shared_context.infrastructure.persistence.mongodb import MongoDbRepository
+from pymongo import MongoClient
+
+from shared.domain.model.aggregate import AggregateRoot
+from shared.domain.model.repository import Repository
 from shared import settings
 
 
-class BaseMongoDbRepository(MongoDbRepository, metaclass=abc.ABCMeta):
+class MongoDbRepository(Repository, metaclass=abc.ABCMeta):
     def __init__(self, database: str):
-        connection_settings = settings.mongodb_connection_settings()
         databases = settings.mongodb_databases()
+        connection_settings = settings.mongodb_connection_settings()
 
-        super().__init__(
-            databases.get(database),
-            connection_settings.get("username"),
-            connection_settings.get("password"),
-            host=connection_settings.get("host"),
+        self._database = databases.get(database)
+        self._client = MongoClient(
+            connection_settings.get("host"),
             port=connection_settings.get("port"),
+            username=connection_settings.get("username"),
+            password=connection_settings.get("password"),
+            authSource=self._database,
+            connect=False,
         )
 
-    def save(self, aggregate: AggregateRoot) -> None:
-        pass
+    @property
+    def client(self) -> MongoClient:
+        return self._client
+
+    @property
+    def database(self):
+        return self.client[self._database]
 
     def add(self, aggregate: AggregateRoot) -> None:
         pass
 
-    def find(self, **kwargs) -> AggregateRoot:
+    def save(self, aggregate: AggregateRoot) -> None:
+        pass
+
+    def find(self, **kwargs) -> Optional[AggregateRoot]:
         pass
 
     def find_all(self, **kwargs) -> List[AggregateRoot]:

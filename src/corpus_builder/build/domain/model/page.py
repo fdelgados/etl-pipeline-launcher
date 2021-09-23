@@ -3,7 +3,8 @@ from typing import Dict, Optional
 from datetime import datetime
 from http import HTTPStatus
 
-from shared_context.domain.model import AggregateRoot, Repository
+from shared.domain.model.aggregate import AggregateRoot
+from shared.domain.model.repository import Repository
 
 from corpus_builder.build.domain.event.page_added import PageAdded
 from .url import Url
@@ -19,7 +20,7 @@ class Page(AggregateRoot):
         status_code: int,
         status: str,
         modified_on: datetime,
-        corpus_name: str
+        corpus_name: str,
     ):
         self._url = url
         self._build_id = build_id
@@ -43,7 +44,7 @@ class Page(AggregateRoot):
             self._status_code,
             self._status,
             self._modified_on,
-            self._corpus_name
+            self._corpus_name,
         )
 
         self.record_event(page_requested)

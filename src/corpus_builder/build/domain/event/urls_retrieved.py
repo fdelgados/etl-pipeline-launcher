@@ -1,8 +1,8 @@
-from shared_context.domain.events import DomainEvent
+from shared.domain.event.event import DomainEvent
 
 
 class UrlsRetrieved(DomainEvent):
-    _EVENT_NAME = "urls_retrieved"
+    EVENT_NAME = "urls_retrieved"
 
     def __init__(self, tenant_id: str, build_id: str, total_pages: int):
         self._tenant_id = tenant_id
@@ -22,6 +22,3 @@ class UrlsRetrieved(DomainEvent):
     @property
     def total_pages(self):
         return self._total_pages
-
-    def event_name(self) -> str:
-        return self._EVENT_NAME

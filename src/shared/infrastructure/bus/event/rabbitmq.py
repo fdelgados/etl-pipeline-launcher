@@ -2,11 +2,11 @@ import json
 import pika
 from pika import exceptions
 
-from shared_context.domain.events import DomainEvent
 from shared import settings
-from shared.domain.service.messaging.publisher import EventPublisher
+from shared.domain.bus.event import EventBus, DomainEvent
+from shared.domain.event.event_store import store_event
 from shared.domain.service.logging.logger import Logger
-from .connector import RabbitMqConnector
+from shared.infrastructure.messaging.rabbitmq.connector import RabbitMqConnector
 
 
 def _build_message(event: DomainEvent):
@@ -18,21 +18,25 @@ def _build_message(event: DomainEvent):
     return json.dumps(message).encode()
 
 
-class RabbitMqEventPublisher(EventPublisher):
-    def __init__(self, logger: Logger):
+class RabbitMqEventBus(EventBus):
+    def __init__(
+        self, connector: RabbitMqConnector, exchange_name: str, logger: Logger
+    ):
+        self._connector = connector
+        self._exchange_name = exchange_name
         self._logger = logger
-        self._connector = RabbitMqConnector(self._logger)
 
-    def publish(self, event: DomainEvent, publisher: str) -> None:
+    @store_event
+    def _do_publish(self, event: DomainEvent) -> None:
         connection = self._connect()
 
         try:
             channel = connection.channel()
             channel.exchange_declare(
-                exchange=publisher, exchange_type="direct", durable=True
+                exchange=self._exchange_name, exchange_type="direct", durable=True
             )
             channel.basic_publish(
-                exchange=publisher,
+                exchange=self._exchange_name,
                 routing_key=event.event_name(),
                 body=_build_message(event),
                 properties=pika.BasicProperties(delivery_mode=2),

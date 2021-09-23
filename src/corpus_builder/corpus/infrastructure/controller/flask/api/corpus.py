@@ -9,7 +9,7 @@ from shared.infrastructure.security import (
     ExpiredTokenException,
 )
 from shared.infrastructure.controller.flask.api import BaseController
-from corpus_builder.corpus.application.create.corpus_creator import CorpusCreatorCommand, CorpusCreator
+from corpus_builder.corpus.application.create.corpus_creator import CorpusCreatorCommand
 
 corpus_api = Namespace("corpus", description="Create/Update corpus")
 
@@ -25,9 +25,9 @@ def handle_value_error(error):
     return BaseController.api_error(error, HTTPStatus.BAD_REQUEST)
 
 
-@corpus_api.errorhandler(Exception)
-def handle_authorization_error(error):
-    return BaseController.api_error(error, HTTPStatus.INTERNAL_SERVER_ERROR)
+# @corpus_api.errorhandler(Exception)
+# def handle_authorization_error(error):
+#     return BaseController.api_generic_error(error)
 
 
 @corpus_api.route("/<string:name>")
@@ -49,10 +49,6 @@ class PutCorpusController(BaseController):
             params.get("urlPattern"),
         )
 
-        corpus_creator: CorpusCreator = self.service(
-            "corpus_builder.corpus.application.create.corpus_creator"
-        )
+        self.dispatch(command)
 
-        response = corpus_creator.handle(command)
-
-        return self.response(HTTPStatus.NO_CONTENT if response.updated else HTTPStatus.CREATED)
+        return self.response(HTTPStatus.CREATED)

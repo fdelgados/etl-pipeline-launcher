@@ -9,7 +9,7 @@ from shared.infrastructure.security import (
     ExpiredTokenException,
 )
 from shared.infrastructure.controller.flask.api import BaseController
-from duplicates.report.application.create.report_creator import ReportCreatorCommand, ReportCreator
+from duplicates.report.application.create.report_creator import ReportCreatorCommand
 
 report_api = Namespace("report", description="Near duplicates report generator")
 
@@ -32,18 +32,11 @@ class ReportController(BaseController):
         params = request.get_json()
 
         command = ReportCreatorCommand(
-            params.get("similarity_threshold"),
-            params.get("k_shingle_size"),
-            user
+            params.get("similarity_threshold"), params.get("k_shingle_size"), user
         )
 
-        report_creator: ReportCreator = self.service(
-            "duplicates.report.application.create.report_creator"
-        )
-
-        report_id = report_creator.handle(command)
+        self.dispatch(command)
 
         return self.response(
-            HTTPStatus.ACCEPTED,
-            {"Location": f"{settings.api_url()}/reports/{report_id}"}
+            HTTPStatus.ACCEPTED, {"Location": f"{settings.api_url()}/reports/report_id"}
         )

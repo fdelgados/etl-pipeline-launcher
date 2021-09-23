@@ -3,8 +3,10 @@ from datetime import datetime
 
 from coolname import generate
 
-from shared_context.domain.model import Uuid, AggregateRoot, Repository
-from shared.domain.model.user.user import User
+from shared.domain.model.value_object.unique_id import Uuid
+from shared.domain.model.aggregate import AggregateRoot
+from shared.domain.model.repository import Repository
+from shared.domain.model.entity.user import User
 from duplicates.shared.domain.model.similarity_threshold import SimilarityThreshold
 from duplicates.shared.domain.model.k_shingle_size import KShingleSize
 from duplicates.report.domain.event.report_created import ReportCreated
