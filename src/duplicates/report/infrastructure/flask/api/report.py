@@ -8,7 +8,7 @@ from shared.infrastructure.security import (
     AuthorizationError,
     ExpiredTokenException,
 )
-from shared.infrastructure.controller.flask.api import BaseController
+from shared.infrastructure.flask.api.base_controller import BaseController
 from duplicates.report.application.create.report_creator import ReportCreatorCommand
 
 report_api = Namespace("report", description="Near duplicates report generator")

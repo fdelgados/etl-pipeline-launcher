@@ -29,7 +29,7 @@ services:
       - ../../log:/log
       - ../../bin:/var/www/bin
     environment:
-      - FLASK_APP=shared/infrastructure/entrypoint/flask/start.py
+      - FLASK_APP=shared/infrastructure/flask/entrypoint/run.py
       - PYTHONDONTWRITEBYTECODE=1
       - PYTHONUNBUFFERED=1
     networks:

@@ -1,8 +1,9 @@
 import abc
 
 from typing import Any, Dict
-from pydic import create_container
+
 from shared import settings
+from shared.infrastructure.dependency_injection.container import create_container
 
 
 class Input:

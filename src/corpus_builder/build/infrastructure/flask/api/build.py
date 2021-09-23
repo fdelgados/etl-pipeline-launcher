@@ -8,7 +8,7 @@ from shared.infrastructure.security import (
     AuthorizationError,
     ExpiredTokenException,
 )
-from shared.infrastructure.controller.flask.api import BaseController
+from shared.infrastructure.flask.api.base_controller import BaseController
 from corpus_builder.build.application.start.start_build import StartBuildCommand
 from corpus_builder.build.application.identity.next_identity import (
     NextIdentityQuery,

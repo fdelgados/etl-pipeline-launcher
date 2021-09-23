@@ -1,7 +1,42 @@
+from __future__ import annotations
+
+import os
+import time
 import re
-from .infrastructure.dependency_injection.container import create_container
-from .infrastructure.environment.settings import settings
-from .infrastructure.error.api import *
+from importlib import util
+
+from shared.infrastructure.dependency_injection.container import create_container
+from shared.infrastructure.environment.settings import settings
+from shared.infrastructure.logging.file.logger import FileLogger
+from shared.infrastructure.error.api import *
+
+
+class Bootstrap:
+    def __init__(self):
+        self.logger = FileLogger()
+
+        os.environ["TZ"] = settings.time_zone()
+        time.tzset()
+
+    def generate_db_maps(self) -> Bootstrap:
+        self.logger.info("Generating database tables mappings")
+        for mapping_class in settings.db_mapping_classes():
+            module_name, class_name = mapping_class.rsplit(".", 1)
+
+            try:
+                spec = util.find_spec(module_name)
+                module = util.module_from_spec(spec)
+                spec.loader.exec_module(module)
+
+                class_ = getattr(module, class_name)
+                mapper = class_()
+                mapper.map_entities()
+
+                self.logger.info("Database tables mappings generated")
+            except (ModuleNotFoundError, AttributeError):
+                continue
+
+        return self
 
 
 class Application:
