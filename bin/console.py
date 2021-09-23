@@ -7,7 +7,7 @@ from importlib import util
 from typing import List
 
 from shared import settings
-from shared.infrastructure.entrypoint.command import ConsoleCommand, Input
+from shared.infrastructure.command import ConsoleCommand, Input
 
 
 def _parse_input_args(arguments: List):
