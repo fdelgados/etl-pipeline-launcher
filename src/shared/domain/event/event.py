@@ -11,8 +11,9 @@ class DomainEvent(metaclass=abc.ABCMeta):
         self._occurred_on = datetime.now()
         self._aggregate_id = aggregate_id
 
-    def event_name(self) -> str:
-        return self.EVENT_NAME
+    @classmethod
+    def type_name(cls) -> str:
+        return cls.__name__
 
     @property
     def occurred_on(self):

@@ -15,7 +15,7 @@ class InMemoryEventBus(EventBus):
         for subscriber in event_handlers:
             if (
                 subscriber.subscribed_to()
-                and not domain_event.event_name() in subscriber.subscribed_to()
+                and not domain_event.type_name() in subscriber.subscribed_to()
             ):
                 continue
 

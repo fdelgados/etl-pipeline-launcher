@@ -33,4 +33,9 @@
         <argument name="build_repository" value="corpus_builder.build.domain.model.build.build_repository" type="service"/>
     </service>
 
+    <service id="corpus_builder.build.application.check_status.status_checker.status_checker_query_handler"
+             class="corpus_builder.build.application.check_status.status_checker.StatusCheckerQueryHandler">
+        <argument name="build_status_checker" value="corpus_builder.build.domain.service.status.build_status_checker.build_status_checker" type="service" />
+    </service>
+
 </services>

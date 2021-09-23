@@ -36,7 +36,11 @@ class QueryHandler(metaclass=abc.ABCMeta):
 
 class Response(metaclass=abc.ABCMeta):
     def to_dict(self) -> Dict:
-        return self.__dict__
+        properties = {}
+        for property_name, value in self.__dict__.items():
+            properties[property_name.lstrip("_")] = value
+
+        return properties
 
 
 class QueryBus(metaclass=abc.ABCMeta):

@@ -1,3 +1,5 @@
+from typing import List, Union
+
 from shared.domain.event.event import DomainEvent
 from shared.domain.event.event_store import EventStore
 from shared.infrastructure.persistence.sqlalchemy.dbal import DbalService
@@ -20,3 +22,15 @@ class MysqlEventStore(EventStore):
             event_name=type(domain_event).__name__,
             aggregate_id=domain_event.aggregate_id,
         )
+
+    def events_since(self, domain_event_id: int) -> List[DomainEvent]:
+        pass
+
+    def events_by_type(self, *type_name: str, **kwargs) -> List[DomainEvent]:
+        sentence = """
+            SELECT id, occurred_on, event_data, event_name, aggregate_id
+            FROM event_store
+            WHERE event_name IN :type_names
+        """
+
+        self._db_service.execute(sentence)

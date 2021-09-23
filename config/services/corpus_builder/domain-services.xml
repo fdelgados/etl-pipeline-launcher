@@ -21,4 +21,13 @@
 
     <service id="corpus_builder.domain.event.event_store.event_store"
              alias="corpus_builder.infrastructure.event.mysql.event_store.mysql_event_store" />
+
+    <service id="corpus_builder.build.domain.service.status.requests_counter.requests_counter"
+             alias="corpus_builder.build.infrastructure.status.requests_counter.sqlalchemy.requests_counter.requests_counter_impl" />
+
+    <service id="corpus_builder.build.domain.service.status.build_status_checker.build_status_checker"
+             class="corpus_builder.build.domain.service.status.build_status_checker.BuildStatusChecker">
+        <argument name="build_repository" value="corpus_builder.build.domain.model.build.build_repository" type="service" />
+        <argument name="requests_counter" value="corpus_builder.build.domain.service.status.requests_counter.requests_counter" type="service" />
+    </service>
 </services>

@@ -29,4 +29,9 @@
              class="shared.infrastructure.event.mysql.event_store.MysqlEventStore">
         <argument name="db_service" value="corpus_builder.infrastructure.persistence.sqlalchemy.dbal.sql_alchemy_dbal_service" type="service" />
     </service>
+
+    <service id="corpus_builder.build.infrastructure.status.requests_counter.sqlalchemy.requests_counter.requests_counter_impl"
+             class="corpus_builder.build.infrastructure.status.requests_counter.sqlalchemy.requests_counter.RequestsCounterImpl">
+        <argument name="db_service" value="corpus_builder.infrastructure.persistence.sqlalchemy.dbal.sql_alchemy_dbal_service" type="service" />
+    </service>
 </services>

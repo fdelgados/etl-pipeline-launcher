@@ -37,7 +37,7 @@ class RabbitMqEventBus(EventBus):
             )
             channel.basic_publish(
                 exchange=self._exchange_name,
-                routing_key=domain_event.event_name(),
+                routing_key=domain_event.type_name(),
                 body=_build_message(domain_event),
                 properties=pika.BasicProperties(delivery_mode=2),
             )

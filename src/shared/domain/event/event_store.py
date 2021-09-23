@@ -1,6 +1,8 @@
 import abc
 from functools import wraps
 
+from typing import List
+
 from shared import Application, Utils
 from shared.domain.event.event import DomainEvent
 
@@ -8,6 +10,14 @@ from shared.domain.event.event import DomainEvent
 class EventStore(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def append(self, domain_event: DomainEvent) -> None:
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def events_since(self, domain_event_id: int) -> List[DomainEvent]:
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def events_by_type(self, *type_name: str, **kwargs) -> List[DomainEvent]:
         raise NotImplementedError
 
 

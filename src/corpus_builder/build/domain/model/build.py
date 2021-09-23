@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import abc
 
+from datetime import datetime
+from dataclasses import dataclass
 from coolname import generate
 
 from shared.domain.model.aggregate import AggregateRoot
@@ -11,7 +13,7 @@ from corpus_builder.build.domain.event.build_started import BuildStarted
 from corpus_builder.build.domain.event.build_completed import BuildCompleted
 
 
-__all__ = ["BuildId", "Build", "BuildRepository"]
+__all__ = ["BuildId", "Build", "BuildRepository", "BuildStatus"]
 
 
 class BuildId(Uuid):
@@ -68,6 +70,10 @@ class Build(AggregateRoot):
         return self._completed
 
     @property
+    def started_on(self) -> datetime:
+        return self._started_on
+
+    @property
     def total_pages(self) -> int:
         return self._total_pages
 
@@ -85,6 +91,15 @@ class Build(AggregateRoot):
 
     def __repr__(self):
         return "Build <{}>".format(self._build_id.value)
+
+
+@dataclass(frozen=True)
+class BuildStatus:
+    build_id: str
+    total_pages: int
+    requested_pages: int
+    build_started_on: datetime
+    is_completed: bool
 
 
 class BuildRepository(Repository, metaclass=abc.ABCMeta):
