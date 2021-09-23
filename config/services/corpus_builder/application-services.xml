@@ -28,6 +28,11 @@
         <argument name="build_repository" value="corpus_builder.build.domain.model.build.build_repository" type="service"/>
     </service>
 
+    <service id="corpus_builder.build.application.update.update_build.update_build_status_on_build_completed"
+             class="corpus_builder.build.application.update.update_build.UpdateBuildStatusOnBuildCompleted">
+        <argument name="build_repository" value="corpus_builder.build.domain.model.build.build_repository" type="service"/>
+    </service>
+
     <service id="corpus_builder.build.application.identity.next_identity.next_identity_query_handler"
              class="corpus_builder.build.application.identity.next_identity.NextIdentityQueryHandler">
         <argument name="build_repository" value="corpus_builder.build.domain.model.build.build_repository" type="service"/>

@@ -1,25 +1,59 @@
+import abc
 from typing import List
 
 from shared.domain.bus.event import DomainEventSubscriber
 from corpus_builder.build.domain.event.urls_retrieved import UrlsRetrieved
-from corpus_builder.build.domain.model.build import BuildRepository, BuildId
+from corpus_builder.build.domain.event.build_completed import BuildCompleted
+from corpus_builder.build.domain.model.build import BuildRepository, Build, BuildId
 
 
-class UpdateTotalPagesOnUrlsRetrieved(DomainEventSubscriber):
+class UpdateBuildSubscriber(DomainEventSubscriber, metaclass=abc.ABCMeta):
     def __init__(self, build_repository: BuildRepository):
         self._build_repository = build_repository
 
-    def subscribed_to(self) -> List:
-        return [UrlsRetrieved.EVENT_NAME]
-
-    def handle(self, domain_event: UrlsRetrieved) -> None:
+    def _retrieve_build(self, tenant_id: str, build_id: str) -> Build:
         build = self._build_repository.build_of_tenant_and_id(
-            domain_event.tenant_id, BuildId(domain_event.build_id)
+            tenant_id,
+            BuildId(build_id),
         )
 
         if not build:
-            return
+            raise ValueError
 
-        build.total_pages = domain_event.total_pages
+        return build
 
-        self._build_repository.save(build)
+
+class UpdateTotalPagesOnUrlsRetrieved(UpdateBuildSubscriber):
+    def subscribed_to(self) -> List:
+        return [UrlsRetrieved.type_name()]
+
+    def handle(self, domain_event: UrlsRetrieved) -> None:
+        try:
+            build = self._retrieve_build(
+                domain_event.tenant_id,
+                domain_event.build_id,
+            )
+
+            build.total_pages = domain_event.total_pages
+
+            self._build_repository.save(build)
+        except ValueError:
+            pass
+
+
+class UpdateBuildStatusOnBuildCompleted(UpdateBuildSubscriber):
+    def subscribed_to(self) -> List:
+        return [BuildCompleted.type_name()]
+
+    def handle(self, domain_event: BuildCompleted) -> None:
+        try:
+            build = self._retrieve_build(
+                domain_event.tenant_id,
+                domain_event.build_id,
+            )
+
+            build.mark_as_completed(domain_event.occurred_on)
+
+            self._build_repository.save(build)
+        except ValueError:
+            pass

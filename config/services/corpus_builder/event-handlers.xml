@@ -9,4 +9,8 @@
         <handler id="corpus_builder.build.application.update.update_build.update_total_pages_on_urls_retrieved" />
     </event>
 
+    <event class="corpus_builder.build.domain.event.build_completed.BuildCompleted">
+        <handler id="corpus_builder.build.application.update.update_build.update_build_status_on_build_completed" />
+    </event>
+
 </events>

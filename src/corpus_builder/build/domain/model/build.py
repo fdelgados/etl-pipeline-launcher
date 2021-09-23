@@ -81,13 +81,14 @@ class Build(AggregateRoot):
     def total_pages(self, total_pages: int) -> None:
         self._total_pages = total_pages
 
+    def mark_as_completed(self, completed_on: datetime) -> None:
+        self._completed = True
+        self._completed_on = completed_on
+
     def complete(self) -> None:
         build_completed = BuildCompleted(self._tenant_id, self._build_id.value)
 
         self.record_event(build_completed)
-
-        self._completed = True
-        self._completed_on = build_completed.occurred_on
 
     def __repr__(self):
         return "Build <{}>".format(self._build_id.value)

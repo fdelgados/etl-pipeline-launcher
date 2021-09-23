@@ -43,7 +43,7 @@ class ExtractDataOnBuildStarted(DomainEventSubscriber):
         self._event_bus = event_bus
 
     def subscribed_to(self) -> List:
-        return [BuildStarted.EVENT_NAME]
+        return [BuildStarted.type_name()]
 
     def handle(self, domain_event: BuildStarted) -> None:
         self._log("info", "Start content extraction")
