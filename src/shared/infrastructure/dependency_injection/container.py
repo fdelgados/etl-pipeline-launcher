@@ -1,6 +1,6 @@
 import os
 import os.path
-from typing import List, Dict, Generator, Optional, Union, Any
+from typing import List, Dict, Generator, Optional, Any
 from importlib import util
 from xml.etree import ElementTree
 from dependency_injector import containers
@@ -32,7 +32,12 @@ def create_container(settings):
 
     for service_id, info in services.items():
         _create_service(
-            services, service_container, service_provider_cls, service_id, info, settings,
+            services,
+            service_container,
+            service_provider_cls,
+            service_id,
+            info,
+            settings,
         )
 
     store_domain_even_subscriber = settings.store_domain_even_subscriber()
@@ -42,7 +47,7 @@ def create_container(settings):
     setattr(
         service_container,
         store_domain_even_subscriber_id.replace(".", "_"),
-        service_provider_cls(service_cls)
+        service_provider_cls(service_cls),
     )
 
     if event_handlers_files is not None:
@@ -77,7 +82,9 @@ def create_container(settings):
 
         @classmethod
         def event_handlers(cls, event_name: str) -> Generator:
-            domain_event_subscribers = subscriber_instances.get(event_name, {}).get("subscribers", [])
+            domain_event_subscribers = subscriber_instances.get(event_name, {}).get(
+                "subscribers", []
+            )
 
             for domain_event_subscriber in domain_event_subscribers:
                 yield domain_event_subscriber

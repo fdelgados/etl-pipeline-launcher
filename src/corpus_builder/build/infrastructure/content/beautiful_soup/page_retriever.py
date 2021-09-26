@@ -88,7 +88,7 @@ class PageRetrieverImpl(PageRetriever):
                 response.status_code,
                 response.reason,
                 _date_to_local(response.headers.get("Date")),
-                corpus.name
+                corpus.name,
             )
 
             self._ensure_is_a_valid_response(response)
@@ -106,7 +106,7 @@ class PageRetrieverImpl(PageRetriever):
                     last_response.status_code,
                     last_response.reason,
                     _date_to_local(response.headers.get("Date")),
-                    corpus.name
+                    corpus.name,
                 )
 
                 page.final_url = Url(response.url)
