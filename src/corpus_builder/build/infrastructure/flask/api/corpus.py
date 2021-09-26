@@ -9,7 +9,7 @@ from shared.infrastructure.security import (
     ExpiredTokenException,
 )
 from shared.infrastructure.flask.api.base_controller import BaseController
-from corpus_builder.corpus.application.create.corpus_creator import CorpusCreatorCommand
+from corpus_builder.build.application.corpus_creator import CorpusCreatorCommand
 
 corpus_api = Namespace("corpus", description="Create/Update corpus")
 

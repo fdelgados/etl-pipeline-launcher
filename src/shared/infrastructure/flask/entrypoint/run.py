@@ -4,7 +4,7 @@ from flask_restx import Api
 from shared import Bootstrap, settings
 from corpus_builder.build.infrastructure.flask.api.build import build_api
 from corpus_builder.build.infrastructure.flask.api.status import status_api
-from corpus_builder.corpus.infrastructure.flask.api.corpus import corpus_api
+from corpus_builder.build.infrastructure.flask.api.corpus import corpus_api
 from duplicates.report.infrastructure.flask.api.report import report_api
 
 

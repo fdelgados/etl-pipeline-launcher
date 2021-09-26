@@ -86,7 +86,11 @@ class Build(AggregateRoot):
         self._completed_on = completed_on
 
     def complete(self) -> None:
-        build_completed = BuildCompleted(self._tenant_id, self._build_id.value)
+        build_completed = BuildCompleted(
+            self._tenant_id,
+            self._build_id.value,
+            self._corpus_name,
+        )
 
         self.record_event(build_completed)
 

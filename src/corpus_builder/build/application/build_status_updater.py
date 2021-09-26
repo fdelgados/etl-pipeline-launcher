@@ -1,5 +1,4 @@
 import abc
-from typing import List
 
 from shared.domain.bus.event import DomainEventSubscriber
 from corpus_builder.build.domain.event.urls_retrieved import UrlsRetrieved
@@ -9,6 +8,8 @@ from corpus_builder.build.domain.model.build import BuildRepository, Build, Buil
 
 class UpdateBuildSubscriber(DomainEventSubscriber, metaclass=abc.ABCMeta):
     def __init__(self, build_repository: BuildRepository):
+        super().__init__()
+
         self._build_repository = build_repository
 
     def _retrieve_build(self, tenant_id: str, build_id: str) -> Build:
@@ -24,9 +25,6 @@ class UpdateBuildSubscriber(DomainEventSubscriber, metaclass=abc.ABCMeta):
 
 
 class UpdateTotalPagesOnUrlsRetrieved(UpdateBuildSubscriber):
-    def subscribed_to(self) -> List:
-        return [UrlsRetrieved.type_name()]
-
     def handle(self, domain_event: UrlsRetrieved) -> None:
         try:
             build = self._retrieve_build(
@@ -42,9 +40,6 @@ class UpdateTotalPagesOnUrlsRetrieved(UpdateBuildSubscriber):
 
 
 class UpdateBuildStatusOnBuildCompleted(UpdateBuildSubscriber):
-    def subscribed_to(self) -> List:
-        return [BuildCompleted.type_name()]
-
     def handle(self, domain_event: BuildCompleted) -> None:
         try:
             build = self._retrieve_build(

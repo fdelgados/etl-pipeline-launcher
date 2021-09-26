@@ -9,8 +9,8 @@ from shared.infrastructure.security import (
     ExpiredTokenException,
 )
 from shared.infrastructure.flask.api.base_controller import BaseController
-from corpus_builder.build.application.start.start_build import StartBuildCommand
-from corpus_builder.build.application.identity.next_identity import (
+from corpus_builder.build.application.build_starter import StartBuildCommand
+from corpus_builder.build.application.identity_generator import (
     NextIdentityQuery,
     NextIdentityResponse,
 )

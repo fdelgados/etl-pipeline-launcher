@@ -20,7 +20,7 @@ from corpus_builder.build.domain.service.content.page_retriever import (
 )
 from corpus_builder.build.domain.service.content.url_source import UrlSource
 from corpus_builder.build.domain.model.page import PageRepository
-from corpus_builder.corpus.domain.model.corpus import Corpus, CorpusRepository
+from corpus_builder.build.domain.model.corpus import Corpus, CorpusRepository
 
 
 class ExtractDataOnBuildStarted(DomainEventSubscriber):
@@ -34,6 +34,8 @@ class ExtractDataOnBuildStarted(DomainEventSubscriber):
         logger: Logger,
         event_bus: EventBus,
     ):
+        super().__init__()
+
         self._page_retriever = page_retriever
         self._url_source = url_source
         self._build_repository = build_repository
@@ -41,9 +43,6 @@ class ExtractDataOnBuildStarted(DomainEventSubscriber):
         self._corpus_repository = corpus_repository
         self._logger = logger
         self._event_bus = event_bus
-
-    def subscribed_to(self) -> List:
-        return [BuildStarted.type_name()]
 
     def handle(self, domain_event: BuildStarted) -> None:
         self._log("info", "Start content extraction")

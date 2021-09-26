@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from typing import List
 from shared.domain.bus.command import Command, CommandHandler
 
-from corpus_builder.corpus.domain.model.corpus import CorpusRepository, Corpus
+from corpus_builder.build.domain.model.corpus import CorpusRepository, Corpus
 
 
 @dataclass(frozen=True)

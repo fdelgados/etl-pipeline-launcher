@@ -45,9 +45,7 @@ class Application:
     @classmethod
     def container(cls):
         if not cls._container:
-            cls._container = create_container(
-                settings.services_files(), settings.event_handlers_files()
-            )
+            cls._container = create_container(settings)
 
         return cls._container
 

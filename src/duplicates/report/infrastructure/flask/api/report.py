@@ -9,8 +9,8 @@ from shared.infrastructure.security import (
     ExpiredTokenException,
 )
 from shared.infrastructure.flask.api.base_controller import BaseController
-from duplicates.report.application.create.report_creator import ReportCreatorCommand
-from duplicates.report.application.identity.next_identity import NextIdentityQuery
+from duplicates.report.application.report_creator import ReportCreatorCommand
+from duplicates.report.application.identity_generator import NextIdentityQuery
 
 report_api = Namespace("report", description="Near duplicates report generator")
 

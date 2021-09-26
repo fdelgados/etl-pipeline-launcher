@@ -20,6 +20,13 @@ class Settings:
         configs_dir = "/var/www/config"
         settings_dir = f"{configs_dir}/settings"
         services_dir = f"{configs_dir}/services"
+        contexts_dir = "/var/www/src"
+
+        self._contexts = list(
+            filter(
+                lambda context: "." not in context, find_packages(where=contexts_dir)
+            )
+        )
 
         self._config = toml.load(f"{settings_dir}/common/settings.toml")
         common_environment_config = toml.load(
@@ -155,6 +162,9 @@ class Settings:
 
         return self._subscribed_events.get(exchange, {}).get(event, {})
 
+    def store_domain_even_subscriber(self) -> Dict:
+        return self._config.get("application").get("store_domain_event_subscriber")
+
     def redis_host(self):
         return self._get("redis", "host")
 
@@ -178,13 +188,7 @@ class Settings:
         return self._get("application", "root_dir")
 
     def contexts(self) -> List:
-        contexts_dir = self._get("application", "contexts_dir")
-
-        return list(
-            filter(
-                lambda context: "." not in context, find_packages(where=contexts_dir)
-            )
-        )
+        return self._contexts
 
     def services_files(self) -> List:
         services_dir = os.path.join(self._configs_dir(), "services/")
@@ -226,6 +230,30 @@ class Settings:
                 mapping_modules.append(module_name)
 
         return mapping_modules
+
+    def event_store_config_for_context(self, context: str) -> Dict:
+        context_config = self._get("application", "contexts", {}).get(context)
+
+        if not context_config:
+            return {}
+
+        return context_config.get("event_store", {})
+
+    def is_event_store_enabled_for_context(self, context: str) -> bool:
+        context_event_store = self.event_store_config_for_context(context)
+
+        if not context_event_store:
+            return False
+
+        return context_event_store.get("enabled", False)
+
+    def event_store_id(self, context: str) -> Optional[str]:
+        context_event_store = self.event_store_config_for_context(context)
+
+        if not context_event_store:
+            return None
+
+        return context_event_store.get("id")
 
     def api_path(self):
         return "/{}".format(self.api_version())

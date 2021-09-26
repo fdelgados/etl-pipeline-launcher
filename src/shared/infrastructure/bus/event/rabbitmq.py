@@ -4,7 +4,6 @@ from pika import exceptions
 
 from shared import settings
 from shared.domain.bus.event import EventBus, DomainEvent
-from shared.domain.event.event_store import store_event
 from shared.domain.service.logging.logger import Logger
 from shared.infrastructure.messaging.rabbitmq.connector import RabbitMqConnector
 
@@ -26,7 +25,6 @@ class RabbitMqEventBus(EventBus):
         self._exchange_name = exchange_name
         self._logger = logger
 
-    @store_event
     def _do_publish(self, domain_event: DomainEvent) -> None:
         connection = self._connect()
 

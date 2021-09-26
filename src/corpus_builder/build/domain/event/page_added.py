@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from shared.domain.event.event import DomainEvent
+from shared.domain.bus.event import DomainEvent
 
 
 class PageAdded(DomainEvent):

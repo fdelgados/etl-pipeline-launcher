@@ -6,9 +6,10 @@ from xml.etree import ElementTree
 from dependency_injector import containers
 
 
-def create_container(
-    services_files: List, event_handlers_files: Optional[Union[str, List[str]]] = None
-):
+def create_container(settings):
+    services_files = settings.services_files()
+    event_handlers_files = settings.event_handlers_files()
+
     service_container = containers.DynamicContainer()
     services = _get_services(services_files)
     service_provider_cls = _import_cls("dependency_injector.providers.Factory")
@@ -31,8 +32,18 @@ def create_container(
 
     for service_id, info in services.items():
         _create_service(
-            services, service_container, service_provider_cls, service_id, info
+            services, service_container, service_provider_cls, service_id, info, settings,
         )
+
+    store_domain_even_subscriber = settings.store_domain_even_subscriber()
+    store_domain_even_subscriber_id = store_domain_even_subscriber.get("id")
+
+    service_cls = _import_cls(store_domain_even_subscriber.get("class_name"))
+    setattr(
+        service_container,
+        store_domain_even_subscriber_id.replace(".", "_"),
+        service_provider_cls(service_cls)
+    )
 
     if event_handlers_files is not None:
         if isinstance(event_handlers_files, str):
@@ -40,6 +51,19 @@ def create_container(
 
         for event_handlers_file in event_handlers_files:
             event_handlers.update(_get_event_handlers(event_handlers_file))
+
+        subscriber_instances = {}
+        for domain_event, subscriber_data in event_handlers.items():
+            subscriber_data["subscribers"].insert(0, store_domain_even_subscriber_id)
+            subscriber_instances[domain_event] = {"subscribers": []}
+            for subscriber_id in subscriber_data["subscribers"]:
+                subscriber = getattr(
+                    service_container, subscriber_id.replace(".", "_")
+                )()
+
+                subscriber.subscribe_to(domain_event)
+
+                subscriber_instances[domain_event]["subscribers"].append(subscriber)
 
     class Container:
         @classmethod
@@ -53,10 +77,10 @@ def create_container(
 
         @classmethod
         def event_handlers(cls, event_name: str) -> Generator:
-            subscribers = event_handlers.get(event_name, {}).get("subscribers", {})
+            domain_event_subscribers = subscriber_instances.get(event_name, {}).get("subscribers", [])
 
-            for subscriber in subscribers:
-                yield Container.get(subscriber)
+            for domain_event_subscriber in domain_event_subscribers:
+                yield domain_event_subscriber
 
     return Container
 
@@ -99,6 +123,7 @@ def _get_service_from_file(services_file: str) -> Dict:
                     "type": service_argument.attrib["type"],
                     "name": service_argument.attrib["name"],
                     "value": service_argument.attrib["value"],
+                    "args": service_argument.attrib.get("args"),
                 }
             )
 
@@ -120,7 +145,7 @@ def _import_cls(full_class_name: str):
 
 
 def _create_service(
-    services, service_container, service_provider_cls, service_id: str, info
+    services, service_container, service_provider_cls, service_id: str, info, settings
 ):
     service_key = service_id.replace(".", "_")
     if hasattr(service_container, service_key):
@@ -134,6 +159,16 @@ def _create_service(
             args[argument["name"]] = os.environ.get(argument["value"])
         elif argument.get("type") == "parameter":
             args[argument["name"]] = argument["value"]
+        elif argument.get("type") == "settings":
+            method = getattr(settings, argument["value"])
+            method_arguments = argument["args"]
+
+            if not method_arguments:
+                value = method()
+            else:
+                value = method(*argument["args"].split(","))
+
+            args[argument["name"]] = value
         elif argument.get("type") == "service":
             dependency_service_id = argument["value"]
 
@@ -148,6 +183,7 @@ def _create_service(
                 service_provider_cls,
                 dependency_service_id,
                 dependency_service_info,
+                settings,
             )
 
     service_cls = _import_cls(info.get("class_name"))

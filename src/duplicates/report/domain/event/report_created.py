@@ -1,4 +1,4 @@
-from shared.domain.event.event import DomainEvent
+from shared.domain.bus.event import DomainEvent
 
 
 class ReportCreated(DomainEvent):

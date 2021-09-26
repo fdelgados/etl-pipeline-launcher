@@ -8,7 +8,7 @@ from shared.infrastructure.security import (
     ExpiredTokenException,
 )
 from shared.infrastructure.flask.api.base_controller import BaseController
-from corpus_builder.build.application.check_status.status_checker import (
+from corpus_builder.build.application.status_checker import (
     StatusCheckerQuery,
 )
 

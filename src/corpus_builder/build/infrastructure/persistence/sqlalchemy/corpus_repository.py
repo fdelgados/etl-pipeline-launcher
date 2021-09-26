@@ -4,7 +4,7 @@ from shared.infrastructure.persistence.sqlalchemy.repository import Repository
 
 from shared import settings
 
-from corpus_builder.corpus.domain.model.corpus import Corpus, CorpusRepository
+from corpus_builder.build.domain.model.corpus import Corpus, CorpusRepository
 
 
 class CorpusRepositoryImpl(CorpusRepository, Repository):

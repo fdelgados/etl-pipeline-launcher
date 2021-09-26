@@ -1,7 +1,6 @@
 from typing import List
 
-from shared.domain.event.event import DomainEvent
-from shared.domain.event.event_store import EventStore
+from shared.domain.bus.event import DomainEvent, EventStore
 from shared.infrastructure.persistence.sqlalchemy.dbal import DbalService
 
 
@@ -19,7 +18,7 @@ class MysqlEventStore(EventStore):
             sentence,
             occurred_on=domain_event.occurred_on,
             event_data=domain_event.serialize(),
-            event_name=type(domain_event).__name__,
+            event_name=domain_event.type_name(),
             aggregate_id=domain_event.aggregate_id,
         )
 

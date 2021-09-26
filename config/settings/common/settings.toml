@@ -4,6 +4,10 @@ root_dir = "/var/www"
 logs_dir = "/log"
 contexts_dir = "/var/www/src"
 configs_dir = "/var/www/config"
+store_domain_event_subscriber.id = "shared.application.event.store.store_domain_event_on_published"
+store_domain_event_subscriber.class_name = "shared.application.event.store.StoreDomainEventOnPublished"
+contexts.corpus_builder.event_store.enabled = true
+contexts.corpus_builder.event_store.id = "corpus_builder.domain.event.event_store.event_store"
 
 [identity_access]
 token_issuer = "http://localhost"

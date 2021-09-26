@@ -27,7 +27,7 @@ from corpus_builder.build.domain.service.content.page_retriever import (
     PageRetrieverFatalError,
 )
 
-from corpus_builder.corpus.domain.model.corpus import Corpus
+from corpus_builder.build.domain.model.corpus import Corpus
 
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)

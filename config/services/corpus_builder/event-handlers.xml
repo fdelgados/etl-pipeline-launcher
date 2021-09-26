@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 
 <events>
+    <event class="corpus_builder.build.domain.event.page_added.PageAdded" />
+
     <event class="corpus_builder.build.domain.event.build_started.BuildStarted">
-        <handler id="corpus_builder.build.application.extract.data_extractor.extract_data_on_build_started" />
+        <handler id="corpus_builder.build.application.data_extractor.extract_data_on_build_started" />
     </event>
 
     <event class="corpus_builder.build.domain.event.urls_retrieved.UrlsRetrieved">
-        <handler id="corpus_builder.build.application.update.update_build.update_total_pages_on_urls_retrieved" />
+        <handler id="corpus_builder.build.application.build_status_updater.update_total_pages_on_urls_retrieved" />
     </event>
 
     <event class="corpus_builder.build.domain.event.build_completed.BuildCompleted">
-        <handler id="corpus_builder.build.application.update.update_build.update_build_status_on_build_completed" />
+        <handler id="corpus_builder.build.application.build_status_updater.update_build_status_on_build_completed" />
+        <handler id="corpus_builder.build.application.pages_linker.link_pages_to_corpus_on_build_completed" />
     </event>
 
 </events>

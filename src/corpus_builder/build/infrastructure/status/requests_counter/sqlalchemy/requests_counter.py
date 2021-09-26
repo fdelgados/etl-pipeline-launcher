@@ -20,7 +20,10 @@ class RequestsCounterImpl(RequestsCounter):
         result = self._db_service.execute(
             sentence,
             build_id=build_id.value,
-            requests_events=[ExtractionFailed.type_name(), PageAdded.type_name()],
+            requests_events=[
+                ExtractionFailed.type_name(),
+                PageAdded.type_name()
+            ],
         )
 
         return result.scalar()

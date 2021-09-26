@@ -61,6 +61,10 @@ class Page(AggregateRoot):
         return self._corpus_name
 
     @property
+    def tenant_id(self) -> str:
+        return self._tenant_id
+
+    @property
     def status_code(self) -> int:
         return self._status_code
 
@@ -170,4 +174,6 @@ class Page(AggregateRoot):
 
 
 class PageRepository(Repository, metaclass=abc.ABCMeta):
-    pass
+    @abc.abstractmethod
+    def rename_pages_collection(self, corpus: str) -> None:
+        raise NotImplementedError

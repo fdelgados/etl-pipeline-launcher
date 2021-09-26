@@ -5,7 +5,7 @@ from sqlalchemy.orm import registry
 from shared.infrastructure.persistence.sqlalchemy.mapping import Mapping
 
 from corpus_builder.build.domain.model.build import Build
-from corpus_builder.corpus.domain.model.corpus import Corpus
+from corpus_builder.build.domain.model.corpus import Corpus
 from corpus_builder.shared.infrastructure.persistence.sqlalchemy.type import BuildIdType
 
 

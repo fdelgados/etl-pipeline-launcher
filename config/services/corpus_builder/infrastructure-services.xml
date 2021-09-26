@@ -2,7 +2,9 @@
 
 <services>
     <service id="corpus_builder.build.infrastructure.persistence.sqlalchemy.build_repository.build_repository_impl"
-             class="corpus_builder.build.infrastructure.persistence.sqlalchemy.build_repository.BuildRepositoryImpl" />
+             class="corpus_builder.build.infrastructure.persistence.sqlalchemy.build_repository.BuildRepositoryImpl">
+        <argument name="dsn" value="database_dsn" args="corpus_builder" type="settings" />
+    </service>
 
     <service id="corpus_builder.build.infrastructure.persistence.mongodb.page_repository.mongo_db_page_repository"
              class="corpus_builder.build.infrastructure.persistence.mongodb.page_repository.MongoDbPageRepository">
@@ -17,8 +19,8 @@
     <service id="corpus_builder.build.infrastructure.content.beautiful_soup.url_source.url_source_impl"
              class="corpus_builder.build.infrastructure.content.beautiful_soup.url_source.UrlSourceImpl" />
 
-    <service id="corpus_builder.corpus.infrastructure.persistence.sqlalchemy.corpus_repository.corpus_repository_impl"
-             class="corpus_builder.corpus.infrastructure.persistence.sqlalchemy.corpus_repository.CorpusRepositoryImpl" />
+    <service id="corpus_builder.build.infrastructure.persistence.sqlalchemy.corpus_repository.corpus_repository_impl"
+             class="corpus_builder.build.infrastructure.persistence.sqlalchemy.corpus_repository.CorpusRepositoryImpl" />
 
     <service id="corpus_builder.infrastructure.persistence.sqlalchemy.dbal.sql_alchemy_dbal_service"
              class="shared.infrastructure.persistence.sqlalchemy.dbal.SqlAlchemyDbalService">
