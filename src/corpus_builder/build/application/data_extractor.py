@@ -66,7 +66,11 @@ class ExtractDataOnBuildStarted(DomainEventSubscriber):
 
             build.complete()
 
-        except (PageRetrieverFatalError, UrlSourceError, UnableToSavePageError) as error:
+        except (
+            PageRetrieverFatalError,
+            UrlSourceError,
+            UnableToSavePageError,
+        ) as error:
             build.abort()
 
             self._log("critical", str(error))

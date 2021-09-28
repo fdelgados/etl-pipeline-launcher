@@ -1,6 +1,10 @@
 from typing import List
 
-from corpus_builder.build.domain.model.page import PageRepository, Page, UnableToSavePageError
+from corpus_builder.build.domain.model.page import (
+    PageRepository,
+    Page,
+    UnableToSavePageError,
+)
 
 from shared.infrastructure.persistence.mongodb.repository import MongoDbRepository
 from pymongo import errors
@@ -19,27 +23,33 @@ class MongoDbPageRepository(PageRepository, MongoDbRepository):
         try:
             tmp_collection.update_one(
                 {"address": page.url.address},
-                {"$set": {
-                    "corpus_builder": page.corpus_name,
-                    "tenant_id": page.tenant_id,
-                    "address": page.url.address,
-                    "status": page.status,
-                    "status_code": page.status_code,
-                    "h1": page.h1,
-                    "title": page.title,
-                    "content": page.content,
-                    "is_indexable": page.is_indexable,
-                    "final_address": None if not page.final_url else page.final_url.address,
-                    "canonical_address": None
-                    if not page.canonical_url
-                    else page.canonical_url.address,
-                    "datalayer": page.datalayer,
-                    "modified_on": page.modified_on,
-                }},
-                upsert=True
+                {
+                    "$set": {
+                        "corpus_builder": page.corpus_name,
+                        "tenant_id": page.tenant_id,
+                        "address": page.url.address,
+                        "status": page.status,
+                        "status_code": page.status_code,
+                        "h1": page.h1,
+                        "title": page.title,
+                        "content": page.content,
+                        "is_indexable": page.is_indexable,
+                        "final_address": None
+                        if not page.final_url
+                        else page.final_url.address,
+                        "canonical_address": None
+                        if not page.canonical_url
+                        else page.canonical_url.address,
+                        "datalayer": page.datalayer,
+                        "modified_on": page.modified_on,
+                    }
+                },
+                upsert=True,
             )
         except errors.PyMongoError as error:
-            raise UnableToSavePageError(f"Cannot save page content ({page.url.address}). {str(error)}")
+            raise UnableToSavePageError(
+                f"Cannot save page content ({page.url.address}). {str(error)}"
+            )
 
     def add(self, page: Page) -> None:
         pass

@@ -15,7 +15,9 @@ import shared.infrastructure.environment.global_vars as glob
 
 
 def _on_message(ch, method, _, message):
-    commands = glob.settings.event_subscribed_commands(method.exchange, method.routing_key)
+    commands = glob.settings.event_subscribed_commands(
+        method.exchange, method.routing_key
+    )
 
     command = commands.get(method.consumer_tag)
     if not command:

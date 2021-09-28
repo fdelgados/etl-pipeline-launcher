@@ -58,7 +58,9 @@ class BuildListController(BaseController):
         build_info = []
         for dto in response.build_info_dtos:
             dto_dict = dto.to_dict()
-            dto_dict["links"] = {"self": f"{glob.settings.api_url()}/builds/{dto.build_id}"}
+            dto_dict["links"] = {
+                "self": f"{glob.settings.api_url()}/builds/{dto.build_id}"
+            }
             build_info.append(dto_dict)
 
         return make_response(
