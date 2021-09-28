@@ -8,14 +8,16 @@ from typing import Dict, Any
 import json
 from pika import exceptions
 
+from shared.application.bootstrap import Bootstrap
 from shared.infrastructure.logging.file.logger import FileLogger
 from shared.domain.service.logging.logger import Logger
 from shared.infrastructure.messaging.rabbitmq.connector import RabbitMqConnector
-import shared.infrastructure.environment.global_vars as glob
+
+bootstrap = Bootstrap()
 
 
 def _on_message(ch, method, _, message):
-    commands = glob.settings.event_subscribed_commands(
+    commands = bootstrap.settings.event_subscribed_commands(
         method.exchange, method.routing_key
     )
 
@@ -117,8 +119,8 @@ def consume(exchange_name: str, routing_keys: Dict, logger: Logger, channel) -> 
         logger.info(" [*] Consumer stopped")
 
 
-exchanges = glob.settings.subscribed_events()
-connection_settings = glob.settings.rabbit_connection_settings()
+exchanges = bootstrap.settings.subscribed_events()
+connection_settings = bootstrap.settings.rabbit_connection_settings()
 file_logger = FileLogger()
 connector = RabbitMqConnector(file_logger)
 

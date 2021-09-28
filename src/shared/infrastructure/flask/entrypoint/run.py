@@ -9,7 +9,6 @@ from corpus_builder.build.infrastructure.flask.api.corpus import corpus_api
 from duplicates.report.infrastructure.flask.api.report import report_api
 
 bootstrap = Bootstrap()
-bootstrap.generate_db_maps()
 
 app = Flask(__name__)
 app.config.from_mapping(bootstrap.settings.flask_config())

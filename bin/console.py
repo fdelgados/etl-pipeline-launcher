@@ -6,8 +6,10 @@ import argparse
 from importlib import util
 from typing import List
 
-import shared.infrastructure.environment.global_vars as glob
 from shared.infrastructure.command import ConsoleCommand, Input
+from shared.application.bootstrap import Bootstrap
+
+boostrap = Bootstrap()
 
 
 def _parse_input_args(arguments: List):
@@ -40,7 +42,7 @@ if __name__ == "__main__":
 
     args, unknown = parser.parse_known_args()
 
-    command_path = glob.settings.command(args.command)
+    command_path = boostrap.settings.command(args.command)
 
     if not command_path:
         sys.exit("There is no command")

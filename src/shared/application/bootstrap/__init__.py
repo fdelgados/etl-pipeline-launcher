@@ -24,6 +24,8 @@ class Bootstrap:
         self.logger = FileLogger()
         self.settings = glob.settings
 
+        self.generate_db_maps()
+
     def generate_db_maps(self) -> Bootstrap:
         self.logger.info("Generating database tables mappings")
         for mapping_class in glob.settings.db_mapping_classes():
