@@ -38,7 +38,7 @@ CREATE TABLE `event_store`
 (
     `id`           INT AUTO_INCREMENT,
     `aggregate_id` VARCHAR(255) NOT NULL,
-    `event_name`   VARCHAR(100) NOT NULL,
+    `event_name`   VARCHAR(200) NOT NULL,
     `event_data`   JSON         NOT NULL,
     `occurred_on`  DATETIME     NOT NULL,
     PRIMARY KEY `pk_event_store` (`id`)
@@ -65,9 +65,11 @@ CREATE TABLE `builds`
     `tenant_id` CHAR(36) NOT NULL,
     `name` VARCHAR(60) NOT NULL,
     `corpus_name` VARCHAR(25) NOT NULL,
-    `total_pages` INT DEFAULT 0 NOT NULL,
+    `total_requests` INT DEFAULT 0 NOT NULL,
+    `successful_requests` INT DEFAULT 0 NOT NULL,
+    `failed_requests` INT DEFAULT 0 NOT NULL,
     `started_by` VARCHAR(30) NOT NULL,
-    `completed` TINYINT(1) DEFAULT 0 NOT NULL,
+    `status` TINYINT(1) DEFAULT 0 NOT NULL,
     `started_on` DATETIME NOT NULL,
     `completed_on` DATETIME DEFAULT NULL,
     PRIMARY KEY `pk_builds` (`id`)

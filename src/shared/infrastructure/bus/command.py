@@ -1,4 +1,4 @@
-from shared import Utils, Application
+from shared.utils import camel_to_snake_case, class_fullname
 from shared.domain.bus.command import (
     Command,
     CommandHandler,
@@ -6,20 +6,17 @@ from shared.domain.bus.command import (
     CommandNotRegisteredError,
     CommandNotCallableError,
 )
+import shared.infrastructure.environment.global_vars as glob
 
 
 class CommandBusImpl(CommandBus):
     def dispatch(self, command: Command) -> None:
-        container = Application.container()
-
-        command_fullname = Utils.class_fullname(command)
+        command_fullname = class_fullname(command)
         module, command_name = command_fullname.rsplit(".", maxsplit=1)
 
-        handler_id = "{}.{}_handler".format(
-            module, Utils.camel_case_to_snake(command_name)
-        )
+        handler_id = "{}.{}_handler".format(module, camel_to_snake_case(command_name))
 
-        command_handler: CommandHandler = container.get(handler_id)
+        command_handler: CommandHandler = glob.container.get(handler_id)
 
         if not command_handler:
             raise CommandNotRegisteredError(command)

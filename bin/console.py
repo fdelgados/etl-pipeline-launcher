@@ -6,7 +6,7 @@ import argparse
 from importlib import util
 from typing import List
 
-from shared import settings
+import shared.infrastructure.environment.global_vars as glob
 from shared.infrastructure.command import ConsoleCommand, Input
 
 
@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
     args, unknown = parser.parse_known_args()
 
-    command_path = settings.command(args.command)
+    command_path = glob.settings.command(args.command)
 
     if not command_path:
         sys.exit("There is no command")

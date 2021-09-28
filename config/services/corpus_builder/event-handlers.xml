@@ -12,8 +12,13 @@
     </event>
 
     <event class="corpus_builder.build.domain.event.build_completed.BuildCompleted">
-        <handler id="corpus_builder.build.application.build_status_updater.update_build_status_on_build_completed" />
-        <handler id="corpus_builder.build.application.pages_linker.link_pages_to_corpus_on_build_completed" />
+        <handler id="corpus_builder.build.application.build_status_updater.update_build_stats_on_build_completed" />
+        <handler id="corpus_builder.build.application.corpus_rotator.rotate_corpus_on_build_completed" />
+    </event>
+
+    <event class="corpus_builder.build.domain.event.build_aborted.BuildAborted">
+        <handler id="corpus_builder.build.application.build_status_updater.update_build_stats_on_build_aborted" />
+        <handler id="corpus_builder.build.application.corpus_cleaner.clean_corpus_on_build_aborted" />
     </event>
 
 </events>

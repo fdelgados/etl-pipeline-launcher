@@ -16,12 +16,12 @@ import urllib3
 
 from bs4 import BeautifulSoup
 
-from shared import settings
+import shared.infrastructure.environment.global_vars as glob
 from shared.domain.service.caching.cache import Cache
 from corpus_builder.build.domain.model.page import Page
 from corpus_builder.build.domain.model.url import Url
 from corpus_builder.build.domain.model.build import Build
-from corpus_builder.build.domain.service.content.page_retriever import (
+from corpus_builder.build.domain.service.page_retriever import (
     PageRetriever,
     RetrievalError,
     PageRetrieverFatalError,
@@ -77,7 +77,7 @@ class PageRetrieverImpl(PageRetriever):
             response = requests.get(
                 url.address,
                 allow_redirects=True,
-                verify=settings.is_production(),
+                verify=glob.settings.is_production(),
                 headers=headers,
             )
 

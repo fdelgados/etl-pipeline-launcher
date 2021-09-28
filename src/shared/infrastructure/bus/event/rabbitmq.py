@@ -2,7 +2,7 @@ import json
 import pika
 from pika import exceptions
 
-from shared import settings
+import shared.infrastructure.environment.global_vars as glob
 from shared.domain.bus.event import EventBus, DomainEvent
 from shared.domain.service.logging.logger import Logger
 from shared.infrastructure.messaging.rabbitmq.connector import RabbitMqConnector
@@ -10,7 +10,7 @@ from shared.infrastructure.messaging.rabbitmq.connector import RabbitMqConnector
 
 def _build_message(event: DomainEvent):
     message = {
-        "metadata": {"environment": settings.environment()},
+        "metadata": {"environment": glob.settings.environment()},
         "body": json.loads(event.serialize()),
     }
 

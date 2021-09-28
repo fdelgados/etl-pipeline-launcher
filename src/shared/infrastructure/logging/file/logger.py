@@ -2,12 +2,13 @@ import logging
 
 from typing import Optional
 
-from shared import settings
+import shared.infrastructure.environment.global_vars as glob
 from shared.domain.service.logging.logger import Logger
 
 
 class FileLogger(Logger):
     def __init__(self, name: Optional[str] = None, logfile: Optional[str] = None):
+        settings = glob.settings
         if not name:
             name = settings.site()
 

@@ -272,8 +272,3 @@ class Settings:
 
     def time_zone(self):
         return self._get("application", "timezone")
-
-
-settings = Settings(
-    os.environ.get("SITE"), os.environ.get("ENVIRONMENT", "development")
-)

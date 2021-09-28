@@ -2,17 +2,10 @@ from functools import wraps
 from flask import request
 import credential_shield as cs
 
-from shared import settings
-from shared import ErrorCodes, ApiBaseError
 from shared.domain.model.entity.user import User
+from shared.domain.errors.errors import Errors, ApplicationError
 
-
-class AuthorizationError(ApiBaseError):
-    pass
-
-
-class ExpiredTokenException(ApiBaseError):
-    pass
+import shared.infrastructure.environment.global_vars as glob
 
 
 def authorization_required(scope: str):
@@ -21,26 +14,24 @@ def authorization_required(scope: str):
         def decorated_function(self, *args, **kwargs):
             auth_header = request.headers.get("Authorization")
             if not auth_header:
-                raise AuthorizationError(ErrorCodes.ACCESS_TOKEN_NOT_PROVIDED)
+                raise ApplicationError(Errors.missing_access_token())
 
             token_validator = cs.TokenValidator(
-                settings.application_id(), scope, settings.token_issuer()
+                glob.settings.application_id(), scope, glob.settings.token_issuer()
             )
 
             try:
                 token: cs.Token = token_validator.validate(
-                    auth_header, settings.public_key()
+                    auth_header, glob.settings.public_key()
                 )
                 user = User(token.tenant_id(), token.username(), token.user_email())
                 kwargs["user"] = user
 
                 return func(self, *args, **kwargs)
             except cs.ExpiredTokenException:
-                raise ExpiredTokenException(ErrorCodes.ACCESS_TOKEN_EXPIRED)
+                raise ApplicationError(Errors.access_token_expired())
             except cs.CredentialShieldException as error:
-                raise AuthorizationError(
-                    ErrorCodes.AUTHORIZATION_FAILED, details=str(error)
-                )
+                raise ApplicationError(Errors.authorization(details=str(error)))
 
         return decorated_function
 

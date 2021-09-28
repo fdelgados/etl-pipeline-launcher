@@ -7,10 +7,10 @@
     <service id="corpus_builder.build.domain.model.page.page_repository"
              alias="corpus_builder.build.infrastructure.persistence.mongodb.page_repository.mongo_db_page_repository" />
 
-    <service id="corpus_builder.build.domain.service.content.page_retriever.page_retriever"
+    <service id="corpus_builder.build.domain.service.page_retriever.page_retriever"
              alias="corpus_builder.build.infrastructure.content.beautiful_soup.page_retriever.page_retriever_impl" />
 
-    <service id="corpus_builder.build.domain.service.content.url_source.url_source"
+    <service id="corpus_builder.build.domain.service.url_source.url_source"
              alias="corpus_builder.build.infrastructure.content.beautiful_soup.url_source.url_source_impl" />
 
     <service id="corpus_builder.build.domain.model.corpus.corpus_repository"
@@ -22,12 +22,15 @@
     <service id="corpus_builder.domain.event.event_store.event_store"
              alias="corpus_builder.infrastructure.event.mysql.event_store.mysql_event_store" />
 
-    <service id="corpus_builder.build.domain.service.status.requests_counter.requests_counter"
-             alias="corpus_builder.build.infrastructure.status.requests_counter.sqlalchemy.requests_counter.requests_counter_impl" />
+    <service id="corpus_builder.build.domain.service.requests_counter.requests_counter"
+             alias="corpus_builder.build.infrastructure.requests_counter.sqlalchemy.requests_counter.requests_counter_impl" />
 
-    <service id="corpus_builder.build.domain.service.status.build_status_checker.build_status_checker"
-             class="corpus_builder.build.domain.service.status.build_status_checker.BuildStatusChecker">
-        <argument name="build_repository" value="corpus_builder.build.domain.model.build.build_repository" type="service" />
-        <argument name="requests_counter" value="corpus_builder.build.domain.service.status.requests_counter.requests_counter" type="service" />
+    <service id="corpus_builder.build.domain.service.corpus_manager.corpus_manager"
+             alias="corpus_builder.build.infrastructure.corpus_manager.mongodb.corpus_manager.corpus_manager_impl" />
+
+    <service id="corpus_builder.build.domain.service.build_stats.build_stats"
+             class="corpus_builder.build.domain.service.build_stats.BuildStats">
+        <argument name="requests_counter" value="corpus_builder.build.domain.service.requests_counter.requests_counter" type="service" />
     </service>
+
 </services>

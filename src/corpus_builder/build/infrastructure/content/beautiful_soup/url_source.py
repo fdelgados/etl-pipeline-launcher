@@ -10,8 +10,7 @@ import urllib3
 from bs4 import BeautifulSoup
 
 from corpus_builder.build.domain.model.url import Url, InvalidUrlException
-from corpus_builder.build.domain.service.content.page_retriever import PageRetrieverFatalError
-from corpus_builder.build.domain.service.content.url_source import UrlSource, UrlSourceError
+from corpus_builder.build.domain.service.url_source import UrlSource, UrlSourceError
 
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -67,7 +66,7 @@ class UrlSourceImpl(UrlSource):
                     if re.match(sitemaps_url_pattern, url):
                         sitemap_urls.append(url)
         except URLError as error:
-            raise PageRetrieverFatalError(str(error))
+            raise UrlSourceError(str(error))
 
         return sitemap_urls
 
@@ -89,4 +88,4 @@ class UrlSourceImpl(UrlSource):
                 if 0 < max_urls <= len(self.__urls):
                     break
         except (URLError, InvalidUrlException) as error:
-            raise PageRetrieverFatalError(str(error))
+            raise UrlSourceError(str(error))

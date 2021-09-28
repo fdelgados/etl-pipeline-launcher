@@ -1,37 +1,26 @@
 from http import HTTPStatus
-from flask import request
+from flask import request, make_response
 from flask_restx import Namespace
 
-from shared import settings, InvalidRequestParamsException
-from shared.infrastructure.security import (
-    authorization_required,
-    AuthorizationError,
-    ExpiredTokenException,
-)
+import shared.infrastructure.environment.global_vars as glob
+from shared.infrastructure.security import authorization_required
 from shared.infrastructure.flask.api.base_controller import BaseController
 from corpus_builder.build.application.build_starter import StartBuildCommand
 from corpus_builder.build.application.identity_generator import (
     NextIdentityQuery,
     NextIdentityResponse,
 )
+from corpus_builder.build.application.build_info_retriever import (
+    RetrieveBuildInfoQuery,
+    RetrieveBuildInfoResponse,
+)
 
 
 build_api = Namespace("build", description="Corpus build starter")
 
 
-@build_api.errorhandler(AuthorizationError)
-@build_api.errorhandler(ExpiredTokenException)
-def handle_authorization_error(error):
-    return BaseController.api_error(error, HTTPStatus.UNAUTHORIZED)
-
-
-@build_api.errorhandler(InvalidRequestParamsException)
-def handle_value_error(error):
-    return BaseController.api_error(error, HTTPStatus.BAD_REQUEST)
-
-
 @build_api.route("")
-class PostBuildController(BaseController):
+class StartBuildController(BaseController):
     @authorization_required("start:corpus-build")
     def post(self, user):
         params = request.get_json()
@@ -44,11 +33,52 @@ class PostBuildController(BaseController):
 
         self.dispatch(command)
 
-        return self.response(
-            HTTPStatus.ACCEPTED, {"Location": f"{settings.api_url()}/builds/{build_id}"}
-        )
+        response = make_response("", HTTPStatus.ACCEPTED)
+        response.headers = {
+            "Content-Location": f"{glob.settings.api_url()}/builds/{build_id}"
+        }
+
+        return response
 
     def _generate_build_id(self) -> str:
         response: NextIdentityResponse = self.ask(NextIdentityQuery())
 
         return response.build_id
+
+
+@build_api.route("")
+class BuildListController(BaseController):
+    @authorization_required("get:corpus-build-info")
+    def get(self, user):
+
+        query = RetrieveBuildInfoQuery(user.tenant_id())
+
+        response: RetrieveBuildInfoResponse = self.ask(query)
+
+        build_info = []
+        for dto in response.build_info_dtos:
+            dto_dict = dto.to_dict()
+            dto_dict["links"] = {"self": f"{glob.settings.api_url()}/builds/{dto.build_id}"}
+            build_info.append(dto_dict)
+
+        return make_response(
+            self.json_response(*build_info),
+            HTTPStatus.OK,
+        )
+
+
+@build_api.route("/<string:build_id>")
+class BuildInfoController(BaseController):
+    @authorization_required("get:corpus-build-info")
+    def get(self, user, build_id: str):
+
+        query = RetrieveBuildInfoQuery(user.tenant_id(), build_id)
+
+        response: RetrieveBuildInfoResponse = self.ask(query)
+        build = response.build_info_dtos[0]
+
+        links = {"self": f"{glob.settings.api_url()}/builds/{build_id}"}
+
+        return make_response(
+            self.json_response(**build.to_dict(), _links=links), HTTPStatus.OK
+        )

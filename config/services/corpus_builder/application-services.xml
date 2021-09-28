@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 
 <services>
+    <service id="corpus_builder.build.application.build_info_retriever.retrieve_build_info_query_handler"
+             class="corpus_builder.build.application.build_info_retriever.RetrieveBuildInfoQueryHandler">
+        <argument name="build_repository" value="corpus_builder.build.domain.model.build.build_repository" type="service" />
+        <argument name="requests_counter" value="corpus_builder.build.domain.service.requests_counter.requests_counter" type="service" />
+    </service>
+
     <service id="corpus_builder.build.application.build_starter.start_build_command_handler"
              class="corpus_builder.build.application.build_starter.StartBuildCommandHandler">
         <argument name="build_repository" value="corpus_builder.build.domain.model.build.build_repository" type="service" />
@@ -11,8 +17,8 @@
              class="corpus_builder.build.application.data_extractor.ExtractDataOnBuildStarted">
         <argument name="build_repository" value="corpus_builder.build.domain.model.build.build_repository" type="service"/>
         <argument name="page_repository" value="corpus_builder.build.domain.model.page.page_repository" type="service"/>
-        <argument name="page_retriever" value="corpus_builder.build.domain.service.content.page_retriever.page_retriever" type="service"/>
-        <argument name="url_source" value="corpus_builder.build.domain.service.content.url_source.url_source" type="service"/>
+        <argument name="page_retriever" value="corpus_builder.build.domain.service.page_retriever.page_retriever" type="service"/>
+        <argument name="url_source" value="corpus_builder.build.domain.service.url_source.url_source" type="service"/>
         <argument name="corpus_repository" value="corpus_builder.build.domain.model.corpus.corpus_repository" type="service"/>
         <argument name="logger" value="shared.domain.service.logging.logger.logger" type="service"/>
         <argument name="event_bus" value="shared.domain.bus.event.event_bus" type="service"/>
@@ -28,9 +34,16 @@
         <argument name="build_repository" value="corpus_builder.build.domain.model.build.build_repository" type="service"/>
     </service>
 
-    <service id="corpus_builder.build.application.build_status_updater.update_build_status_on_build_completed"
-             class="corpus_builder.build.application.build_status_updater.UpdateBuildStatusOnBuildCompleted">
+    <service id="corpus_builder.build.application.build_status_updater.update_build_stats_on_build_completed"
+             class="corpus_builder.build.application.build_status_updater.UpdateBuildStatsOnBuildCompleted">
         <argument name="build_repository" value="corpus_builder.build.domain.model.build.build_repository" type="service"/>
+        <argument name="build_stats_service" value="corpus_builder.build.domain.service.build_stats.build_stats" type="service" />
+    </service>
+
+    <service id="corpus_builder.build.application.build_status_updater.update_build_stats_on_build_aborted"
+             class="corpus_builder.build.application.build_status_updater.UpdateBuildStatsOnBuildAborted">
+        <argument name="build_repository" value="corpus_builder.build.domain.model.build.build_repository" type="service"/>
+        <argument name="build_stats_service" value="corpus_builder.build.domain.service.build_stats.build_stats" type="service" />
     </service>
 
     <service id="corpus_builder.build.application.identity_generator.next_identity_query_handler"
@@ -38,14 +51,14 @@
         <argument name="build_repository" value="corpus_builder.build.domain.model.build.build_repository" type="service"/>
     </service>
 
-    <service id="corpus_builder.build.application.status_checker.status_checker_query_handler"
-             class="corpus_builder.build.application.status_checker.StatusCheckerQueryHandler">
-        <argument name="build_status_checker" value="corpus_builder.build.domain.service.status.build_status_checker.build_status_checker" type="service" />
+    <service id="corpus_builder.build.application.corpus_rotator.rotate_corpus_on_build_completed"
+             class="corpus_builder.build.application.corpus_rotator.RotateCorpusOnBuildCompleted">
+        <argument name="corpus_manager" value="corpus_builder.build.domain.service.corpus_manager.corpus_manager" type="service"/>
     </service>
 
-    <service id="corpus_builder.build.application.pages_linker.link_pages_to_corpus_on_build_completed"
-             class="corpus_builder.build.application.pages_linker.LinkPagesToCorpusOnBuildCompleted">
-        <argument name="page_repository" value="corpus_builder.build.domain.model.page.page_repository" type="service"/>
+    <service id="corpus_builder.build.application.corpus_cleaner.clean_corpus_on_build_aborted"
+             class="corpus_builder.build.application.corpus_cleaner.CleanCorpusOnBuildAborted">
+        <argument name="corpus_manager" value="corpus_builder.build.domain.service.corpus_manager.corpus_manager" type="service"/>
     </service>
 
 </services>

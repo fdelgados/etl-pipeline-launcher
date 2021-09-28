@@ -11,11 +11,11 @@ from pika import exceptions
 from shared.infrastructure.logging.file.logger import FileLogger
 from shared.domain.service.logging.logger import Logger
 from shared.infrastructure.messaging.rabbitmq.connector import RabbitMqConnector
-from shared import settings
+import shared.infrastructure.environment.global_vars as glob
 
 
 def _on_message(ch, method, _, message):
-    commands = settings.event_subscribed_commands(method.exchange, method.routing_key)
+    commands = glob.settings.event_subscribed_commands(method.exchange, method.routing_key)
 
     command = commands.get(method.consumer_tag)
     if not command:
@@ -115,8 +115,8 @@ def consume(exchange_name: str, routing_keys: Dict, logger: Logger, channel) -> 
         logger.info(" [*] Consumer stopped")
 
 
-exchanges = settings.subscribed_events()
-connection_settings = settings.rabbit_connection_settings()
+exchanges = glob.settings.subscribed_events()
+connection_settings = glob.settings.rabbit_connection_settings()
 file_logger = FileLogger()
 connector = RabbitMqConnector(file_logger)
 

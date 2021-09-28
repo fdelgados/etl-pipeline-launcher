@@ -1,13 +1,14 @@
 import multiprocessing
 
-from shared import Application, Utils
+from shared.utils import class_fullname
 from shared.domain.bus.event import EventBus, DomainEvent
+import shared.infrastructure.environment.global_vars as glob
 
 
 class InMemoryEventBus(EventBus):
     def _do_publish(self, domain_event: DomainEvent) -> None:
-        domain_event_name = Utils.class_fullname(domain_event)
-        event_handlers = Application.container().event_handlers(domain_event_name)
+        domain_event_name = class_fullname(domain_event)
+        event_handlers = glob.container.event_handlers(domain_event_name)
 
         jobs = []
         for subscriber in event_handlers:

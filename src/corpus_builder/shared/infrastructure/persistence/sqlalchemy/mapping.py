@@ -6,7 +6,10 @@ from shared.infrastructure.persistence.sqlalchemy.mapping import Mapping
 
 from corpus_builder.build.domain.model.build import Build
 from corpus_builder.build.domain.model.corpus import Corpus
-from corpus_builder.shared.infrastructure.persistence.sqlalchemy.type import BuildIdType
+from corpus_builder.shared.infrastructure.persistence.sqlalchemy.type import (
+    BuildIdType,
+    BuildStatusType,
+)
 
 
 class CorpusBuilderMapping(Mapping):
@@ -22,8 +25,10 @@ class CorpusBuilderMapping(Mapping):
             Column("name", String(60), nullable=False),
             Column("started_by", String(30), nullable=False),
             Column("corpus_name", String(25), nullable=False),
-            Column("total_pages", Integer, nullable=False, default=0),
-            Column("completed", Boolean, nullable=False, default=False),
+            Column("total_requests", Integer, nullable=False, default=0),
+            Column("successful_requests", Integer, nullable=False, default=0),
+            Column("failed_requests", Integer, nullable=False, default=0),
+            Column("status", BuildStatusType, nullable=False, default=0),
             Column("started_on", DateTime, nullable=False),
             Column("completed_on", DateTime, nullable=True),
         )

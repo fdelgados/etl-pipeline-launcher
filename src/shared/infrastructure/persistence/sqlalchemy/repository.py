@@ -1,7 +1,7 @@
 import threading
-from typing import List
+from typing import List, Dict
 from contextlib import contextmanager
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, desc, asc
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 from shared.domain.model.aggregate import AggregateRoot
@@ -67,8 +67,18 @@ class Repository(BaseRepository):
 
         return result
 
-    def find_all(self, **kwargs) -> List[AggregateRoot]:
+    def find_all(self, order_by: Dict = None, **kwargs) -> List[AggregateRoot]:
         with session_scope(self._dsn) as session:
-            results = session.query(self._aggregate).filter_by(**kwargs).all()
+            query = session.query(self._aggregate).filter_by(**kwargs)
+            if order_by:
+                for field, direction in order_by.items():
+                    if direction == "desc":
+                        order_expression = desc(self._aggregate.__dict__[field])
+                    else:
+                        order_expression = asc(self._aggregate.__dict__[field])
 
-            return results
+                    query = query.order_by(order_expression)
+
+            results = query.all()
+
+        return results

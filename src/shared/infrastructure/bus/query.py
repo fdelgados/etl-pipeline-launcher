@@ -1,5 +1,5 @@
 from typing import Optional
-from shared import Utils, Application
+from shared.utils import camel_to_snake_case, class_fullname
 from shared.domain.bus.query import (
     Query,
     QueryHandler,
@@ -8,20 +8,18 @@ from shared.domain.bus.query import (
     QueryNotRegisteredError,
     QueryNotCallableError,
 )
+import shared.infrastructure.environment.global_vars as glob
 
 
 class QueryBusImpl(QueryBus):
     def ask(self, query: Query) -> Optional[Response]:
-        container = Application.container()
 
-        query_fullname = Utils.class_fullname(query)
+        query_fullname = class_fullname(query)
         module, query_name = query_fullname.rsplit(".", maxsplit=1)
 
-        handler_id = "{}.{}_handler".format(
-            module, Utils.camel_case_to_snake(query_name)
-        )
+        handler_id = "{}.{}_handler".format(module, camel_to_snake_case(query_name))
 
-        query_handler: QueryHandler = container.get(handler_id)
+        query_handler: QueryHandler = glob.container.get(handler_id)
 
         if not query_handler:
             raise QueryNotRegisteredError(query)

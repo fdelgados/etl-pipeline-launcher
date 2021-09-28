@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import abc
 
+from typing import Optional, List
+from enum import IntEnum
+
 from datetime import datetime
-from dataclasses import dataclass
 from coolname import generate
 
 from shared.domain.model.aggregate import AggregateRoot
@@ -11,13 +13,65 @@ from shared.domain.model.value_object.unique_id import Uuid
 from shared.domain.model.repository import Repository
 from corpus_builder.build.domain.event.build_started import BuildStarted
 from corpus_builder.build.domain.event.build_completed import BuildCompleted
-
-
-__all__ = ["BuildId", "Build", "BuildRepository", "BuildStatus"]
+from corpus_builder.build.domain.event.build_aborted import BuildAborted
+from corpus_builder.build.domain.event.build_cancelled import BuildCancelled
 
 
 class BuildId(Uuid):
     pass
+
+
+class Status(IntEnum):
+    def __new__(cls, value, description):
+        obj = int.__new__(cls, value)
+        obj._value_ = value
+
+        obj.description = description
+
+        return obj
+
+    CANCELLED = -2, "Cancelled"
+    ABORTED = -1, "Aborted"
+    RUNNING = 0, "Running"
+    COMPLETED = 1, "Completed"
+
+    @property
+    def value(self) -> int:
+        return self._value_
+
+    def serialize(self):
+        return {"id": self._value_, "description": self.description}
+
+    def is_completed(self) -> bool:
+        return self.value == self.COMPLETED
+
+    def is_running(self) -> bool:
+        return self.value == self.RUNNING
+
+    def is_cancelled(self) -> bool:
+        return self.value == self.CANCELLED
+
+    def is_aborted(self) -> bool:
+        return self.value == self.ABORTED
+
+    @classmethod
+    def running(cls) -> Status:
+        return cls(cls.RUNNING)
+
+    @classmethod
+    def completed(cls) -> Status:
+        return cls(cls.COMPLETED)
+
+    @classmethod
+    def cancelled(cls) -> Status:
+        return cls(cls.CANCELLED)
+
+    @classmethod
+    def aborted(cls) -> Status:
+        return cls(cls.ABORTED)
+
+    def __dict__(self):
+        return self.serialize()
 
 
 class Build(AggregateRoot):
@@ -34,8 +88,10 @@ class Build(AggregateRoot):
         self._started_by = started_by
         self._name = name
         self._corpus_name = corpus_name
-        self._total_pages = 0
-        self._completed = False
+        self._total_requests = 0
+        self._successful_requests = 0
+        self._failed_requests = 0
+        self._status = Status.running()
         self._completed_on = None
 
         event = BuildStarted(
@@ -67,25 +123,65 @@ class Build(AggregateRoot):
 
     @property
     def is_completed(self) -> bool:
-        return self._completed
+        return self._status.is_completed()
 
     @property
     def started_on(self) -> datetime:
         return self._started_on
 
     @property
-    def total_pages(self) -> int:
-        return self._total_pages
+    def started_by(self) -> str:
+        return self._started_by
 
-    @total_pages.setter
-    def total_pages(self, total_pages: int) -> None:
-        self._total_pages = total_pages
+    @property
+    def total_requests(self) -> int:
+        return self._total_requests
 
-    def mark_as_completed(self, completed_on: datetime) -> None:
-        self._completed = True
-        self._completed_on = completed_on
+    @total_requests.setter
+    def total_requests(self, total_requests: int) -> None:
+        self._total_requests = total_requests
+
+    @property
+    def successful_requests(self) -> int:
+        return self._successful_requests
+
+    @successful_requests.setter
+    def successful_requests(self, successful_requests: int) -> None:
+        self._successful_requests = successful_requests
+
+    @property
+    def failed_requests(self) -> int:
+        return self._failed_requests
+
+    @failed_requests.setter
+    def failed_requests(self, failed_requests: int) -> None:
+        self._failed_requests = failed_requests
+
+    def cancel(self) -> None:
+        self._status = Status.cancelled()
+
+        self.record_event(
+            BuildCancelled(
+                self._tenant_id,
+                self._build_id.value,
+                self._corpus_name,
+            )
+        )
+
+    def abort(self) -> None:
+        self._status = Status.aborted()
+
+        self.record_event(
+            BuildAborted(
+                self._tenant_id,
+                self._build_id.value,
+                self._corpus_name,
+            )
+        )
 
     def complete(self) -> None:
+        self._status = Status.completed()
+
         build_completed = BuildCompleted(
             self._tenant_id,
             self._build_id.value,
@@ -94,22 +190,29 @@ class Build(AggregateRoot):
 
         self.record_event(build_completed)
 
+        self._completed_on = build_completed.occurred_on
+
+    @property
+    def completed_on(self) -> Optional[datetime]:
+        return self._completed_on
+
+    @property
+    def status(self) -> Status:
+        return self._status
+
     def __repr__(self):
         return "Build <{}>".format(self._build_id.value)
 
 
-@dataclass(frozen=True)
-class BuildStatus:
-    build_id: str
-    total_pages: int
-    requested_pages: int
-    build_started_on: datetime
-    is_completed: bool
-
-
 class BuildRepository(Repository, metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def build_of_tenant_and_id(self, tenant_id: str, build_id: BuildId):
+    def build_of_tenant_and_id(
+        self, tenant_id: str, build_id: BuildId
+    ) -> Optional[Build]:
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def builds_of_tenant(self, tenant_id: str) -> List[Build]:
         raise NotImplementedError
 
     @staticmethod

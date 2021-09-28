@@ -32,8 +32,13 @@
         <argument name="db_service" value="corpus_builder.infrastructure.persistence.sqlalchemy.dbal.sql_alchemy_dbal_service" type="service" />
     </service>
 
-    <service id="corpus_builder.build.infrastructure.status.requests_counter.sqlalchemy.requests_counter.requests_counter_impl"
-             class="corpus_builder.build.infrastructure.status.requests_counter.sqlalchemy.requests_counter.RequestsCounterImpl">
+    <service id="corpus_builder.build.infrastructure.requests_counter.sqlalchemy.requests_counter.requests_counter_impl"
+             class="corpus_builder.build.infrastructure.requests_counter.sqlalchemy.requests_counter.RequestsCounterImpl">
         <argument name="db_service" value="corpus_builder.infrastructure.persistence.sqlalchemy.dbal.sql_alchemy_dbal_service" type="service" />
+    </service>
+
+    <service id="corpus_builder.build.infrastructure.corpus_manager.mongodb.corpus_manager.corpus_manager_impl"
+             class="corpus_builder.build.infrastructure.corpus_manager.mongodb.corpus_manager.CorpusManagerImpl">
+        <argument name="database" value="web_corpus" type="parameter" />
     </service>
 </services>

@@ -173,7 +173,9 @@ class Page(AggregateRoot):
         return self._url.address
 
 
+class UnableToSavePageError(RuntimeError):
+    pass
+
+
 class PageRepository(Repository, metaclass=abc.ABCMeta):
-    @abc.abstractmethod
-    def rename_pages_collection(self, corpus: str) -> None:
-        raise NotImplementedError
+    pass

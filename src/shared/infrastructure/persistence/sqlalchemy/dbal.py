@@ -1,12 +1,12 @@
 from sqlalchemy import create_engine, text, exc
 
-from shared import settings
+import shared.infrastructure.environment.global_vars as glob
 from shared.domain.service.persistence.dbal import DbalService, DbalServiceError
 
 
 class SqlAlchemyDbalService(DbalService):
     def __init__(self, context: str):
-        dsn = settings.database_dsn(context)
+        dsn = glob.settings.database_dsn(context)
         self._connection = create_engine(dsn)
 
     def execute(self, sentence: str, **parameters):

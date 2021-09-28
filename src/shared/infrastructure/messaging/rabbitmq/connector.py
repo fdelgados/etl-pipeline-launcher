@@ -1,7 +1,7 @@
 from typing import Optional, Dict
 import pika
 from pika import exceptions
-from shared import settings
+import shared.infrastructure.environment.global_vars as glob
 from shared.domain.service.logging.logger import Logger
 
 
@@ -14,7 +14,7 @@ class RabbitMqConnector:
         self, connection_settings: Optional[Dict] = None
     ) -> pika.BlockingConnection:
         if not connection_settings:
-            connection_settings = settings.rabbit_connection_settings()
+            connection_settings = glob.settings.rabbit_connection_settings()
 
         credentials = pika.PlainCredentials(
             connection_settings.get("user"), connection_settings.get("password")

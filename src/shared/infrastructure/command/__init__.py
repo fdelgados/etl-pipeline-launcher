@@ -2,7 +2,7 @@ import abc
 
 from typing import Any, Dict
 
-from shared import settings
+import shared.infrastructure.environment.global_vars as glob
 from shared.infrastructure.dependency_injection.container import create_container
 
 

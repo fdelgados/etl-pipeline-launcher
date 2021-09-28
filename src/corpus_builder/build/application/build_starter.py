@@ -2,8 +2,8 @@ from dataclasses import dataclass
 
 from shared.domain.bus.command import Command, CommandHandler
 
-from shared import MissingRequestParamsException
 from shared.domain.bus.event import EventBus
+from shared.domain.errors.errors import Errors, ApplicationError
 
 from corpus_builder.build.domain.model.build import Build, BuildId, BuildRepository
 
@@ -41,6 +41,4 @@ class CommandValidator:
     @staticmethod
     def validate(command: StartBuildCommand):
         if not command.corpus_name:
-            raise MissingRequestParamsException(
-                "Parameter 'sitemapUrl' must be provided."
-            )
+            raise ApplicationError(Errors.missing_request_parameter())

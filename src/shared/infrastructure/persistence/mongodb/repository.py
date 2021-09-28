@@ -6,13 +6,13 @@ from pymongo import MongoClient
 
 from shared.domain.model.aggregate import AggregateRoot
 from shared.domain.model.repository import Repository
-from shared import settings
+import shared.infrastructure.environment.global_vars as glob
 
 
 class MongoDbRepository(Repository, metaclass=abc.ABCMeta):
     def __init__(self, database: str):
-        databases = settings.mongodb_databases()
-        connection_settings = settings.mongodb_connection_settings()
+        databases = glob.settings.mongodb_databases()
+        connection_settings = glob.settings.mongodb_connection_settings()
 
         self._database = databases.get(database)
         self._client = MongoClient(

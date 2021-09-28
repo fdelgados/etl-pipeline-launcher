@@ -1,33 +1,12 @@
 from http import HTTPStatus
-from flask import request
+from flask import request, make_response
 from flask_restx import Namespace
 
-from shared import InvalidRequestParamsException
-from shared.infrastructure.security import (
-    authorization_required,
-    AuthorizationError,
-    ExpiredTokenException,
-)
+from shared.infrastructure.security import authorization_required
 from shared.infrastructure.flask.api.base_controller import BaseController
 from corpus_builder.build.application.corpus_creator import CorpusCreatorCommand
 
-corpus_api = Namespace("corpus", description="Create/Update corpus")
-
-
-@corpus_api.errorhandler(AuthorizationError)
-@corpus_api.errorhandler(ExpiredTokenException)
-def handle_authorization_error(error):
-    return BaseController.api_error(error, HTTPStatus.UNAUTHORIZED)
-
-
-@corpus_api.errorhandler(InvalidRequestParamsException)
-def handle_value_error(error):
-    return BaseController.api_error(error, HTTPStatus.BAD_REQUEST)
-
-
-# @corpus_api.errorhandler(Exception)
-# def handle_authorization_error(error):
-#     return BaseController.api_generic_error(error)
+corpus_api = Namespace("corpus_builder", description="Create/Update corpus_builder")
 
 
 @corpus_api.route("/<string:name>")
@@ -51,4 +30,4 @@ class PutCorpusController(BaseController):
 
         self.dispatch(command)
 
-        return self.response(HTTPStatus.CREATED)
+        return make_response("", HTTPStatus.CREATED)
