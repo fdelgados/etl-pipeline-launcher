@@ -1,7 +1,7 @@
 import abc
 
 from typing import Optional, List
-from corpus_builder.build.domain.model.url import Url
+from shared.domain.model.value_object.url import Url
 
 
 __all__ = ["UrlSource", "UrlSourceError"]

@@ -5,7 +5,7 @@ from http import HTTPStatus
 from typing import Optional
 
 from corpus_builder.build.domain.model.page import Page
-from corpus_builder.build.domain.model.url import Url
+from shared.domain.model.value_object.url import Url
 from corpus_builder.build.domain.model.build import BuildId
 from tests.unit.shared.domain.model.entity_builder import EntityBuilder
 

@@ -7,7 +7,7 @@ from shared.domain.model.aggregate import AggregateRoot
 from shared.domain.model.repository import Repository
 
 from corpus_builder.build.domain.event.page_added import PageAdded
-from corpus_builder.build.domain.model.url import Url
+from shared.domain.model.value_object.url import Url
 from corpus_builder.build.domain.model.build import BuildId
 
 
