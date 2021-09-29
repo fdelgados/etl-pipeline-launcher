@@ -35,40 +35,36 @@ class Status(IntEnum):
     RUNNING = 0, "Running"
     COMPLETED = 1, "Completed"
 
-    @property
-    def value(self) -> int:
-        return self._value_
-
     def serialize(self):
         return {"id": self._value_, "description": self.description}
 
     def is_completed(self) -> bool:
-        return self.value == self.COMPLETED
+        return self.value() == self.COMPLETED
 
     def is_running(self) -> bool:
-        return self.value == self.RUNNING
+        return self.value() == self.RUNNING
 
     def is_cancelled(self) -> bool:
-        return self.value == self.CANCELLED
+        return self.value() == self.CANCELLED
 
     def is_aborted(self) -> bool:
-        return self.value == self.ABORTED
+        return self.value() == self.ABORTED
 
     @classmethod
     def running(cls) -> Status:
-        return cls(cls.RUNNING)
+        return cls(cls.RUNNING, cls.RUNNING.description)
 
     @classmethod
     def completed(cls) -> Status:
-        return cls(cls.COMPLETED)
+        return cls(cls.COMPLETED, cls.COMPLETED.description)
 
     @classmethod
     def cancelled(cls) -> Status:
-        return cls(cls.CANCELLED)
+        return cls(cls.CANCELLED, cls.CANCELLED.description)
 
     @classmethod
     def aborted(cls) -> Status:
-        return cls(cls.ABORTED)
+        return cls(cls.ABORTED, cls.ABORTED.description)
 
     def __dict__(self):
         return self.serialize()

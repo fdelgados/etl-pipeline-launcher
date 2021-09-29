@@ -1,4 +1,5 @@
 from typing import List
+from pymongo import errors
 
 from corpus.build.domain.model.page import (
     PageRepository,
@@ -7,7 +8,6 @@ from corpus.build.domain.model.page import (
 )
 
 from shared.infrastructure.persistence.mongodb.repository import MongoDbRepository
-from pymongo import errors
 
 
 class MongoDbPageRepository(PageRepository, MongoDbRepository):
