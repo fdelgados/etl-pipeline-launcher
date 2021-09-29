@@ -4,8 +4,8 @@ from flask_restx import Api
 from shared.domain.errors.errors import ApplicationError
 from shared.infrastructure.flask.api.base_controller import BaseController
 from shared.application.bootstrap import Bootstrap
-from corpus_builder.build.infrastructure.flask.api.build import build_api
-from corpus_builder.build.infrastructure.flask.api.corpus import corpus_api
+from corpus.build.infrastructure.flask.api.build import build_api
+from corpus.build.infrastructure.flask.api.corpus import corpus_api
 from duplicates.report.infrastructure.flask.api.report import report_api
 
 bootstrap = Bootstrap()

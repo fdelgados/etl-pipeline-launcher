@@ -2,7 +2,7 @@ import unittest
 from hypothesis import given
 import hypothesis.strategies as st
 
-from corpus_builder.build.domain.model.build import BuildId
+from corpus.build.domain.model.build import BuildId
 
 
 class BuildIdTest(unittest.TestCase):

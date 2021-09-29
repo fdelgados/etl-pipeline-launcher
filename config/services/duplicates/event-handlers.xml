@@ -2,6 +2,6 @@
 
 <events>
     <event class="duplicates.report.domain.event.report_created.ReportCreated">
-        <handler id="duplicates.data.application.transform.data_transformer.transform_data_on_report_created" />
+        <handler id="duplicates.data.application.transformer.transform_data_on_report_created" />
     </event>
 </events>

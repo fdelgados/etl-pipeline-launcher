@@ -10,9 +10,9 @@ databases.web_corpus = "corpus_emagister_it"
 
 [database]
 host = "nlp.mysql.emagister.it"
-[database.corpus_builder]
-  name = "corpus_builder"
-  user = "corpus_builder"
+[database.corpus]
+  name = "corpus"
+  user = "corpus"
   password = "wTUbtEmk2S6R"
 [database.duplicates]
   name = "duplicates"

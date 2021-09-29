@@ -1,6 +1,6 @@
 import unittest
 
-from corpus_builder.build.domain.event.page_added import PageAdded
+from corpus.build.domain.event.page_added import PageAdded
 
 from .page_creator import PageCreator
 
