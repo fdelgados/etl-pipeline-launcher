@@ -8,12 +8,12 @@ import shared.infrastructure.environment.global_vars as glob
 from shared.domain.service.logging.logger import Logger
 from shared.domain.bus.event import DomainEventSubscriber, EventBus
 from shared.domain.errors.errors import Errors, ApplicationError
+from shared.domain.model.value_object.url import Url
 
 from corpus_builder.build.domain.event.build_started import BuildStarted
 from corpus_builder.build.domain.event.extraction_failed import ExtractionFailed
 from corpus_builder.build.domain.event.urls_retrieved import UrlsRetrieved
 from corpus_builder.build.domain.model.build import BuildId, Build, BuildRepository
-from shared.domain.model.value_object.url import Url
 from corpus_builder.build.domain.service.page_retriever import (
     PageRetriever,
     PageRetrieverFatalError,
