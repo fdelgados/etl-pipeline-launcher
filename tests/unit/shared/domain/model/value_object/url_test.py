@@ -1,8 +1,7 @@
 import unittest
 from parameterized import parameterized
 
-from corpus_builder.build.domain.model.url import InvalidUrlException
-from .url_creator import UrlCreator
+from shared.domain.model.value_object.url import Url, InvalidUrlException
 
 
 class UrlTest(unittest.TestCase):
@@ -11,7 +10,7 @@ class UrlTest(unittest.TestCase):
     )
     def test_if_it_raise_an_exception_when_address_is_invalid(self, url: str) -> None:
         with self.assertRaises(InvalidUrlException):
-            UrlCreator().with_address(url).build()
+            Url(url)
 
     @parameterized.expand(
         [
@@ -24,5 +23,5 @@ class UrlTest(unittest.TestCase):
     def test_if_it_not_raise_an_exception_when_address_is_valid(
         self, address: str
     ) -> None:
-        url = UrlCreator().with_address(address).build()
+        url = Url(address)
         self.assertEqual(address, url.address)

@@ -26,13 +26,13 @@ test: up
 	docker-compose -p nlp.$(SITE) -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.development.yml -f ./docker/compose/$(SITE)/docker-compose.yml -f ./docker/compose/$(SITE)/docker-compose.$(ENV).yml run --rm --no-deps --entrypoint=pytest application /var/www/tests/unit /var/www/tests/integration /var/www/tests/e2e
 
 unit-tests:
-	docker-compose -p nlp.$(SITE) -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.test.yml run --rm --no-deps --entrypoint=pytest application /var/www/tests/unit
+	docker-compose -p nlp.test -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.test.yml run --rm --no-deps --entrypoint=pytest application /var/www/tests/unit
 
 integration-tests: up
-	docker-compose -p nlp.$(SITE) -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.development.yml -f ./docker/compose/$(SITE)/docker-compose.yml -f ./docker/compose/docker-compose.development.yml run --rm --no-deps --entrypoint=pytest application /var/www/tests/integration
+	docker-compose -p nlp.test -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.development.yml -f ./docker/compose/test/docker-compose.yml -f ./docker/compose/docker-compose.development.yml run --rm --no-deps --entrypoint=pytest application /var/www/tests/integration
 
 e2e-tests: up
-	docker-compose -p nlp.$(SITE) -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.development.yml -f ./docker/compose/$(SITE)/docker-compose.yml -f ./docker/compose/docker-compose.development.yml run --rm --no-deps --entrypoint=pytest application /var/www/tests/e2e
+	docker-compose -p nlp.test -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.development.yml -f ./docker/compose/test/docker-compose.yml -f ./docker/compose/docker-compose.development.yml run --rm --no-deps --entrypoint=pytest application /var/www/tests/e2e
 
 logs:
 	docker-compose -p nlp.$(SITE) -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.$(ENV).yml -f ./docker/compose/$(SITE)/docker-compose.yml -f ./docker/compose/$(SITE)/docker-compose.$(ENV).yml logs --tail=25 application

@@ -8,8 +8,8 @@
         <argument name="event_bus" value="shared.domain.bus.event.event_bus" type="service"/>
     </service>
 
-    <service id="duplicates.data.application.transform.data_transformer.transform_data_on_report_created"
-             class="duplicates.data.application.transform.data_transformer.TransformDataOnReportCreated"/>
+    <service id="duplicates.data.application.data_transformer.transform_data_on_report_created"
+             class="duplicates.data.application.data_transformer.TransformDataOnReportCreated"/>
 
     <service id="duplicates.report.application.identity_generator.next_identity_query_handler"
              class="duplicates.report.application.identity_generator.NextIdentityQueryHandler">
