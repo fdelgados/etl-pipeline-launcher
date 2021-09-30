@@ -25,10 +25,9 @@ class PageRetrieverImpl(PageRetriever):
         pages_collection = self._client[self._database][corpus]
         pages = []
 
-        documents = pages_collection.find({
-            "is_indexable": {"$eq": True},
-            "status_code": {"$eq": 200}
-        })
+        documents = pages_collection.find(
+            {"is_indexable": {"$eq": True}, "status_code": {"$eq": 200}}
+        )
 
         for document in documents:
             content = [section for _, section in document.get("content").items()]
@@ -36,7 +35,7 @@ class PageRetrieverImpl(PageRetriever):
                 Page(
                     Url(document.get("address")),
                     " ".join(content),
-                    document.get("datalayer")
+                    document.get("datalayer"),
                 )
             )
 

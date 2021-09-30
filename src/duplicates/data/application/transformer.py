@@ -25,7 +25,9 @@ class TransformDataOnReportCreated(DomainEventSubscriber):
 
         if not report:
             raise ApplicationError(
-                Errors.entity_not_found(entity_name="Report", entity_id=domain_event.report_id)
+                Errors.entity_not_found(
+                    entity_name="Report", entity_id=domain_event.report_id
+                )
             )
 
         self._data_loader.load(pages, report)

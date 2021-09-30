@@ -16,14 +16,15 @@ class DataLoaderImpl(DataLoader):
         content = []
 
         for page in data:
-            content.append({
-                'url': page.url.address,
-                'content': clean_text(page.content).lower()
-            })
+            content.append(
+                {"url": page.url.address, "content": clean_text(page.content).lower()}
+            )
 
-        content_df = pd.DataFrame(content, columns=['url', 'content'], dtype='object')
+        content_df = pd.DataFrame(content, columns=["url", "content"], dtype="object")
 
-        content_file = glob.settings.duplicates_content_file(report.name.replace(" ", "_").lower())
+        content_file = glob.settings.duplicates_content_file(
+            report.name.replace(" ", "_").lower()
+        )
 
         _create_content_dir(content_file)
 
