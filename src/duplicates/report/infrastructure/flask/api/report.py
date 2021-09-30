@@ -22,6 +22,7 @@ class ReportController(BaseController):
 
         command = ReportCreatorCommand(
             report_id,
+            params.get("corpus"),
             params.get("similarity_threshold"),
             params.get("k_shingle_size"),
             user,

@@ -12,6 +12,7 @@ from duplicates.report.domain.model.report import Report, ReportRepository, Repo
 @dataclass(frozen=True)
 class ReportCreatorCommand(Command):
     report_id: str
+    corpus: str
     similarity_threshold: float
     k_shingle_size: int
     user: User
@@ -34,6 +35,7 @@ class ReportCreatorCommandHandler(CommandHandler):
         report = Report(
             ReportId(command.report_id),
             self._report_repository.generate_unique_name(),
+            command.corpus,
             command.user,
             KShingleSize(command.k_shingle_size),
             SimilarityThreshold(command.similarity_threshold),

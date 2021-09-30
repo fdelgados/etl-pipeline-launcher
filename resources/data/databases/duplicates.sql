@@ -39,6 +39,7 @@ CREATE TABLE `reports`
     `id` BINARY(16) NOT NULL,
     `tenant_id` CHAR(36) NOT NULL,
     `name` VARCHAR(60) NOT NULL,
+    `from_corpus` VARCHAR(25) NOT NULL,
     `created_by` VARCHAR(30) NOT NULL,
     `completed` TINYINT(1) DEFAULT 0 NOT NULL,
     `k_shingle_size` TINYINT(1) NOT NULL,
@@ -58,6 +59,9 @@ CREATE INDEX `reports_creator_index`
 
 CREATE INDEX `reports_name_index`
     ON reports (`name`);
+
+CREATE INDEX `reports_corpus_index`
+    ON reports (`from_corpus`);
 
 CREATE INDEX `reports_started_on_index`
     ON reports (`started_on`);

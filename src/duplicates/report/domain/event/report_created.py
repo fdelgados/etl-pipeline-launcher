@@ -6,6 +6,7 @@ class ReportCreated(DomainEvent):
         self,
         report_id: str,
         name: str,
+        from_corpus: str,
         created_by: str,
         tenant_id: str,
         k_shingle_size: int,
@@ -15,6 +16,7 @@ class ReportCreated(DomainEvent):
 
         self._report_id = report_id
         self._name = name
+        self._from_corpus = from_corpus
         self._created_by = created_by
         self._tenant_id = tenant_id
         self._k_shingle_size = k_shingle_size
@@ -27,6 +29,10 @@ class ReportCreated(DomainEvent):
     @property
     def name(self) -> str:
         return self._name
+
+    @property
+    def from_corpus(self) -> str:
+        return self._from_corpus
 
     @property
     def created_by(self) -> str:

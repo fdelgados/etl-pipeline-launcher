@@ -46,3 +46,6 @@ connection.port = 27017
 [flask]
 error_include_message = false
 flask_debug = false
+
+[duplicates]
+content_file = "/var/www/data/content/{}/{}.csv"

@@ -24,5 +24,5 @@ class Page:
 
 class PageRetriever(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def retrieve_all(self):
+    def retrieve_all(self, corpus: str):
         raise NotImplementedError

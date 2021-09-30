@@ -3,4 +3,10 @@
 <services>
     <service id="duplicates.report.domain.model.report.report_repository"
              alias="duplicates.report.infrastructure.persistence.sqlalchemy.report_repository.report_repository_impl"/>
+
+    <service id="duplicates.data.domain.model.page.page_retriever"
+             alias="duplicates.data.infrastructure.page_retriever.mongodb.page_retriever.page_retriever_impl" />
+
+    <service id="duplicates.data.domain.service.dataloader.data_loader"
+             alias="duplicates.data.infrastructure.data_loader.pandas.dataloader.data_loader_impl" />
 </services>

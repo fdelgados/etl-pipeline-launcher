@@ -1,5 +1,6 @@
 import abc
 from datetime import datetime
+from typing import Optional
 
 from coolname import generate
 
@@ -21,12 +22,14 @@ class Report(AggregateRoot):
         self,
         report_id: ReportId,
         name: str,
+        from_corpus: str,
         creator: User,
         k_shingle_size: KShingleSize,
         similarity_threshold: SimilarityThreshold,
     ):
         self._id = report_id
         self._name = name
+        self._from_corpus = from_corpus
         self._creator = creator
         self._created_by = self._creator.username()
         self._tenant_id = self._creator.tenant_id()
@@ -43,6 +46,7 @@ class Report(AggregateRoot):
         report_created = ReportCreated(
             self._id.value,
             self._name,
+            self._from_corpus,
             self._created_by,
             self._tenant_id,
             self._k_shingle_size.value,
@@ -56,6 +60,14 @@ class Report(AggregateRoot):
     @property
     def id(self) -> ReportId:
         return self._id
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def from_corpus(self) -> str:
+        return self._from_corpus
 
     @property
     def created_by(self) -> str:
@@ -97,3 +109,7 @@ class ReportRepository(Repository, metaclass=abc.ABCMeta):
     @staticmethod
     def generate_unique_name() -> str:
         return " ".join(x.capitalize() for x in generate(2))
+
+    @abc.abstractmethod
+    def report_of_id(self, report_id: ReportId) -> Optional[Report]:
+        raise NotImplementedError

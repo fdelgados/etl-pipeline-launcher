@@ -3,4 +3,12 @@
 <services>
     <service id="duplicates.report.infrastructure.persistence.sqlalchemy.report_repository.report_repository_impl"
              class="duplicates.report.infrastructure.persistence.sqlalchemy.report_repository.ReportRepositoryImpl" />
+
+    <service id="duplicates.data.infrastructure.page_retriever.mongodb.page_retriever.page_retriever_impl"
+             class="duplicates.data.infrastructure.page_retriever.mongodb.page_retriever.PageRetrieverImpl">
+        <argument name="database" value="web_corpus" type="parameter" />
+    </service>
+
+    <service id="duplicates.data.infrastructure.data_loader.pandas.dataloader.data_loader_impl"
+             class="duplicates.data.infrastructure.data_loader.pandas.dataloader.DataLoaderImpl" />
 </services>

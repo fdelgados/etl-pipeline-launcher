@@ -9,3 +9,4 @@ src/.hypothesis
 .venv
 .pytest_cache
 resources/git
+resources/data/content

@@ -14,6 +14,7 @@ COPY requirements.txt /tmp/
 RUN pip install -r /tmp/requirements.txt
 
 RUN mkdir -p /var/www/src
+RUN mkdir -p /var/www/data/content
 RUN mkdir -p /export/certs
 RUN mkdir -p /log
 COPY src/ /var/www/src

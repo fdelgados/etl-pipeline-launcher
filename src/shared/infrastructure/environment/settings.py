@@ -255,6 +255,11 @@ class Settings:
 
         return context_event_store.get("id")
 
+    def duplicates_content_file(self, report_name: str) -> str:
+        file_pattern = self._get("duplicates", "content_file")
+
+        return file_pattern.format(self._site, report_name)
+
     def api_path(self):
         return "/{}".format(self.api_version())
 

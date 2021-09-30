@@ -28,6 +28,7 @@ mypy==0.910
 mypy-extensions==0.4.3
 lxml==4.6.3
 packaging==21.0
+pandas==1.3.3
 parameterized==0.8.1
 pika==1.2.0
 pluggy==0.13.1
@@ -44,6 +45,7 @@ requests==2.26.0
 six==1.15.0
 SQLAlchemy==1.4.22
 tenacity==8.0.1
+texcptulz==2.0
 toml==0.10.2
 tqdm==4.62.2
 typing-extensions==3.10.0.0

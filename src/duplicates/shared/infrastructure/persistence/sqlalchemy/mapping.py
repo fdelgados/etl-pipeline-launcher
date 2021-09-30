@@ -23,6 +23,7 @@ class DuplicatesMapping(Mapping):
             Column("tenant_id", String(36), nullable=False),
             Column("created_by", String(60), nullable=False),
             Column("name", String(60), nullable=False),
+            Column("from_corpus", String(25), nullable=False),
             Column("completed", Boolean, nullable=False, default=False),
             Column("k_shingle_size", KShingleSizeType, nullable=False),
             Column("similarity_threshold", SimilarityThresholdType, nullable=False),

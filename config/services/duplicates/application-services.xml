@@ -9,7 +9,11 @@
     </service>
 
     <service id="duplicates.data.application.transformer.transform_data_on_report_created"
-             class="duplicates.data.application.transformer.TransformDataOnReportCreated"/>
+             class="duplicates.data.application.transformer.TransformDataOnReportCreated">
+        <argument name="page_retriever" value="duplicates.data.domain.model.page.page_retriever" type="service" />
+        <argument name="data_loader" value="duplicates.data.domain.service.dataloader.data_loader" type="service" />
+        <argument name="report_repository" value="duplicates.report.domain.model.report.report_repository" type="service"/>
+    </service>
 
     <service id="duplicates.report.application.identity_generator.next_identity_query_handler"
              class="duplicates.report.application.identity_generator.NextIdentityQueryHandler">
