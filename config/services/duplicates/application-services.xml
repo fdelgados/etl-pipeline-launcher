@@ -8,8 +8,8 @@
         <argument name="event_bus" value="shared.domain.bus.event.event_bus" type="service"/>
     </service>
 
-    <service id="duplicates.data.application.transformer.transform_data_on_report_created"
-             class="duplicates.data.application.transformer.TransformDataOnReportCreated">
+    <service id="duplicates.data.application.transformer.wrangle_data_on_report_created"
+             class="duplicates.data.application.wrangler.WrangleDataOnReportCreated">
         <argument name="page_retriever" value="duplicates.data.domain.model.page.page_retriever" type="service" />
         <argument name="data_loader" value="duplicates.data.domain.service.dataloader.data_loader" type="service" />
         <argument name="report_repository" value="duplicates.report.domain.model.report.report_repository" type="service"/>

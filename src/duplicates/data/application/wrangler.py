@@ -6,7 +6,7 @@ from duplicates.data.domain.service.dataloader import DataLoader
 from duplicates.report.domain.model.report import ReportRepository, ReportId
 
 
-class TransformDataOnReportCreated(DomainEventSubscriber):
+class WrangleDataOnReportCreated(DomainEventSubscriber):
     def __init__(
         self,
         page_retriever: PageRetriever,
