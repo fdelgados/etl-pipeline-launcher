@@ -3,7 +3,7 @@ from flask import request, make_response
 from flask_restx import Namespace
 
 from shared.infrastructure.security import authorization_required
-from shared.infrastructure.flask.api.base_controller import BaseController
+from shared.infrastructure.flask.api.basecontroller import BaseController
 from corpus.build.application.corpus_creator import CorpusCreatorCommand
 
 corpus_api = Namespace("corpus", description="Create/Update corpus")

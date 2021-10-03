@@ -2,7 +2,7 @@ from typing import Optional, List
 
 from shared.infrastructure.persistence.sqlalchemy.repository import Repository
 
-import shared.infrastructure.environment.global_vars as glob
+import shared.infrastructure.environment.globalvars as glob
 
 from corpus.build.domain.model.corpus import Corpus, CorpusRepository
 

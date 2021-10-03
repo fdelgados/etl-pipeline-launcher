@@ -2,9 +2,9 @@ from pymongo import MongoClient
 
 from typing import List
 
-import shared.infrastructure.environment.global_vars as glob
+import shared.infrastructure.environment.globalvars as glob
 
-from shared.domain.model.value_object.url import Url
+from shared.domain.model.valueobject.url import Url
 
 from duplicates.data.domain.model.page import Page
 from duplicates.data.domain.service.datagatherer import DataGatherer

@@ -9,7 +9,7 @@ import urllib3
 
 from bs4 import BeautifulSoup
 
-from shared.domain.model.value_object.url import Url, InvalidUrlException
+from shared.domain.model.valueobject.url import Url, InvalidUrlException
 from corpus.build.domain.service.url_source import UrlSource, UrlSourceError
 
 

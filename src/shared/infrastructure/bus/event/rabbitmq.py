@@ -2,7 +2,7 @@ import json
 import pika
 from pika import exceptions
 
-import shared.infrastructure.environment.global_vars as glob
+import shared.infrastructure.environment.globalvars as glob
 from shared.domain.bus.event import EventBus, DomainEvent
 from shared.domain.service.logging.logger import Logger
 from shared.infrastructure.messaging.rabbitmq.connector import RabbitMqConnector

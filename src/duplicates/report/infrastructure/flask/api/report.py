@@ -2,9 +2,9 @@ from http import HTTPStatus
 from flask import request, make_response
 from flask_restx import Namespace
 
-import shared.infrastructure.environment.global_vars as glob
+import shared.infrastructure.environment.globalvars as glob
 from shared.infrastructure.security import authorization_required
-from shared.infrastructure.flask.api.base_controller import BaseController
+from shared.infrastructure.flask.api.basecontroller import BaseController
 from duplicates.report.application.report_creator import ReportCreatorCommand
 from duplicates.report.application.identity_generator import NextIdentityQuery
 

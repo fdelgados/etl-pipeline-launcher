@@ -16,9 +16,9 @@ import urllib3
 
 from bs4 import BeautifulSoup
 
-import shared.infrastructure.environment.global_vars as glob
+import shared.infrastructure.environment.globalvars as glob
 from shared.domain.service.caching.cache import Cache
-from shared.domain.model.value_object.url import Url
+from shared.domain.model.valueobject.url import Url
 from corpus.build.domain.model.page import Page
 from corpus.build.domain.model.build import Build
 from corpus.build.domain.service.page_retriever import (

@@ -1,6 +1,6 @@
 from shared.utils import class_fullname
 from shared.domain.bus.event import DomainEvent, DomainEventSubscriber, EventStore
-import shared.infrastructure.environment.global_vars as glob
+import shared.infrastructure.environment.globalvars as glob
 
 
 class StoreDomainEventOnPublished(DomainEventSubscriber):

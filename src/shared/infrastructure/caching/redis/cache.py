@@ -2,7 +2,7 @@ from typing import Any
 from datetime import timedelta
 import redis
 
-import shared.infrastructure.environment.global_vars as glob
+import shared.infrastructure.environment.globalvars as glob
 
 from shared.domain.service.caching.cache import Cache
 

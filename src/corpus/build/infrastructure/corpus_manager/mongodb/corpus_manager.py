@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 
-import shared.infrastructure.environment.global_vars as glob
+import shared.infrastructure.environment.globalvars as glob
 from corpus.build.domain.service.corpus_manager import CorpusManager
 
 

@@ -1,7 +1,7 @@
 from typing import Optional, Dict
 import pika
 from pika import exceptions
-import shared.infrastructure.environment.global_vars as glob
+import shared.infrastructure.environment.globalvars as glob
 from shared.domain.service.logging.logger import Logger
 
 

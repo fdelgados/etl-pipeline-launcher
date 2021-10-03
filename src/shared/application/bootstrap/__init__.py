@@ -6,8 +6,8 @@ from importlib import util
 
 from shared.infrastructure.environment.settings import Settings
 from shared.infrastructure.logging.file.logger import FileLogger
-import shared.infrastructure.environment.global_vars as glob
-import shared.infrastructure.dependency_injection.container as container
+import shared.infrastructure.environment.globalvars as glob
+import shared.infrastructure.dic.container as container
 
 
 class Bootstrap:

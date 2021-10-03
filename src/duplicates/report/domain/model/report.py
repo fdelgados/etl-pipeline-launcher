@@ -4,7 +4,7 @@ from typing import Optional
 
 from coolname import generate
 
-from shared.domain.model.value_object.unique_id import Uuid
+from shared.domain.model.valueobject.uid import Uuid
 from shared.domain.model.aggregate import AggregateRoot
 from shared.domain.model.repository import Repository
 from shared.domain.model.entity.user import User

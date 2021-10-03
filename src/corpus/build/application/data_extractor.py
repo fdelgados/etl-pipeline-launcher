@@ -4,11 +4,11 @@ from typing import List
 import multiprocessing
 from joblib import Parallel, delayed, parallel_backend
 
-import shared.infrastructure.environment.global_vars as glob
+import shared.infrastructure.environment.globalvars as glob
 from shared.domain.service.logging.logger import Logger
 from shared.domain.bus.event import DomainEventSubscriber, EventBus
 from shared.domain.errors.errors import Errors, ApplicationError
-from shared.domain.model.value_object.url import Url
+from shared.domain.model.valueobject.url import Url
 
 from corpus.build.domain.event.build_started import BuildStarted
 from corpus.build.domain.event.extraction_failed import ExtractionFailed

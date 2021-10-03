@@ -8,7 +8,7 @@ from shared.domain.bus.query import (
     QueryNotRegisteredError,
     QueryNotCallableError,
 )
-import shared.infrastructure.environment.global_vars as glob
+import shared.infrastructure.environment.globalvars as glob
 
 
 class QueryBusImpl(QueryBus):

@@ -1,7 +1,7 @@
 import unittest
 from parameterized import parameterized
 
-from shared.domain.model.value_object.url import Url, InvalidUrlException
+from shared.domain.model.valueobject.url import Url, InvalidUrlException
 
 
 class UrlTest(unittest.TestCase):

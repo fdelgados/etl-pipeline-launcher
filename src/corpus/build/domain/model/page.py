@@ -3,7 +3,7 @@ from typing import Dict, Optional
 from datetime import datetime
 from http import HTTPStatus
 
-from shared.domain.model.value_object.url import Url
+from shared.domain.model.valueobject.url import Url
 from shared.domain.model.aggregate import AggregateRoot
 from shared.domain.model.repository import Repository
 from shared.domain.model.entity.document import Document

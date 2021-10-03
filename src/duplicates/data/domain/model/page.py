@@ -1,4 +1,4 @@
-from shared.domain.model.value_object.url import Url
+from shared.domain.model.valueobject.url import Url
 from shared.domain.model.entity.document import Document
 
 

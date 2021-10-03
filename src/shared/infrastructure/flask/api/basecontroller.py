@@ -10,7 +10,7 @@ from shared.domain.errors.errors import Errors, ApplicationError
 from shared.domain.bus.query import Query, QueryBus, Response
 from shared.domain.bus.command import Command, CommandBus
 from shared.domain.service.logging.logger import Logger
-import shared.infrastructure.environment.global_vars as glob
+import shared.infrastructure.environment.globalvars as glob
 
 
 class BaseController(Resource):

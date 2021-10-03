@@ -2,7 +2,7 @@ import multiprocessing
 
 from shared.utils import class_fullname
 from shared.domain.bus.event import EventBus, DomainEvent
-import shared.infrastructure.environment.global_vars as glob
+import shared.infrastructure.environment.globalvars as glob
 
 
 class InMemoryEventBus(EventBus):

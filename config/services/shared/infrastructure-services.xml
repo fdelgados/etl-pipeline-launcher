@@ -25,7 +25,7 @@
     <service id="shared.infrastructure.bus.command.command_bus_impl"
              class="shared.infrastructure.bus.command.CommandBusImpl" />
 
-    <service id="shared.infrastructure.bus.event.in_memory.in_memory_event_bus"
+    <service id="shared.infrastructure.bus.event.inmemory.in_memory_event_bus"
              class="shared.infrastructure.bus.event.in_memory.InMemoryEventBus" />
 
 </services>

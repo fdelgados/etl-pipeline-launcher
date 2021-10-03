@@ -2,8 +2,8 @@ import abc
 
 from typing import Any, Dict
 
-import shared.infrastructure.environment.global_vars as glob
-from shared.infrastructure.dependency_injection.container import create_container
+import shared.infrastructure.environment.globalvars as glob
+from shared.infrastructure.dic.container import create_container
 
 
 class Input:

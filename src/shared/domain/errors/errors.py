@@ -1,4 +1,4 @@
-from shared.domain.model.value_object.error import Error
+from shared.domain.model.valueobject.error import Error
 
 
 class Errors:

@@ -3,7 +3,7 @@ import pandas as pd
 
 from typing import List
 
-import shared.infrastructure.environment.global_vars as glob
+import shared.infrastructure.environment.globalvars as glob
 
 from duplicates.data.domain.model.cleanpage import CleanPageContent
 from duplicates.data.domain.service.dataloader import DataLoader

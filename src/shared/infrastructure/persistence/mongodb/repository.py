@@ -6,7 +6,7 @@ from pymongo import MongoClient
 
 from shared.domain.model.aggregate import AggregateRoot
 from shared.domain.model.repository import Repository
-import shared.infrastructure.environment.global_vars as glob
+import shared.infrastructure.environment.globalvars as glob
 
 
 class MongoDbRepository(Repository, metaclass=abc.ABCMeta):

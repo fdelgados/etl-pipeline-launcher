@@ -1,6 +1,6 @@
 from typing import Optional
 
-import shared.infrastructure.environment.global_vars as glob
+import shared.infrastructure.environment.globalvars as glob
 from shared.infrastructure.persistence.sqlalchemy.repository import Repository
 from duplicates.report.domain.model.report import ReportRepository, Report, ReportId
 

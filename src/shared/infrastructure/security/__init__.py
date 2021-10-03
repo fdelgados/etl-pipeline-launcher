@@ -5,7 +5,7 @@ import credential_shield as cs
 from shared.domain.model.entity.user import User
 from shared.domain.errors.errors import Errors, ApplicationError
 
-import shared.infrastructure.environment.global_vars as glob
+import shared.infrastructure.environment.globalvars as glob
 
 
 def authorization_required(scope: str):

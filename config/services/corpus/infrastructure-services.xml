@@ -27,7 +27,7 @@
         <argument name="context" value="corpus" type="parameter" />
     </service>
 
-    <service id="corpus.infrastructure.event.mysql.event_store.mysql_event_store"
+    <service id="corpus.infrastructure.event.mysql.eventstore.mysql_event_store"
              class="shared.infrastructure.event.mysql.event_store.MysqlEventStore">
         <argument name="db_service" value="corpus.infrastructure.persistence.sqlalchemy.dbal.sql_alchemy_dbal_service" type="service" />
     </service>

@@ -6,7 +6,7 @@ from shared.domain.bus.command import (
     CommandNotRegisteredError,
     CommandNotCallableError,
 )
-import shared.infrastructure.environment.global_vars as glob
+import shared.infrastructure.environment.globalvars as glob
 
 
 class CommandBusImpl(CommandBus):

@@ -8,7 +8,7 @@ from datetime import datetime
 from coolname import generate
 
 from shared.domain.model.aggregate import AggregateRoot
-from shared.domain.model.value_object.unique_id import Uuid
+from shared.domain.model.valueobject.uid import Uuid
 from shared.domain.model.repository import Repository
 from corpus.build.domain.event.build_started import BuildStarted
 from corpus.build.domain.event.build_completed import BuildCompleted

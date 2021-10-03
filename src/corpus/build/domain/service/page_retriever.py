@@ -1,6 +1,6 @@
 import abc
 
-from shared.domain.model.value_object.url import Url
+from shared.domain.model.valueobject.url import Url
 from corpus.build.domain.model.page import Page
 from corpus.build.domain.model.build import Build
 from corpus.build.domain.model.corpus import Corpus

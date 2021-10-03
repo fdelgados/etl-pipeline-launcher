@@ -1,7 +1,7 @@
 import abc
 
 from typing import Optional, List
-from shared.domain.model.value_object.url import Url
+from shared.domain.model.valueobject.url import Url
 
 
 __all__ = ["UrlSource", "UrlSourceError"]
