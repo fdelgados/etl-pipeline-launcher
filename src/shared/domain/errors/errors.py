@@ -47,6 +47,14 @@ class Errors:
 
         return Error(code, "Entity not found")
 
+    @staticmethod
+    def conflict_error(**kwargs) -> Error:
+        code = 3001
+        if kwargs.get("message"):
+            return Error(code, f'Conflict. {kwargs.get("message")}.')
+
+        return Error(code, 'Conflict.')
+
 
 class ApplicationError(RuntimeError):
     def __init__(self, error: Error) -> None:

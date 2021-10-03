@@ -219,6 +219,9 @@ class BuildRepository(Repository, metaclass=abc.ABCMeta):
     ) -> Optional[Build]:
         raise NotImplementedError
 
+    def running_builds_of_tenant(self, tenant_id: str) -> List[Build]:
+        raise NotImplementedError
+
     @abc.abstractmethod
     def builds_of_tenant(self, tenant_id: str) -> List[Build]:
         raise NotImplementedError

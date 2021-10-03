@@ -62,6 +62,9 @@ class BaseController(Resource):
         if exception.error == Errors.entity_not_found():
             status_code = HTTPStatus.NOT_FOUND
 
+        if exception.error == Errors.conflict_error():
+            status_code = HTTPStatus.CONFLICT
+
         error_hash = int(
             hashlib.sha256(
                 (str(time.time()) + str(exception.error.code)).encode()
