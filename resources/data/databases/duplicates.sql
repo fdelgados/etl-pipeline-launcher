@@ -1,5 +1,7 @@
 CREATE DATABASE IF NOT EXISTS duplicates CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+CREATE USER 'duplicates'@'%' IDENTIFIED BY 'wTUbtEmk2S6R';
+
 CREATE DATABASE duplicates CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 GRANT INSERT, SELECT, UPDATE, DELETE ON duplicates.* TO 'duplicates';

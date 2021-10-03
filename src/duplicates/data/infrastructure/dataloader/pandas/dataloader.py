@@ -1,23 +1,22 @@
 import os
 import pandas as pd
-from txtools.normalizer import clean_text
 
 from typing import List
 
 import shared.infrastructure.environment.global_vars as glob
 
-from duplicates.data.domain.model.page import Page
+from duplicates.data.domain.model.cleanpage import CleanPageContent
 from duplicates.data.domain.service.dataloader import DataLoader
 from duplicates.report.domain.model.report import Report
 
 
 class DataLoaderImpl(DataLoader):
-    def load(self, data: List[Page], report: Report) -> None:
+    def load(self, data: List[CleanPageContent], report: Report) -> None:
         content = []
 
-        for page in data:
+        for clean_page in data:
             content.append(
-                {"url": page.url.address, "content": clean_text(page.content).lower()}
+                {"url": clean_page.url, "content": clean_page.content}
             )
 
         content_df = pd.DataFrame(content, columns=["url", "content"], dtype="object")

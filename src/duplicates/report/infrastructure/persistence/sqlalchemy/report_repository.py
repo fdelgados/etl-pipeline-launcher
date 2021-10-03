@@ -10,4 +10,4 @@ class ReportRepositoryImpl(ReportRepository, Repository):
         super().__init__(Report, glob.settings.database_dsn("duplicates"))
 
     def report_of_id(self, report_id: ReportId) -> Optional[Report]:
-        return self.find(_id=report_id)
+        return self.find(_report_id=report_id)

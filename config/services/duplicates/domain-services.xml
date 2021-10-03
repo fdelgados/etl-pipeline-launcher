@@ -4,9 +4,12 @@
     <service id="duplicates.report.domain.model.report.report_repository"
              alias="duplicates.report.infrastructure.persistence.sqlalchemy.report_repository.report_repository_impl"/>
 
-    <service id="duplicates.data.domain.model.page.page_retriever"
-             alias="duplicates.data.infrastructure.page_retriever.mongodb.page_retriever.page_retriever_impl" />
+    <service id="duplicates.data.domain.service.datagatherer.data_gatherer"
+             alias="duplicates.data.infrastructure.datagatherer.mongodb.datagatherer.data_gatherer_impl" />
 
     <service id="duplicates.data.domain.service.dataloader.data_loader"
-             alias="duplicates.data.infrastructure.data_loader.pandas.dataloader.data_loader_impl" />
+             alias="duplicates.data.infrastructure.dataloader.pandas.dataloader.data_loader_impl" />
+
+    <service id="duplicates.data.domain.service.datatransformer.data_transformer"
+             alias="duplicates.data.infrastructure.datatransformer.txtools.datatransformer.data_transformer_impl" />
 </services>

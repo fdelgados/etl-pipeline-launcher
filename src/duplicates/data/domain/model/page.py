@@ -1,9 +1,8 @@
-import abc
-
 from shared.domain.model.value_object.url import Url
+from shared.domain.model.entity.document import Document
 
 
-class Page:
+class Page(Document):
     def __init__(self, url: Url, content: str, datalayer: dict):
         self._url = url
         self._content = content
@@ -20,9 +19,3 @@ class Page:
     @property
     def datalayer(self) -> dict:
         return self._datalayer
-
-
-class PageRetriever(metaclass=abc.ABCMeta):
-    @abc.abstractmethod
-    def retrieve_all(self, corpus: str):
-        raise NotImplementedError

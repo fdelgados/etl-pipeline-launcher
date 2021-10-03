@@ -24,3 +24,6 @@ class Error:
             return False
 
         return other.code == self.code
+
+    def __str__(self):
+        return f"{self._message}. {self._details}"

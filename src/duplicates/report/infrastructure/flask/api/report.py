@@ -17,8 +17,8 @@ class ReportController(BaseController):
     def post(self, user):
         params = request.get_json()
 
-        next_identity_query = self.ask(NextIdentityQuery())
-        report_id = next_identity_query.report_id
+        next_identity_response = self.ask(NextIdentityQuery())
+        report_id = next_identity_response.report_id
 
         command = ReportCreatorCommand(
             report_id,

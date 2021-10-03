@@ -40,5 +40,5 @@ class DuplicatesMapping(Mapping):
             Report,
             reports_table,
             column_prefix="_",
-            properties={"_id": reports_table.c.id},
+            properties={"_report_id": reports_table.c.id},
         )

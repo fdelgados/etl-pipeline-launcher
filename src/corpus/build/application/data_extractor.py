@@ -49,9 +49,10 @@ class ExtractDataOnBuildStarted(DomainEventSubscriber):
         self._log("info", "Start content extraction")
 
         build = self._find_build(domain_event.tenant_id, BuildId(domain_event.build_id))
-        corpus = self._find_corpus(build)
 
         try:
+            corpus = self._find_corpus(build)
+
             urls = self._retrieve_urls(corpus)
 
             self._event_bus.publish(
@@ -70,6 +71,7 @@ class ExtractDataOnBuildStarted(DomainEventSubscriber):
             PageRetrieverFatalError,
             UrlSourceError,
             UnableToSavePageError,
+            ApplicationError,
         ) as error:
             build.abort()
 
@@ -83,7 +85,11 @@ class ExtractDataOnBuildStarted(DomainEventSubscriber):
         build = self._build_repository.build_of_tenant_and_id(tenant_id, build_id)
 
         if not build:
-            raise ApplicationError(Errors.entity_not_found())
+            error = Errors.entity_not_found()
+
+            self._log("critical", str(error))
+
+            raise ApplicationError(error)
 
         return build
 

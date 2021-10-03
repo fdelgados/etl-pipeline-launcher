@@ -6,12 +6,15 @@ from http import HTTPStatus
 from shared.domain.model.value_object.url import Url
 from shared.domain.model.aggregate import AggregateRoot
 from shared.domain.model.repository import Repository
+from shared.domain.model.entity.document import Document
 
 from corpus.build.domain.event.page_added import PageAdded
 from corpus.build.domain.model.build import BuildId
 
 
-class Page(AggregateRoot):
+class Page(AggregateRoot, Document):
+    TYPE = 'web_page'
+
     def __init__(
         self,
         url: Url,

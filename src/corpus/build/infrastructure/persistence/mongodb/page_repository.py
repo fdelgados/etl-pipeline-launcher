@@ -26,6 +26,7 @@ class MongoDbPageRepository(PageRepository, MongoDbRepository):
                 {
                     "$set": {
                         "corpus": page.corpus_name,
+                        "document_type": page.type,
                         "tenant_id": page.tenant_id,
                         "address": page.url.address,
                         "status": page.status,

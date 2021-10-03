@@ -26,7 +26,7 @@ class BuildStatusType(types.TypeDecorator):
     impl = types.INTEGER
 
     def process_bind_param(self, build_status, dialect):
-        return build_status.value()
+        return build_status.value
 
     def process_result_value(self, value, dialect):
         return Status(value)

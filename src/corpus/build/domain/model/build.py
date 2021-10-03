@@ -3,7 +3,6 @@ from __future__ import annotations
 import abc
 
 from typing import Optional, List
-from enum import IntEnum
 
 from datetime import datetime
 from coolname import generate
@@ -21,53 +20,66 @@ class BuildId(Uuid):
     pass
 
 
-class Status(IntEnum):
-    def __new__(cls, value, description):
-        obj = int.__new__(cls, value)
-        obj._value_ = value
+class Status:
+    _CANCELLED = -2
+    _ABORTED = -1
+    _RUNNING = 0
+    _COMPLETED = 1
 
-        obj.description = description
+    _STATUS = {
+        _CANCELLED: "Cancelled by user",
+        _ABORTED: "Aborted due to an error",
+        _RUNNING: "Running",
+        _COMPLETED: "Completed",
+    }
 
-        return obj
+    def __init__(self, value: int):
+        self._value = value
+        self._description = self._STATUS[self._value]
 
-    CANCELLED = -2, "Cancelled"
-    ABORTED = -1, "Aborted"
-    RUNNING = 0, "Running"
-    COMPLETED = 1, "Completed"
+    @property
+    def value(self):
+        return self._value
 
     def serialize(self):
-        return {"id": self._value_, "description": self.description}
+        return {"id": self._value, "description": self._description}
 
     def is_completed(self) -> bool:
-        return self.value() == self.COMPLETED
+        return self.value == self._COMPLETED
 
     def is_running(self) -> bool:
-        return self.value() == self.RUNNING
+        return self.value == self._RUNNING
 
     def is_cancelled(self) -> bool:
-        return self.value() == self.CANCELLED
+        return self.value == self._CANCELLED
 
     def is_aborted(self) -> bool:
-        return self.value() == self.ABORTED
+        return self.value == self._ABORTED
 
     @classmethod
     def running(cls) -> Status:
-        return cls(cls.RUNNING, cls.RUNNING.description)
+        return cls(cls._RUNNING)
 
     @classmethod
     def completed(cls) -> Status:
-        return cls(cls.COMPLETED, cls.COMPLETED.description)
+        return cls(cls._COMPLETED)
 
     @classmethod
     def cancelled(cls) -> Status:
-        return cls(cls.CANCELLED, cls.CANCELLED.description)
+        return cls(cls._CANCELLED)
 
     @classmethod
     def aborted(cls) -> Status:
-        return cls(cls.ABORTED, cls.ABORTED.description)
+        return cls(cls._ABORTED)
 
     def __dict__(self):
         return self.serialize()
+
+    def __eq__(self, other):
+        if not isinstance(other, Status):
+            return False
+
+        return other.value == self.value
 
 
 class Build(AggregateRoot):

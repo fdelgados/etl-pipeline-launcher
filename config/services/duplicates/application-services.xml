@@ -10,7 +10,8 @@
 
     <service id="duplicates.data.application.transformer.wrangle_data_on_report_created"
              class="duplicates.data.application.wrangler.WrangleDataOnReportCreated">
-        <argument name="page_retriever" value="duplicates.data.domain.model.page.page_retriever" type="service" />
+        <argument name="data_gatherer" value="duplicates.data.domain.service.datagatherer.data_gatherer" type="service" />
+        <argument name="data_transformer" value="duplicates.data.domain.service.datatransformer.data_transformer" type="service" />
         <argument name="data_loader" value="duplicates.data.domain.service.dataloader.data_loader" type="service" />
         <argument name="report_repository" value="duplicates.report.domain.model.report.report_repository" type="service"/>
     </service>

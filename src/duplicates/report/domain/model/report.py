@@ -27,7 +27,7 @@ class Report(AggregateRoot):
         k_shingle_size: KShingleSize,
         similarity_threshold: SimilarityThreshold,
     ):
-        self._id = report_id
+        self._report_id = report_id
         self._name = name
         self._from_corpus = from_corpus
         self._creator = creator
@@ -44,7 +44,7 @@ class Report(AggregateRoot):
         self._completed = False
 
         report_created = ReportCreated(
-            self._id.value,
+            self._report_id.value,
             self._name,
             self._from_corpus,
             self._created_by,
@@ -58,8 +58,8 @@ class Report(AggregateRoot):
         self.record_event(report_created)
 
     @property
-    def id(self) -> ReportId:
-        return self._id
+    def report_id(self) -> ReportId:
+        return self._report_id
 
     @property
     def name(self) -> str:

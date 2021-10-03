@@ -4,11 +4,14 @@
     <service id="duplicates.report.infrastructure.persistence.sqlalchemy.report_repository.report_repository_impl"
              class="duplicates.report.infrastructure.persistence.sqlalchemy.report_repository.ReportRepositoryImpl" />
 
-    <service id="duplicates.data.infrastructure.page_retriever.mongodb.page_retriever.page_retriever_impl"
-             class="duplicates.data.infrastructure.page_retriever.mongodb.page_retriever.PageRetrieverImpl">
+    <service id="duplicates.data.infrastructure.datagatherer.mongodb.datagatherer.data_gatherer_impl"
+             class="duplicates.data.infrastructure.datagatherer.mongodb.datagatherer.DataGathererImpl">
         <argument name="database" value="web_corpus" type="parameter" />
     </service>
 
-    <service id="duplicates.data.infrastructure.data_loader.pandas.dataloader.data_loader_impl"
-             class="duplicates.data.infrastructure.data_loader.pandas.dataloader.DataLoaderImpl" />
+    <service id="duplicates.data.infrastructure.dataloader.pandas.dataloader.data_loader_impl"
+             class="duplicates.data.infrastructure.dataloader.pandas.dataloader.DataLoaderImpl" />
+
+    <service id="duplicates.data.infrastructure.datatransformer.txtools.datatransformer.data_transformer_impl"
+             class="duplicates.data.infrastructure.datatransformer.txtools.datatransformer.DataTransformerImpl" />
 </services>
