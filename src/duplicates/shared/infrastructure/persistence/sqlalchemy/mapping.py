@@ -4,11 +4,13 @@ from sqlalchemy.orm import registry
 
 from shared.infrastructure.persistence.sqlalchemy.mapping import Mapping
 
+from duplicates.similarity.domain.model.duplicate import Duplicate
 from duplicates.report.domain.model.report import Report
 from duplicates.shared.infrastructure.persistence.sqlalchemy.type import (
     ReportIdType,
     KShingleSizeType,
     SimilarityThresholdType,
+    UrlType,
 )
 
 
@@ -41,4 +43,23 @@ class DuplicatesMapping(Mapping):
             reports_table,
             column_prefix="_",
             properties={"_report_id": reports_table.c.id},
+        )
+
+        duplicates_table = Table(
+            "duplicates",
+            mapper_registry.metadata,
+            Column("report_id", ReportIdType, primary_key=True),
+            Column("url", UrlType, primary_key=True),
+            Column("duplicate_url", UrlType, primary_key=True),
+            Column("similarity", Float, nullable=False)
+        )
+
+        mapper_registry.map_imperatively(
+            Duplicate,
+            duplicates_table,
+            column_prefix="_",
+            properties={
+                "_a_url": duplicates_table.c.url,
+                "_another_url": duplicates_table.c.duplicate_url,
+            },
         )

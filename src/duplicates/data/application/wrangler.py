@@ -1,10 +1,11 @@
-from shared.domain.bus.event import DomainEventSubscriber
+from shared.domain.bus.event import DomainEventSubscriber, EventBus
 from shared.domain.errors.errors import Errors, ApplicationError
 from duplicates.report.domain.event.report_created import ReportCreated
 from duplicates.data.domain.service.datagatherer import DataGatherer
-from duplicates.data.domain.service.dataloader import DataLoader
 from duplicates.data.domain.service.datatransformer import DataTransformer
+from duplicates.data.domain.event.dataloaded import DataLoaded
 from duplicates.report.domain.model.report import ReportRepository, ReportId
+from duplicates.data.domain.model.transformedpagecontent import TransformedPageContentRepository
 
 
 class WrangleDataOnReportCreated(DomainEventSubscriber):
@@ -12,15 +13,17 @@ class WrangleDataOnReportCreated(DomainEventSubscriber):
         self,
         data_gatherer: DataGatherer,
         data_transformer: DataTransformer,
-        data_loader: DataLoader,
+        transformed_page_content_repository: TransformedPageContentRepository,
         report_repository: ReportRepository,
+        event_bus: EventBus,
     ):
         super().__init__()
 
         self._data_gatherer = data_gatherer
-        self._data_loader = data_loader
+        self._transformed_page_content_repository = transformed_page_content_repository
         self._data_transformer = data_transformer
         self._report_repository = report_repository
+        self._event_bus = event_bus
 
     def handle(self, domain_event: ReportCreated) -> None:
         pages = self._data_gatherer.gather(domain_event.from_corpus)
@@ -35,4 +38,6 @@ class WrangleDataOnReportCreated(DomainEventSubscriber):
 
         clean_pages = self._data_transformer.transform(pages)
 
-        self._data_loader.load(clean_pages, report)
+        self._transformed_page_content_repository.save_all(report.name, clean_pages)
+
+        self._event_bus.publish(DataLoaded(report.report_id.value))

@@ -49,3 +49,4 @@ flask_debug = false
 
 [duplicates]
 content_file = "/var/www/data/content/{}/{}.csv"
+minhashes_file = "/var/www/data/content/{}/{}.pkl"

@@ -258,7 +258,12 @@ class Settings:
     def duplicates_content_file(self, report_name: str) -> str:
         file_pattern = self._get("duplicates", "content_file")
 
-        return file_pattern.format(self._site, report_name)
+        return file_pattern.format(self._site, report_name.replace(' ', '_').lower())
+
+    def duplicates_minhashes_file(self, report_name: str) -> str:
+        file_pattern = self._get("duplicates", "minhashes_file")
+
+        return file_pattern.format(self._site, report_name.replace(' ', '_').lower())
 
     def api_path(self):
         return "/{}".format(self.api_version())

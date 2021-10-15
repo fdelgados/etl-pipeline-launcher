@@ -67,3 +67,17 @@ CREATE INDEX `reports_corpus_index`
 
 CREATE INDEX `reports_started_on_index`
     ON reports (`started_on`);
+
+
+DROP TABLE IF EXISTS `duplicates`;
+CREATE TABLE `duplicates`
+(
+    `report_id` BINARY(16) NOT NULL,
+    `url` VARCHAR(255) NOT NULL,
+    `duplicate_url` VARCHAR(255) NOT NULL,
+    `similarity` DECIMAL(8, 7) NOT NULL,
+    PRIMARY KEY `pk_duplicates` (`report_id`, `url`, `duplicate_url`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE INDEX `duplicates_similarity`
+    ON duplicates (`similarity`);

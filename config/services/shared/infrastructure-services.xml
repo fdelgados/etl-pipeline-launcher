@@ -26,6 +26,6 @@
              class="shared.infrastructure.bus.command.CommandBusImpl" />
 
     <service id="shared.infrastructure.bus.event.inmemory.in_memory_event_bus"
-             class="shared.infrastructure.bus.event.in_memory.InMemoryEventBus" />
+             class="shared.infrastructure.bus.event.inmemory.InMemoryEventBus" />
 
 </services>

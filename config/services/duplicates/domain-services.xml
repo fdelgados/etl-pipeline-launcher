@@ -7,9 +7,15 @@
     <service id="duplicates.data.domain.service.datagatherer.data_gatherer"
              alias="duplicates.data.infrastructure.datagatherer.mongodb.datagatherer.data_gatherer_impl" />
 
-    <service id="duplicates.data.domain.service.dataloader.data_loader"
-             alias="duplicates.data.infrastructure.dataloader.pandas.dataloader.data_loader_impl" />
-
     <service id="duplicates.data.domain.service.datatransformer.data_transformer"
              alias="duplicates.data.infrastructure.datatransformer.txtools.datatransformer.data_transformer_impl" />
+
+    <service id="duplicates.shared.domain.model.transformedpagecontent.transformed_page_content_repository"
+             alias="duplicates.data.infrastructure.persistence.pandas.transformedpagecontent.repository.transformed_page_content_repository_impl" />
+
+    <service id="duplicates.similarity.domain.service.similaritycalculator.similarity_calculator"
+             alias="duplicates.similarity.infrastructure.similaritycalculator.datasketch.similaritycalcutator.similarity_calculator_impl" />
+
+    <service id="duplicates.similarity.domain.model.duplicate.duplicate_repository"
+             alias="duplicates.similarity.infrastructure.persistence.sqlalchemy.duplicaterepository.duplicate_repository_impl" />
 </services>

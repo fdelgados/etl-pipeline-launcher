@@ -4,17 +4,17 @@ from typing import List
 
 from duplicates.data.domain.model.page import Page
 from duplicates.data.domain.service.datatransformer import DataTransformer
-from duplicates.data.domain.model.cleanpage import CleanPageContent
+from duplicates.data.domain.model.transformedpagecontent import TransformedPageContent
 
 
 class DataTransformerImpl(DataTransformer):
-    def transform(self, data: List[Page]) -> List[CleanPageContent]:
+    def transform(self, data: List[Page]) -> List[TransformedPageContent]:
         content = []
 
         for page in data:
             content.append(
-                CleanPageContent(
-                    page.url.address,
+                TransformedPageContent(
+                    page.url,
                     clean_text(page.content).lower(),
                 )
             )

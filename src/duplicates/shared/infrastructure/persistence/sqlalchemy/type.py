@@ -5,6 +5,7 @@ from sqlalchemy import types
 from duplicates.report.domain.model.report import ReportId
 from duplicates.shared.domain.model.k_shingle_size import KShingleSize
 from duplicates.shared.domain.model.similarity_threshold import SimilarityThreshold
+from shared.domain.model.valueobject.url import Url
 
 
 class ReportIdType(types.TypeDecorator):
@@ -45,3 +46,17 @@ class SimilarityThresholdType(types.TypeDecorator):
 
     def process_result_value(self, value, dialect):
         return SimilarityThreshold(float(value))
+
+
+class UrlType(types.TypeDecorator):
+    def process_literal_param(self, value, dialect):
+        pass
+
+    impl = types.STRINGTYPE
+    cache_ok = True
+
+    def process_bind_param(self, url, dialect):
+        return url.address
+
+    def process_result_value(self, value, dialect):
+        return Url(value)
