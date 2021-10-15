@@ -4,7 +4,7 @@ mkdir -p resources/git/hooks
 
 git config core.hooksPath resources/git/hooks
 
-PRE_COMMIT_HOOK=$'#/bin/sh\n
+PRE_COMMIT_HOOK=$'#!/bin/sh\n
 MODIFIED_FILES=$(git diff --stat --cached --name-only -- `find . -name \'*.py\'` 2>&1)
 if [ ! -z "$MODIFIED_FILES" ]
 then
