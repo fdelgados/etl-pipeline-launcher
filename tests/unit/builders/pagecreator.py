@@ -7,7 +7,7 @@ from typing import Optional
 from shared.domain.model.valueobject.url import Url
 from corpus.build.domain.model.page import Page
 from corpus.build.domain.model.build import BuildId
-from unit.shared.domain.model.entitybuilder import EntityBuilder
+from unit.builders.entitybuilder import EntityBuilder
 
 
 class PageCreator(EntityBuilder):

@@ -5,7 +5,7 @@ from hypothesis import given, strategies as st
 from duplicates.shared.domain.model.similarity_threshold import SimilarityThreshold
 
 
-class SimilarityThresholdTest(unittest.TestCase):
+class TestSimilarityThreshold(unittest.TestCase):
     @parameterized.expand(["a string", (10,), (0o10,), (0x10,)])
     def test_if_it_raises_an_exception_when_type_is_wrong(self, value) -> None:
         with self.assertRaises(ValueError):

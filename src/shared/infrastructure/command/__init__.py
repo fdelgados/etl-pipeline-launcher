@@ -17,7 +17,7 @@ class Input:
 class ConsoleCommand(metaclass=abc.ABCMeta):
     def __init__(self, environment: str):
         self._environment = environment
-        self._container = create_container(settings)
+        self._container = create_container(glob.settings)
 
     @property
     def container(self):

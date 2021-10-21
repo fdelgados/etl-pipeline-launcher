@@ -4,7 +4,7 @@ from parameterized import parameterized
 from shared.domain.model.valueobject.url import Url, InvalidUrlException
 
 
-class UrlTest(unittest.TestCase):
+class TestUrl(unittest.TestCase):
     @parameterized.expand(
         ["http:www.example.com/main.html", "foobar", "//foo.com", "www.google.com"]
     )

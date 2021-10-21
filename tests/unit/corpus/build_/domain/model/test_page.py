@@ -2,10 +2,10 @@ import unittest
 
 from corpus.build.domain.event.page_added import PageAdded
 
-from .page_creator import PageCreator
+from unit.builders.pagecreator import PageCreator
 
 
-class PageTest(unittest.TestCase):
+class TestPage(unittest.TestCase):
     def test_if_domain_event_has_been_recorded(self) -> None:
         page = PageCreator().build()
 
@@ -25,7 +25,3 @@ class PageTest(unittest.TestCase):
 
         self.assertFalse(page.is_canonical, "Page should be non canonical")
         self.assertFalse(page.is_fully_indexable(), "Page should be non indexable")
-
-
-if __name__ == "__main__":
-    unittest.main()

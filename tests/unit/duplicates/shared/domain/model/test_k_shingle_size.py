@@ -5,7 +5,7 @@ from hypothesis import given, strategies as st
 from duplicates.shared.domain.model.k_shingle_size import KShingleSize
 
 
-class KShingleSizeTest(unittest.TestCase):
+class TestKShingleSize(unittest.TestCase):
     @parameterized.expand(["a string", (1.0,)])
     def test_if_it_raises_an_exception_when_type_is_wrong(self, value) -> None:
         with self.assertRaises(ValueError):
