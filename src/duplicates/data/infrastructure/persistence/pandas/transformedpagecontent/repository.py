@@ -1,7 +1,7 @@
 import os
-import pandas as pd
-
 from typing import List
+
+import pandas as pd
 
 import shared.infrastructure.environment.globalvars as glob
 

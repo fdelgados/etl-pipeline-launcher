@@ -1,4 +1,4 @@
-from sqlalchemy import Table, String, Column, Boolean, DateTime, Integer, Float, Enum
+from sqlalchemy import Table, String, Column, DateTime, Integer, Float, Enum
 
 from sqlalchemy.orm import registry
 
