@@ -8,7 +8,7 @@ Flask==2.0.1
 flask-restx==0.5.1
 hypothesis==6.21.0
 joblib~=0.14.1
-jwt-validator-fdelgados==2.1.2
+jwt-validator-fdelgados==2.1.3
 pandas==1.3.3
 parameterized==0.8.1
 pika==1.2.0
