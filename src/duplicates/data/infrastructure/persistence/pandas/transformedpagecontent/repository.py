@@ -31,6 +31,12 @@ class TransformedPageContentRepositoryImpl(TransformedPageContentRepository):
 
         content_df.to_csv(content_file, index=False)
 
+    def size_of_report(self, report_name: str) -> int:
+        content_file = glob.settings.duplicates_content_file(report_name)
+        content_df = pd.read_csv(content_file)
+
+        return len(content_df.index)
+
 
 def _create_content_dir(content_file: str):
     content_dir, _ = content_file.rsplit("/", 1)

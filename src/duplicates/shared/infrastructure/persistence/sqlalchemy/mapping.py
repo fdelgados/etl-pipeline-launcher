@@ -1,11 +1,11 @@
-from sqlalchemy import Table, String, Column, Boolean, DateTime, Integer, Float
+from sqlalchemy import Table, String, Column, Boolean, DateTime, Integer, Float, Enum
 
 from sqlalchemy.orm import registry
 
 from shared.infrastructure.persistence.sqlalchemy.mapping import Mapping
 
 from duplicates.similarity.domain.model.duplicate import Duplicate
-from duplicates.report.domain.model.report import Report
+from duplicates.report.domain.model.report import Report, Status
 from duplicates.shared.infrastructure.persistence.sqlalchemy.type import (
     ReportIdType,
     KShingleSizeType,
@@ -26,7 +26,7 @@ class DuplicatesMapping(Mapping):
             Column("created_by", String(60), nullable=False),
             Column("name", String(60), nullable=False),
             Column("from_corpus", String(25), nullable=False),
-            Column("completed", Boolean, nullable=False, default=False),
+            Column("status", Enum(Status), nullable=False, default=Status.CREATED),
             Column("k_shingle_size", KShingleSizeType, nullable=False),
             Column("similarity_threshold", SimilarityThresholdType, nullable=False),
             Column("started_on", DateTime, nullable=False),

@@ -2,22 +2,20 @@ from shared.domain.bus.event import DomainEventSubscriber
 from shared.domain.errors.errors import Errors, ApplicationError
 
 from duplicates.data.domain.event.dataloaded import DataLoaded
+from duplicates.data.domain.model.transformedpagecontent import TransformedPageContentRepository
 from duplicates.report.domain.model.report import ReportRepository, ReportId
-from duplicates.similarity.domain.service.similaritycalculator import (
-    SimilarityCalculator,
-)
 
 
-class CalculateSimilaritiesOnDataLoaded(DomainEventSubscriber):
+class UpdateReportOnDataLoaded(DomainEventSubscriber):
     def __init__(
         self,
         report_repository: ReportRepository,
-        similarity_calculator: SimilarityCalculator,
+        transformed_page_content_repository: TransformedPageContentRepository,
     ):
         super().__init__()
 
         self._report_repository = report_repository
-        self._similarity_calculator = similarity_calculator
+        self._transformed_page_content_repository = transformed_page_content_repository
 
     def handle(self, domain_event: DataLoaded) -> None:
         report = self._report_repository.report_of_id(ReportId(domain_event.report_id))
@@ -29,4 +27,9 @@ class CalculateSimilaritiesOnDataLoaded(DomainEventSubscriber):
                 )
             )
 
-        self._similarity_calculator.calculate(report)
+        report.total_pages = self._transformed_page_content_repository.size_of_report(report.name)
+
+        self._report_repository.save(report)
+
+
+

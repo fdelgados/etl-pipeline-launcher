@@ -43,7 +43,7 @@ CREATE TABLE `reports`
     `name` VARCHAR(60) NOT NULL,
     `from_corpus` VARCHAR(25) NOT NULL,
     `created_by` VARCHAR(30) NOT NULL,
-    `completed` TINYINT(1) DEFAULT 0 NOT NULL,
+    `status` TINYINT(1) DEFAULT 0 NOT NULL,
     `k_shingle_size` TINYINT(1) NOT NULL,
     `similarity_threshold` DECIMAL(2, 1) NOT NULL,
     `started_on` DATETIME NOT NULL,
@@ -64,6 +64,9 @@ CREATE INDEX `reports_name_index`
 
 CREATE INDEX `reports_corpus_index`
     ON reports (`from_corpus`);
+
+CREATE INDEX `reports_status_index`
+    ON reports (`status`);
 
 CREATE INDEX `reports_started_on_index`
     ON reports (`started_on`);

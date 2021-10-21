@@ -1,4 +1,5 @@
 import abc
+import enum
 from datetime import datetime
 from typing import Optional
 
@@ -10,11 +11,18 @@ from shared.domain.model.repository import Repository
 from shared.domain.model.entity.user import User
 from duplicates.shared.domain.model.similarity_threshold import SimilarityThreshold
 from duplicates.shared.domain.model.k_shingle_size import KShingleSize
-from duplicates.report.domain.event.report_created import ReportCreated
+from duplicates.report.domain.event.reportcreated import ReportCreated
 
 
 class ReportId(Uuid):
     pass
+
+
+class Status(enum.Enum):
+    CREATED = 0
+    COMPUTATION_IN_PROGRESS = 1
+    CANCELLED = 2
+    COMPLETED = 3
 
 
 class Report(AggregateRoot):
@@ -42,6 +50,7 @@ class Report(AggregateRoot):
         self._duplication_average = None
         self._duplication_median = None
         self._completed = False
+        self._status = Status.CREATED
 
         report_created = ReportCreated(
             self._report_id.value,
@@ -94,11 +103,24 @@ class Report(AggregateRoot):
         return self._started_on
 
     def complete(self):
-        self._completed = True
+        self._status = Status.COMPLETED
         self._completed_on = datetime.now()
 
     def is_completed(self) -> bool:
         return self._completed
+
+    def cancel(self):
+        self._status = Status.CANCELLED
+
+
+
+    @property
+    def total_pages(self) -> int:
+        return self._total_pages
+
+    @total_pages.setter
+    def total_pages(self, total_pages: int) -> None:
+        self._total_pages = total_pages
 
 
 class ReportRepository(Repository, metaclass=abc.ABCMeta):

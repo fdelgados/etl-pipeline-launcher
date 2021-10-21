@@ -1,6 +1,6 @@
 from shared.domain.bus.event import DomainEventSubscriber, EventBus
 from shared.domain.errors.errors import Errors, ApplicationError
-from duplicates.report.domain.event.report_created import ReportCreated
+from duplicates.report.domain.event.reportcreated import ReportCreated
 from duplicates.data.domain.service.datagatherer import DataGatherer
 from duplicates.data.domain.service.datatransformer import DataTransformer
 from duplicates.data.domain.event.dataloaded import DataLoaded

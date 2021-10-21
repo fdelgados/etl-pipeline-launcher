@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 
 <events>
-    <event class="duplicates.report.domain.event.report_created.ReportCreated">
+    <event class="duplicates.report.domain.event.reportcreated.ReportCreated">
         <handler id="duplicates.data.application.transformer.wrangle_data_on_report_created" />
     </event>
 
     <event class="duplicates.data.domain.event.dataloaded.DataLoaded">
         <handler id="duplicates.similarity.application.similarity.calculate_similarities_on_data_loaded" />
+        <handler id="duplicates.report.application.reportupdater.update_report_on_data_loaded" />
     </event>
 </events>

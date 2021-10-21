@@ -5,7 +5,7 @@ from flask_restx import Namespace
 import shared.infrastructure.environment.globalvars as glob
 from shared.infrastructure.security import authorization_required
 from shared.infrastructure.flask.api.basecontroller import BaseController
-from duplicates.report.application.report_creator import ReportCreatorCommand
+from duplicates.report.application.reportcreator import ReportCreatorCommand
 from duplicates.report.application.identity_generator import NextIdentityQuery
 
 report_api = Namespace("report", description="Near duplicates report generator")
