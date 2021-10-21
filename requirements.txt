@@ -1,5 +1,6 @@
 beautifulsoup4==4.9.3
 coolname~=1.1.0
+cryptography==3.4.7
 datasketch==1.5.3
 dependency-injector==4.34.2
 Faker==8.12.1
