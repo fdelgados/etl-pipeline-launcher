@@ -51,7 +51,7 @@ class DuplicatesMapping(Mapping):
             Column("report_id", ReportIdType, primary_key=True),
             Column("url", UrlType, primary_key=True),
             Column("duplicate_url", UrlType, primary_key=True),
-            Column("similarity", Float, nullable=False)
+            Column("similarity", Float, nullable=False),
         )
 
         mapper_registry.map_imperatively(

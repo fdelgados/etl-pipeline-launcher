@@ -5,7 +5,9 @@ from duplicates.data.domain.service.datagatherer import DataGatherer
 from duplicates.data.domain.service.datatransformer import DataTransformer
 from duplicates.data.domain.event.dataloaded import DataLoaded
 from duplicates.report.domain.model.report import ReportRepository, ReportId
-from duplicates.data.domain.model.transformedpagecontent import TransformedPageContentRepository
+from duplicates.data.domain.model.transformedpagecontent import (
+    TransformedPageContentRepository,
+)
 
 
 class WrangleDataOnReportCreated(DomainEventSubscriber):

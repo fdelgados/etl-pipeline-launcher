@@ -112,8 +112,6 @@ class Report(AggregateRoot):
     def cancel(self):
         self._status = Status.CANCELLED
 
-
-
     @property
     def total_pages(self) -> int:
         return self._total_pages

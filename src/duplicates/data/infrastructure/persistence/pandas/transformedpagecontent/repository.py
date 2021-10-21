@@ -15,7 +15,9 @@ class TransformedPageContentRepositoryImpl(TransformedPageContentRepository):
     def __init__(self):
         self._data_frame = None
 
-    def save_all(self, report_name: str, transformed_page_content: List[TransformedPageContent]):
+    def save_all(
+        self, report_name: str, transformed_page_content: List[TransformedPageContent]
+    ):
         content = []
 
         for clean_page in transformed_page_content:

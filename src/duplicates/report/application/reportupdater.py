@@ -2,7 +2,9 @@ from shared.domain.bus.event import DomainEventSubscriber
 from shared.domain.errors.errors import Errors, ApplicationError
 
 from duplicates.data.domain.event.dataloaded import DataLoaded
-from duplicates.data.domain.model.transformedpagecontent import TransformedPageContentRepository
+from duplicates.data.domain.model.transformedpagecontent import (
+    TransformedPageContentRepository,
+)
 from duplicates.report.domain.model.report import ReportRepository, ReportId
 
 
@@ -27,9 +29,8 @@ class UpdateReportOnDataLoaded(DomainEventSubscriber):
                 )
             )
 
-        report.total_pages = self._transformed_page_content_repository.size_of_report(report.name)
+        report.total_pages = self._transformed_page_content_repository.size_of_report(
+            report.name
+        )
 
         self._report_repository.save(report)
-
-
-
