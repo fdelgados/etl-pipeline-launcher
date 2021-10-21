@@ -1,8 +1,8 @@
 import unittest
 
-from corpus.build.domain.event.page_added import PageAdded
-
 from unit.builders.pagecreator import PageCreator
+
+from corpus.build.domain.event.page_added import PageAdded
 
 
 class TestPage(unittest.TestCase):

@@ -4,10 +4,11 @@ from http import HTTPStatus
 
 from typing import Optional
 
+from unit.builders.entitybuilder import EntityBuilder
+
 from shared.domain.model.valueobject.url import Url
 from corpus.build.domain.model.page import Page
 from corpus.build.domain.model.build import BuildId
-from unit.builders.entitybuilder import EntityBuilder
 
 
 class PageCreator(EntityBuilder):
