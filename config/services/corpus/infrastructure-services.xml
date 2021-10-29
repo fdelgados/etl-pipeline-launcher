@@ -2,9 +2,7 @@
 
 <services>
     <service id="corpus.build.infrastructure.persistence.sqlalchemy.build_repository.build_repository_impl"
-             class="corpus.build.infrastructure.persistence.sqlalchemy.build_repository.BuildRepositoryImpl">
-        <argument name="dsn" value="database_dsn" args="corpus" type="settings" />
-    </service>
+             class="corpus.build.infrastructure.persistence.sqlalchemy.build_repository.BuildRepositoryImpl" />
 
     <service id="corpus.build.infrastructure.persistence.mongodb.page_repository.mongo_db_page_repository"
              class="corpus.build.infrastructure.persistence.mongodb.page_repository.MongoDbPageRepository">

@@ -1,4 +1,4 @@
-from sqlalchemy import Table, String, Column, DateTime, Integer, JSON
+from sqlalchemy import Table, String, Column, DateTime, Integer, JSON, MetaData
 
 from sqlalchemy.orm import registry
 
@@ -13,9 +13,9 @@ from corpus.shared.infrastructure.persistence.sqlalchemy.type import (
 
 
 class CorpusMapping(Mapping):
-    def map_entities(self) -> None:
+    def _do_mapping(self, metadata: MetaData) -> None:
 
-        mapper_registry = registry()
+        mapper_registry = registry(metadata=metadata)
 
         build_table = Table(
             "builds",
@@ -31,6 +31,7 @@ class CorpusMapping(Mapping):
             Column("status", BuildStatusType, nullable=False, default=0),
             Column("started_on", DateTime, nullable=False),
             Column("completed_on", DateTime, nullable=True),
+            extend_existing=True,
         )
 
         mapper_registry.map_imperatively(
@@ -53,6 +54,7 @@ class CorpusMapping(Mapping):
             Column("excluded_selectors", JSON, nullable=True),
             Column("url_address_pattern", String(150), nullable=True),
             Column("custom_request_fields", JSON, nullable=True),
+            extend_existing=True,
         )
 
         mapper_registry.map_imperatively(Corpus, corpus_table, column_prefix="_")

@@ -1,4 +1,4 @@
-from sqlalchemy import Table, String, Column, DateTime, Integer, Float, Enum
+from sqlalchemy import Table, String, Column, DateTime, Integer, Float, MetaData, create_engine
 
 from sqlalchemy.orm import registry
 
@@ -8,6 +8,7 @@ from duplicates.similarity.domain.model.duplicate import Duplicate
 from duplicates.report.domain.model.report import Report, Status
 from duplicates.shared.infrastructure.persistence.sqlalchemy.type import (
     ReportIdType,
+    ReportStatusType,
     KShingleSizeType,
     SimilarityThresholdType,
     UrlType,
@@ -15,8 +16,8 @@ from duplicates.shared.infrastructure.persistence.sqlalchemy.type import (
 
 
 class DuplicatesMapping(Mapping):
-    def map_entities(self) -> None:
-        mapper_registry = registry()
+    def _do_mapping(self, metadata: MetaData) -> None:
+        mapper_registry = registry(metadata=metadata)
 
         reports_table = Table(
             "reports",
@@ -26,7 +27,7 @@ class DuplicatesMapping(Mapping):
             Column("created_by", String(60), nullable=False),
             Column("name", String(60), nullable=False),
             Column("from_corpus", String(25), nullable=False),
-            Column("status", Enum(Status), nullable=False, default=Status.CREATED),
+            Column("status", ReportStatusType, nullable=False, default=Status.created().value),
             Column("k_shingle_size", KShingleSizeType, nullable=False),
             Column("similarity_threshold", SimilarityThresholdType, nullable=False),
             Column("started_on", DateTime, nullable=False),
@@ -36,6 +37,7 @@ class DuplicatesMapping(Mapping):
             Column("duplication_ratio", Float, nullable=True),
             Column("duplication_average", Float, nullable=True),
             Column("duplication_median", Float, nullable=True),
+            extend_existing=True,
         )
 
         mapper_registry.map_imperatively(
@@ -52,6 +54,7 @@ class DuplicatesMapping(Mapping):
             Column("url", UrlType, primary_key=True),
             Column("duplicate_url", UrlType, primary_key=True),
             Column("similarity", Float, nullable=False),
+            extend_existing=True,
         )
 
         mapper_registry.map_imperatively(

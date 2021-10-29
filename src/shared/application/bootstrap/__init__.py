@@ -30,6 +30,7 @@ class Bootstrap:
         self.logger.info("Generating database tables mappings")
         for mapping_class in glob.settings.db_mapping_classes():
             module_name, class_name = mapping_class.rsplit(".", 1)
+            context, _ = module_name.split(".", 1)
 
             try:
                 spec = util.find_spec(module_name)
@@ -38,7 +39,7 @@ class Bootstrap:
 
                 class_ = getattr(module, class_name)
                 mapper = class_()
-                mapper.map_entities()
+                mapper.map_entities(glob.settings.database_dsn(context))
 
                 self.logger.info("Database tables mappings generated")
             except (ModuleNotFoundError, AttributeError):

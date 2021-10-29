@@ -9,8 +9,8 @@
         <argument name="database" value="web_corpus" type="parameter" />
     </service>
 
-    <service id="duplicates.data.infrastructure.datatransformer.txtools.datatransformer.data_transformer_impl"
-             class="duplicates.data.infrastructure.datatransformer.txtools.datatransformer.DataTransformerImpl" />
+    <service id="duplicates.data.infrastructure.datatransformer.textcleaner.datatransformer.data_transformer_impl"
+             class="duplicates.data.infrastructure.datatransformer.textcleaner.datatransformer.DataTransformerImpl" />
 
     <service id="duplicates.data.infrastructure.persistence.pandas.transformedpagecontent.repository.transformed_page_content_repository_impl"
              class="duplicates.data.infrastructure.persistence.pandas.transformedpagecontent.repository.TransformedPageContentRepositoryImpl" />
@@ -21,7 +21,5 @@
     </service>
 
     <service id="duplicates.similarity.infrastructure.persistence.sqlalchemy.duplicaterepository.duplicate_repository_impl"
-             class="duplicates.similarity.infrastructure.persistence.sqlalchemy.duplicaterepository.DuplicateRepositoryImpl">
-        <argument name="dsn" value="database_dsn" args="duplicates" type="settings" />
-    </service>
+             class="duplicates.similarity.infrastructure.persistence.sqlalchemy.duplicaterepository.DuplicateRepositoryImpl" />
 </services>

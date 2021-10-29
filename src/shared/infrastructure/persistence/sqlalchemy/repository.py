@@ -13,20 +13,20 @@ class ScopedSessionError(RuntimeError):
 
 
 class SessionBuilder:
-    _session = None
+    _sessions = {}
     _lock = threading.Lock()
 
     @classmethod
     def build(cls, dsn: str) -> scoped_session:
-        if not cls._session:
+        if not cls._sessions.get(dsn):
             with cls._lock:
-                if not cls._session:
+                if not cls._sessions.get(dsn):
                     session_factory = sessionmaker(
                         bind=create_engine(dsn), expire_on_commit=False
                     )
-                    cls._session = scoped_session(session_factory)
+                    cls._sessions[dsn] = scoped_session(session_factory)
 
-        return cls._session
+        return cls._sessions[dsn]
 
 
 @contextmanager
