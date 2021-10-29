@@ -2,7 +2,7 @@ import uuid
 
 from sqlalchemy import types
 
-from duplicates.report.domain.model.report import ReportId
+from duplicates.report.domain.model.report import ReportId, Status
 from duplicates.shared.domain.model.k_shingle_size import KShingleSize
 from duplicates.shared.domain.model.similarity_threshold import SimilarityThreshold
 from shared.domain.model.valueobject.url import Url
@@ -60,3 +60,16 @@ class UrlType(types.TypeDecorator):
 
     def process_result_value(self, value, dialect):
         return Url(value)
+
+
+class ReportStatusType(types.TypeDecorator):
+    def process_literal_param(self, value, dialect):
+        pass
+
+    impl = types.INTEGER
+
+    def process_bind_param(self, build_status, dialect):
+        return build_status.value
+
+    def process_result_value(self, value, dialect):
+        return Status(value)

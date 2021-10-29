@@ -1,5 +1,6 @@
+from __future__ import annotations
+
 import abc
-import enum
 from datetime import datetime
 from typing import Optional
 
@@ -18,11 +19,51 @@ class ReportId(Uuid):
     pass
 
 
-class Status(enum.Enum):
-    CREATED = 0
-    COMPUTATION_IN_PROGRESS = 1
-    CANCELLED = 2
-    COMPLETED = 3
+class Status:
+    _CREATED = 0
+    _COMPUTATION_IN_PROGRESS = 1
+    _CANCELLED = 2
+    _COMPLETED = 3
+
+    _STATUS = {
+        _CREATED: "Created",
+        _COMPUTATION_IN_PROGRESS: "Computation in progress",
+        _CANCELLED: "Cancelled",
+        _COMPLETED: "Completed",
+    }
+
+    def __init__(self, value: int):
+        self._value = value
+        self._description = self._STATUS[self._value]
+
+    @property
+    def value(self):
+        return self._value
+
+    def serialize(self):
+        return {"id": self._value, "description": self._description}
+
+    @classmethod
+    def created(cls) -> Status:
+        return cls(cls._CREATED)
+
+    def complete(self) -> Status:
+        return Status(self._COMPLETED)
+
+    def cancel(self) -> Status:
+        return Status(self._CANCELLED)
+
+    def computation_in_progress(self) -> Status:
+        return Status(self._COMPUTATION_IN_PROGRESS)
+
+    def __dict__(self):
+        return self.serialize()
+
+    def __eq__(self, other):
+        if not isinstance(other, Status):
+            return False
+
+        return other.value == self.value
 
 
 class Report(AggregateRoot):
@@ -50,7 +91,7 @@ class Report(AggregateRoot):
         self._duplication_average = None
         self._duplication_median = None
         self._completed = False
-        self._status = Status.CREATED
+        self._status = Status.created()
 
         report_created = ReportCreated(
             self._report_id.value,
@@ -103,14 +144,14 @@ class Report(AggregateRoot):
         return self._started_on
 
     def complete(self):
-        self._status = Status.COMPLETED
+        self._status = self._status.complete()
         self._completed_on = datetime.now()
 
     def is_completed(self) -> bool:
         return self._completed
 
     def cancel(self):
-        self._status = Status.CANCELLED
+        self._status = self._status.cancel()
 
     @property
     def total_pages(self) -> int:
