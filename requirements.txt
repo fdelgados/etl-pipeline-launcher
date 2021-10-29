@@ -9,6 +9,7 @@ flask-restx==0.5.1
 hypothesis==6.21.0
 joblib~=0.14.1
 jwt-validator-fdelgados==2.1.3
+lxml==4.6.3
 pandas==1.3.3
 parameterized==0.8.1
 pika==1.2.0
@@ -17,7 +18,7 @@ PyMySQL==0.9.3
 redis==3.5.3
 requests==2.26.0
 SQLAlchemy==1.4.22
-texcptulz==2.0
+text-cleaner-fdelgados==2.0.1
 toml==0.10.2
 urllib3==1.26.6
 xxhash==2.0.2

@@ -1,4 +1,4 @@
-from txtools.normalizer import clean_text
+from textcleaner import TextCleaner
 
 from typing import List
 
@@ -11,11 +11,12 @@ class DataTransformerImpl(DataTransformer):
     def transform(self, data: List[Page]) -> List[TransformedPageContent]:
         content = []
 
+        cleaner = TextCleaner()
         for page in data:
             content.append(
                 TransformedPageContent(
                     page.url,
-                    clean_text(page.content).lower(),
+                    cleaner.clean(page.content),
                 )
             )
 
