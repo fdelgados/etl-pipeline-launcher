@@ -1,4 +1,12 @@
-from sqlalchemy import Table, String, Column, DateTime, Integer, Float, MetaData, create_engine
+from sqlalchemy import (
+    Table,
+    String,
+    Column,
+    DateTime,
+    Integer,
+    Float,
+    MetaData,
+)
 
 from sqlalchemy.orm import registry
 
@@ -27,7 +35,12 @@ class DuplicatesMapping(Mapping):
             Column("created_by", String(60), nullable=False),
             Column("name", String(60), nullable=False),
             Column("from_corpus", String(25), nullable=False),
-            Column("status", ReportStatusType, nullable=False, default=Status.created().value),
+            Column(
+                "status",
+                ReportStatusType,
+                nullable=False,
+                default=Status.created().value,
+            ),
             Column("k_shingle_size", KShingleSizeType, nullable=False),
             Column("similarity_threshold", SimilarityThresholdType, nullable=False),
             Column("started_on", DateTime, nullable=False),
