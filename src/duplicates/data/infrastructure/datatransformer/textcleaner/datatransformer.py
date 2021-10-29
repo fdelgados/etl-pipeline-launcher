@@ -1,6 +1,6 @@
-from textcleaner import TextCleaner
-
 from typing import List
+
+from textcleaner import TextCleaner
 
 from duplicates.data.domain.model.page import Page
 from duplicates.data.domain.service.datatransformer import DataTransformer
