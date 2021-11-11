@@ -12,6 +12,15 @@ services:
       - FLASK_DEBUG=1
     ports:
       - "5000:5000"
+
+  static-analysis:
+    build:
+      context: ../..
+      dockerfile: docker/services/application/Dockerfile
+      args:
+        REQUIREMENTS_FILE: requirements-devel.txt
+    entrypoint: pylint .
+
   worker:
     environment:
       - ENVIRONMENT=test

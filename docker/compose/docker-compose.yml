@@ -83,12 +83,6 @@ services:
     networks:
       - nlp_net
 
-  static-analysis:
-    build:
-      context: ../..
-      dockerfile: docker/services/application/Dockerfile
-    entrypoint: pylint .
-
 networks:
   nlp_net:
     driver: bridge
