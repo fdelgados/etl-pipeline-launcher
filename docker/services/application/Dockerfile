@@ -1,5 +1,7 @@
 FROM python:3.9-slim-buster
 
+ARG REQUIREMENTS_FILE=requirements.txt
+
 EXPOSE 5000
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -10,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     vim
 
 
-COPY requirements.txt /tmp/
+COPY $REQUIREMENTS_FILE /tmp/
 RUN pip install -r /tmp/requirements.txt
 
 RUN mkdir -p /var/www/src
