@@ -19,7 +19,7 @@ services:
       dockerfile: docker/services/application/Dockerfile
       args:
         REQUIREMENTS_FILE: requirements-devel.txt
-    entrypoint: pylint .
+    command: python -m pylint ./
 
   worker:
     environment:

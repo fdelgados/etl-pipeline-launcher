@@ -9,7 +9,7 @@ MODIFIED_FILES=$(git diff --stat --cached --name-only -- `find . -name \'*.py\'`
 if [ ! -z "$MODIFIED_FILES" ]
 then
     black $MODIFIED_FILES
-    python lint.py --path $MODIFIED_FILES --threshold=9
+    flake8 $MODIFIED_FILES
     make unit-tests
 fi'
 
