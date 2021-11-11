@@ -6,6 +6,7 @@ dependency-injector==4.34.2
 Faker==8.12.1
 Flask==2.0.1
 flask-restx==0.5.1
+gunicorn==20.1.0
 hypothesis==6.21.0
 joblib~=0.14.1
 jwt-validator-fdelgados==2.1.3

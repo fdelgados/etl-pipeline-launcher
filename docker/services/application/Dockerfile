@@ -31,5 +31,3 @@ CMD chmod a+x bin/run_workers.py
 CMD chmod a+x bin/console.py
 
 WORKDIR /var/www/src
-
-CMD flask run --host=0.0.0.0 --port=5000

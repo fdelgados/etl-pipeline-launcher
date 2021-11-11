@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  application:
+    environment:
+      - ENVIRONMENT=production
+      - FLASK_ENV=production
+      - FLASK_DEBUG=0
+    command: gunicorn --bind 0.0.0.0:5000 shared.infrastructure.flask.entrypoint.run:app
+  worker:
+    environment:
+      - ENVIRONMENT=production
