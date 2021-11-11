@@ -93,7 +93,10 @@ class PageRetrieverImpl(PageRetriever):
 
             self._ensure_is_a_valid_response(response)
 
-            if response.status_code not in [HTTPStatus.OK, HTTPStatus.NOT_MODIFIED]:
+            if response.status_code not in [
+                HTTPStatus.OK,
+                HTTPStatus.NOT_MODIFIED,
+            ]:
                 return page
 
             if response.history:
@@ -114,9 +117,14 @@ class PageRetrieverImpl(PageRetriever):
             if response.status_code == HTTPStatus.NOT_MODIFIED:
                 return page
 
-            self._cache_last_extracted_date(url.address, response.headers.get("Date"))
+            self._cache_last_extracted_date(
+                url.address,
+                response.headers.get("Date"),
+            )
 
-            markup_parser = MarkupParser(self._retrieve_content(response.content))
+            markup_parser = MarkupParser(
+                self._retrieve_content(response.content)
+            )
 
             page.h1 = markup_parser.h1()
             page.title = markup_parser.title()
@@ -128,7 +136,9 @@ class PageRetrieverImpl(PageRetriever):
 
             blacklisted_tags = corpus.excluded_tags
             blacklisted_tags.extend(self._DEFAULT_BLACKLISTED_TAGS)
-            body = markup_parser.body(blacklisted_tags, corpus.excluded_selectors)
+            body = markup_parser.body(
+                blacklisted_tags, corpus.excluded_selectors
+            )
 
             selector_mapping = corpus.selector_mapping or {}
             page.content = self._build_content(body, **selector_mapping)
@@ -146,7 +156,9 @@ class PageRetrieverImpl(PageRetriever):
                 page_content[name] = self._STRING_SEPARATOR.join(
                     [
                         self._STRING_SEPARATOR.join(
-                            tag.get_text(self._STRING_SEPARATOR, strip=True).split()
+                            tag.get_text(
+                                self._STRING_SEPARATOR, strip=True
+                            ).split()
                         )
                         for tag in selector_tags
                     ]
@@ -157,7 +169,9 @@ class PageRetrieverImpl(PageRetriever):
             page_content["body"] = self._STRING_SEPARATOR.join(
                 [
                     self._STRING_SEPARATOR.join(
-                        tag.get_text(self._STRING_SEPARATOR, strip=True).split()
+                        tag.get_text(
+                            self._STRING_SEPARATOR, strip=True
+                        ).split()
                     )
                     for tag in tags
                 ]
@@ -167,7 +181,9 @@ class PageRetrieverImpl(PageRetriever):
 
     def _ensure_scraping_is_allowed(self, url: Url) -> None:
         url_struct = urlparse(url.address)
-        robots_url = "{}://{}/robots.txt".format(url_struct.scheme, url_struct.netloc)
+        robots_url = "{}://{}/robots.txt".format(
+            url_struct.scheme, url_struct.netloc
+        )
 
         robot_parser = RobotFileParser(robots_url)
         robot_parser.read()
@@ -279,9 +295,9 @@ class MarkupParser:
 
     def datalayer(self) -> Dict:
         try:
-            script_text = self.markup.find(string=re.compile(r"var\s+dataLayer")).split(
-                "= ", 1
-            )[1]
+            script_text = self.markup.find(
+                string=re.compile(r"var\s+dataLayer")
+            ).split("= ", 1)[1]
 
             return loads(script_text[: script_text.find("];")] + "]")[0]
         except decoder.JSONDecodeError:
