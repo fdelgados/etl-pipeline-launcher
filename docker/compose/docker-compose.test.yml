@@ -19,7 +19,7 @@ services:
       dockerfile: docker/services/application/Dockerfile
       args:
         REQUIREMENTS_FILE: requirements-devel.txt
-    command: python -m pylint ./
+    command: flake8 .
 
   worker:
     environment:
