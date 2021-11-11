@@ -238,8 +238,9 @@ class MarkupParser:
             if not blacklisted_selectors:
                 return body
 
-            for selector in body.select(",".join(set(blacklisted_selectors))):
-                selector.decompose()
+            for blacklisted_selector in set(blacklisted_selectors):
+                for selector in body.select(blacklisted_selector):
+                    selector.decompose()
 
             return body
         except AttributeError:
