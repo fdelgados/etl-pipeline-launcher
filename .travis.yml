@@ -1,3 +1,6 @@
+language: python
+python:
+  - "3.9"
 services:
   - docker
 
@@ -18,4 +21,4 @@ jobs:
       name: "Unit Tests"
       script:
         - docker-compose -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.test.yml build application
-        - docker-compose -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.test.yml run --rm --no-deps --entrypoint="pytest /var/www/tests/unit" application
+        - docker-compose -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.test.yml run application sh -c "pytest /var/www/tests/unit"
