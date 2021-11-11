@@ -20,5 +20,4 @@ jobs:
     - stage: tests
       name: "Unit Tests"
       script:
-        - docker-compose -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.test.yml build application
         - docker-compose -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.test.yml run application sh -c "pytest /var/www/tests/unit"
