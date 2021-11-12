@@ -4,9 +4,15 @@ from shared.domain.bus.command import Command, CommandHandler
 from shared.domain.bus.event import EventBus
 from shared.domain.service.logging.logger import Logger
 from shared.domain.model.entity.user import User
-from duplicates.shared.domain.model.similarity_threshold import SimilarityThreshold
+from duplicates.shared.domain.model.similarity_threshold import (
+    SimilarityThreshold,
+)
 from duplicates.shared.domain.model.k_shingle_size import KShingleSize
-from duplicates.report.domain.model.report import Report, ReportRepository, ReportId
+from duplicates.report.domain.model.report import (
+    Report,
+    ReportRepository,
+    ReportId,
+)
 
 
 @dataclass(frozen=True)

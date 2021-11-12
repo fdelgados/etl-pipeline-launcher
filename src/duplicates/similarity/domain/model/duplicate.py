@@ -14,7 +14,7 @@ class Duplicate(AggregateRoot):
         report_id: ReportId,
         a_url: Url,
         another_url: Url,
-        similarity: float
+        similarity: float,
     ):
         self._report_id = report_id
         self._a_url = a_url

@@ -17,21 +17,27 @@ def authorization_required(scope: str):
                 raise ApplicationError(Errors.missing_access_token())
 
             token_validator = jwt_validator.TokenValidator(
-                glob.settings.application_id(), scope, glob.settings.token_issuer()
+                glob.settings.application_id(),
+                scope,
+                glob.settings.token_issuer(),
             )
 
             try:
                 token: jwt_validator.Token = token_validator.validate(
                     auth_header, glob.settings.public_key()
                 )
-                user = User(token.tenant_id(), token.username(), token.user_email())
+                user = User(
+                    token.tenant_id(), token.username(), token.user_email()
+                )
                 kwargs["user"] = user
 
                 return func(self, *args, **kwargs)
             except jwt_validator.ExpiredTokenException:
                 raise ApplicationError(Errors.access_token_expired())
             except jwt_validator.JwtValidatorException as error:
-                raise ApplicationError(Errors.authorization(details=str(error)))
+                raise ApplicationError(
+                    Errors.authorization(details=str(error))
+                )
 
         return decorated_function
 

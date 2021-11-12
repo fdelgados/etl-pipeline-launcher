@@ -17,7 +17,9 @@ class QueryBusImpl(QueryBus):
         query_fullname = class_fullname(query)
         module, query_name = query_fullname.rsplit(".", maxsplit=1)
 
-        handler_id = "{}.{}_handler".format(module, camel_to_snake_case(query_name))
+        handler_id = "{}.{}_handler".format(
+            module, camel_to_snake_case(query_name)
+        )
 
         query_handler: QueryHandler = glob.container.get(handler_id)
 
@@ -27,7 +29,9 @@ class QueryBusImpl(QueryBus):
         if not isinstance(query_handler, QueryHandler):
             raise QueryNotRegisteredError(query)
 
-        if not hasattr(query_handler, "handle") or not callable(query_handler.handle):
+        if not hasattr(query_handler, "handle") or not callable(
+            query_handler.handle
+        ):
             raise QueryNotCallableError(query)
 
         return query_handler.handle(query)

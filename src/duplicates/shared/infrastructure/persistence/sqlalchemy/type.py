@@ -4,7 +4,9 @@ from sqlalchemy import types
 
 from duplicates.report.domain.model.report import ReportId, Status
 from duplicates.shared.domain.model.k_shingle_size import KShingleSize
-from duplicates.shared.domain.model.similarity_threshold import SimilarityThreshold
+from duplicates.shared.domain.model.similarity_threshold import (
+    SimilarityThreshold,
+)
 from shared.domain.model.valueobject.url import Url
 
 

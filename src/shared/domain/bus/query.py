@@ -13,7 +13,9 @@ class QueryNotRegisteredError(QueryError):
     def __init__(self, query: Query) -> None:
         query_class = type(query).__name__
 
-        super().__init__(f"The query <{query_class}> hasn't a query handler associated")
+        super().__init__(
+            f"The query <{query_class}> hasn't a query handler associated"
+        )
 
 
 class QueryNotCallableError(QueryError):

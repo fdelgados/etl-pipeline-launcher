@@ -1,7 +1,10 @@
 from sqlalchemy import create_engine, text, exc
 
 import shared.infrastructure.environment.globalvars as glob
-from shared.domain.service.persistence.dbal import DbalService, DbalServiceError
+from shared.domain.service.persistence.dbal import (
+    DbalService,
+    DbalServiceError,
+)
 
 
 class SqlAlchemyDbalService(DbalService):

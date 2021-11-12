@@ -43,7 +43,9 @@ class BaseController(Resource):
         )
 
     @classmethod
-    def api_error(cls, exception: ApplicationError, from_error: Exception = None):
+    def api_error(
+        cls, exception: ApplicationError, from_error: Exception = None
+    ):
         status_code = HTTPStatus.INTERNAL_SERVER_ERROR
         message = exception.error.message
         if exception.error.details:

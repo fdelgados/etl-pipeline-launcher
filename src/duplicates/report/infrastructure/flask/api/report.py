@@ -8,7 +8,9 @@ from shared.infrastructure.flask.api.basecontroller import BaseController
 from duplicates.report.application.reportcreator import ReportCreatorCommand
 from duplicates.report.application.identity_generator import NextIdentityQuery
 
-report_api = Namespace("report", description="Near duplicates report generator")
+report_api = Namespace(
+    "report", description="Near duplicates report generator"
+)
 
 
 @report_api.route("")
@@ -32,7 +34,10 @@ class ReportController(BaseController):
 
         response = make_response("", HTTPStatus.ACCEPTED)
         response.headers = {
-            "Content-Location": f"{glob.settings.api_url()}/reports/{report_id}"
+            "Content-Location": "{}/reports/{}".format(
+                glob.settings.api_url(),
+                report_id,
+            )
         }
 
         return response

@@ -51,15 +51,22 @@ class RetrieveBuildInfoResponse(Response):
 
 class RetrieveBuildInfoQueryHandler(QueryHandler):
     def __init__(
-        self, build_repository: BuildRepository, requests_counter: RequestsCounter
+        self,
+        build_repository: BuildRepository,
+        requests_counter: RequestsCounter,
     ):
         self._build_repository = build_repository
         self._requests_counter = requests_counter
 
-    def handle(self, query: RetrieveBuildInfoQuery) -> RetrieveBuildInfoResponse:
+    def handle(
+        self, query: RetrieveBuildInfoQuery
+    ) -> RetrieveBuildInfoResponse:
+
         response = RetrieveBuildInfoResponse()
         if query.build_id:
-            build = self._retrieve_build(query.tenant_id, BuildId(query.build_id))
+            build = self._retrieve_build(
+                query.tenant_id, BuildId(query.build_id)
+            )
 
             self._add_dto(response, build)
 
@@ -67,7 +74,9 @@ class RetrieveBuildInfoQueryHandler(QueryHandler):
 
         builds = self._build_repository.builds_of_tenant(query.tenant_id)
         if not builds:
-            raise ApplicationError(Errors.entity_not_found(entity_name="Build"))
+            raise ApplicationError(
+                Errors.entity_not_found(entity_name="Build")
+            )
 
         for build in builds:
             self._add_dto(response, build)
@@ -75,21 +84,29 @@ class RetrieveBuildInfoQueryHandler(QueryHandler):
         return response
 
     def _retrieve_build(self, tenant_id: str, build_id: BuildId) -> Build:
-        build = self._build_repository.build_of_tenant_and_id(tenant_id, build_id)
+        build = self._build_repository.build_of_tenant_and_id(
+            tenant_id, build_id
+        )
 
         if not build:
             raise ApplicationError(
-                Errors.entity_not_found(entity_name="Build", entity_id=build_id.value)
+                Errors.entity_not_found(
+                    entity_name="Build", entity_id=build_id.value
+                )
             )
 
         return build
 
-    def _add_dto(self, response: RetrieveBuildInfoResponse, build: Build) -> None:
+    def _add_dto(
+        self, response: RetrieveBuildInfoResponse, build: Build
+    ) -> None:
         count_successful = build.successful_requests
         count_failed = build.failed_requests
 
         if not build.is_completed:
-            count_successful = self._requests_counter.count_successful(build.id)
+            count_successful = self._requests_counter.count_successful(
+                build.id
+            )
             count_failed = self._requests_counter.count_failed(build.id)
 
         build_info_dto = BuildInfoDto(

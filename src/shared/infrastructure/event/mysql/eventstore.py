@@ -10,7 +10,12 @@ class MysqlEventStore(EventStore):
 
     def append(self, domain_event: DomainEvent) -> None:
         sentence = """
-            INSERT INTO event_store (occurred_on, event_data, event_name, aggregate_id)
+            INSERT INTO event_store (
+                occurred_on,
+                event_data,
+                event_name,
+                aggregate_id
+            )
             VALUES (:occurred_on, :event_data, :event_name, :aggregate_id)
         """
 

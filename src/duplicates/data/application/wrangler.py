@@ -22,14 +22,18 @@ class WrangleDataOnReportCreated(DomainEventSubscriber):
         super().__init__()
 
         self._data_gatherer = data_gatherer
-        self._transformed_page_content_repository = transformed_page_content_repository
+        self._transformed_page_content_repository = (
+            transformed_page_content_repository
+        )
         self._data_transformer = data_transformer
         self._report_repository = report_repository
         self._event_bus = event_bus
 
     def handle(self, domain_event: ReportCreated) -> None:
         pages = self._data_gatherer.gather(domain_event.from_corpus)
-        report = self._report_repository.report_of_id(ReportId(domain_event.report_id))
+        report = self._report_repository.report_of_id(
+            ReportId(domain_event.report_id)
+        )
 
         if not report:
             raise ApplicationError(
@@ -40,6 +44,8 @@ class WrangleDataOnReportCreated(DomainEventSubscriber):
 
         clean_pages = self._data_transformer.transform(pages)
 
-        self._transformed_page_content_repository.save_all(report.name, clean_pages)
+        self._transformed_page_content_repository.save_all(
+            report.name, clean_pages
+        )
 
         self._event_bus.publish(DataLoaded(report.report_id.value))

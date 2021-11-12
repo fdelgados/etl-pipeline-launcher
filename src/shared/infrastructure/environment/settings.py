@@ -24,7 +24,8 @@ class Settings:
 
         self._contexts = list(
             filter(
-                lambda context: "." not in context, find_packages(where=contexts_dir)
+                lambda context: "." not in context,
+                find_packages(where=contexts_dir),
             )
         )
 
@@ -36,19 +37,29 @@ class Settings:
         self._dict_merge(self._config, common_environment_config)
 
         if not self.is_test():
-            country_config = toml.load(f"{settings_dir}/{self._site}/settings.toml")
+            country_config = toml.load(
+                f"{settings_dir}/{self._site}/settings.toml"
+            )
             self._dict_merge(self._config, country_config)
 
-            country_environment_config = toml.load(
-                f"{settings_dir}/{self._site}/settings.{self._environment}.toml"
+            country_env_file = "{}/{}/settings.{}.toml".format(
+                settings_dir,
+                self._site,
+                self._environment,
             )
+            country_environment_config = toml.load(country_env_file)
+
             self._dict_merge(self._config, country_environment_config)
 
         self._subscribed_events = {}
-        subscribed_events_files = glob.glob(f"{services_dir}/**/subscribed-events.toml")
+        subscribed_events_files = glob.glob(
+            f"{services_dir}/**/subscribed-events.toml"
+        )
 
         for subscribed_events_file in subscribed_events_files:
-            self._dict_merge(self._subscribed_events, toml.load(subscribed_events_file))
+            self._dict_merge(
+                self._subscribed_events, toml.load(subscribed_events_file)
+            )
 
         self._commands = {}
         commands_files = glob.glob(f"{services_dir}/**/commands.toml")
@@ -86,10 +97,13 @@ class Settings:
             return {}
 
         return {
-            key.upper(): value for (key, value) in self._config.get("flask").items()
+            key.upper(): value
+            for (key, value) in self._config.get("flask").items()
         }
 
-    def _get(self, section: str, entry: str, default: Optional[Any] = None) -> Any:
+    def _get(
+        self, section: str, entry: str, default: Optional[Any] = None
+    ) -> Any:
         return self._config.get(section).get(entry, default)
 
     def application_id(self) -> str:
@@ -163,7 +177,9 @@ class Settings:
         return self._subscribed_events.get(exchange, {}).get(event, {})
 
     def store_domain_even_subscriber(self) -> Dict:
-        return self._config.get("application").get("store_domain_event_subscriber")
+        return self._config.get("application").get(
+            "store_domain_event_subscriber"
+        )
 
     def redis_host(self):
         return self._get("redis", "host")
@@ -215,18 +231,29 @@ class Settings:
         context_mapping_files = {}
         mapping_modules = []
         for context in self.contexts():
+            mapping_file = (
+                "{}/{}/shared/infrastructure/persistence"
+                "/sqlalchemy/mapping.py"
+            )
+
             mapping_files = glob.glob(
-                f"{contexts_dir}/{context}/shared/infrastructure/persistence/sqlalchemy/mapping.py"
+                mapping_file.format(contexts_dir, context)
             )
 
             context_mapping_files[context] = mapping_files
 
         for context, files in context_mapping_files.items():
-            mapping_class_prefix = context.replace("_", " ").title().replace(" ", "")
+            mapping_class_prefix = (
+                context.replace("_", " ").title().replace(" ", "")
+            )
             for file in files:
-                module_name = file.replace(f"{contexts_dir}/", "").replace("/", ".")
+                module_name = file.replace(f"{contexts_dir}/", "").replace(
+                    "/", "."
+                )
                 module_name = re.sub(r"\.py$", "", module_name)
-                module_name = "{}.{}Mapping".format(module_name, mapping_class_prefix)
+                module_name = "{}.{}Mapping".format(
+                    module_name, mapping_class_prefix
+                )
                 mapping_modules.append(module_name)
 
         return mapping_modules
@@ -258,12 +285,16 @@ class Settings:
     def duplicates_content_file(self, report_name: str) -> str:
         file_pattern = self._get("duplicates", "content_file")
 
-        return file_pattern.format(self._site, report_name.replace(' ', '_').lower())
+        return file_pattern.format(
+            self._site, report_name.replace(" ", "_").lower()
+        )
 
     def duplicates_minhashes_file(self, report_name: str) -> str:
         file_pattern = self._get("duplicates", "minhashes_file")
 
-        return file_pattern.format(self._site, report_name.replace(' ', '_').lower())
+        return file_pattern.format(
+            self._site, report_name.replace(" ", "_").lower()
+        )
 
     def api_path(self):
         return "/{}".format(self.api_version())

@@ -2,7 +2,9 @@ import abc
 
 from typing import List
 
-from duplicates.data.domain.model.transformedpagecontent import TransformedPageContent
+from duplicates.data.domain.model.transformedpagecontent import (
+    TransformedPageContent,
+)
 from duplicates.data.domain.model.page import Page
 
 

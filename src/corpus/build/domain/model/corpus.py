@@ -93,7 +93,9 @@ class Corpus(AggregateRoot):
 
 class CorpusRepository(Repository, metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def corpus_of_tenant_and_name(self, tenant_id: str, name: str) -> Optional[Corpus]:
+    def corpus_of_tenant_and_name(
+        self, tenant_id: str, name: str
+    ) -> Optional[Corpus]:
         raise NotImplementedError
 
     @abc.abstractmethod

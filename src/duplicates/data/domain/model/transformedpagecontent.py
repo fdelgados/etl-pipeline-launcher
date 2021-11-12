@@ -22,7 +22,9 @@ class TransformedPageContent:
 class TransformedPageContentRepository(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def save_all(
-        self, report_name: str, transformed_page_content: List[TransformedPageContent]
+        self,
+        report_name: str,
+        transformed_page_content: List[TransformedPageContent],
     ):
         raise NotImplementedError
 

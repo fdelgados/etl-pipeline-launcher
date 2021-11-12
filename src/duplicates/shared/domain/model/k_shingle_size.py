@@ -15,10 +15,14 @@ class KShingleSize:
             raise ValueError(f"{value} is not a valid k-shingle size value")
 
         if value < self._MIN_VALUE:
-            raise ValueError(f"K-shingle size cannot be lower than {self._MIN_VALUE}")
+            raise ValueError(
+                f"K-shingle size cannot be lower than {self._MIN_VALUE}"
+            )
 
         if value > self._MAX_VALUE:
-            raise ValueError(f"K-shingle size cannot be higher than {self._MAX_VALUE}")
+            raise ValueError(
+                f"K-shingle size cannot be higher than {self._MAX_VALUE}"
+            )
 
     @property
     def value(self):

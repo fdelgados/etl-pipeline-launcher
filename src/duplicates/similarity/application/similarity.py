@@ -20,7 +20,9 @@ class CalculateSimilaritiesOnDataLoaded(DomainEventSubscriber):
         self._similarity_calculator = similarity_calculator
 
     def handle(self, domain_event: DataLoaded) -> None:
-        report = self._report_repository.report_of_id(ReportId(domain_event.report_id))
+        report = self._report_repository.report_of_id(
+            ReportId(domain_event.report_id)
+        )
 
         if not report:
             raise ApplicationError(

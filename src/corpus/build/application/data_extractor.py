@@ -20,7 +20,10 @@ from corpus.build.domain.service.page_retriever import (
     RetrievalError,
 )
 from corpus.build.domain.service.url_source import UrlSource, UrlSourceError
-from corpus.build.domain.model.page import PageRepository, UnableToSavePageError
+from corpus.build.domain.model.page import (
+    PageRepository,
+    UnableToSavePageError,
+)
 from corpus.build.domain.model.corpus import Corpus, CorpusRepository
 
 
@@ -48,7 +51,9 @@ class ExtractDataOnBuildStarted(DomainEventSubscriber):
     def handle(self, domain_event: BuildStarted) -> None:
         self._log("info", "Start content extraction")
 
-        build = self._find_build(domain_event.tenant_id, BuildId(domain_event.build_id))
+        build = self._find_build(
+            domain_event.tenant_id, BuildId(domain_event.build_id)
+        )
 
         try:
             corpus = self._find_corpus(build)
@@ -59,7 +64,9 @@ class ExtractDataOnBuildStarted(DomainEventSubscriber):
                 UrlsRetrieved(build.tenant_id, build.id.value, len(urls))
             )
 
-            with parallel_backend("threading", n_jobs=multiprocessing.cpu_count()):
+            with parallel_backend(
+                "threading", n_jobs=multiprocessing.cpu_count()
+            ):
                 Parallel()(
                     delayed(self._retrieve_page_content())(url, build, corpus)
                     for url in urls
@@ -82,7 +89,9 @@ class ExtractDataOnBuildStarted(DomainEventSubscriber):
             self._event_bus.publish(*build.pull_events())
 
     def _find_build(self, tenant_id: str, build_id: BuildId) -> Build:
-        build = self._build_repository.build_of_tenant_and_id(tenant_id, build_id)
+        build = self._build_repository.build_of_tenant_and_id(
+            tenant_id, build_id
+        )
 
         if not build:
             error = Errors.entity_not_found()
@@ -107,7 +116,9 @@ class ExtractDataOnBuildStarted(DomainEventSubscriber):
         valid_urls = []
         limit = 100 if glob.settings.is_development() else 0
 
-        urls = self._url_source.retrieve(max_urls=limit, sitemaps=corpus.sitemaps)
+        urls = self._url_source.retrieve(
+            max_urls=limit, sitemaps=corpus.sitemaps
+        )
 
         for url in urls:
             if corpus.url_address_pattern and not re.fullmatch(
@@ -149,9 +160,10 @@ class ExtractDataOnBuildStarted(DomainEventSubscriber):
         )
 
     def _log(self, level: str, message: str):
-        message = (
-            f"{self.__class__.__module__}.{self.__class__.__qualname__}: {message}"
-        )
+        module = self.__class__.__module__
+        class_name = self.__class__.__qualname__
+
+        message = f"{module}.{class_name}: {message}"
 
         if level == "warning":
             self._logger.warning(message)

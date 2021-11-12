@@ -73,7 +73,9 @@ class Repository(BaseRepository):
             if order_by:
                 for field, direction in order_by.items():
                     if direction == "desc":
-                        order_expression = desc(self._aggregate.__dict__[field])
+                        order_expression = desc(
+                            self._aggregate.__dict__[field]
+                        )
                     else:
                         order_expression = asc(self._aggregate.__dict__[field])
 

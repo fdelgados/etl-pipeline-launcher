@@ -28,7 +28,10 @@ class StartBuildController(BaseController):
         build_id = self._generate_build_id()
 
         command = StartBuildCommand(
-            build_id, user.tenant_id(), user.username(), params.get("corpusName")
+            build_id,
+            user.tenant_id(),
+            user.username(),
+            params.get("corpusName"),
         )
 
         self.dispatch(command)

@@ -24,11 +24,15 @@ class StartBuildCommandHandler(CommandHandler):
     def handle(self, command: StartBuildCommand) -> None:
         CommandValidator.validate(command)
 
-        running_builds = self._build_repository.running_builds_of_tenant(command.tenant_id)
+        running_builds = self._build_repository.running_builds_of_tenant(
+            command.tenant_id
+        )
 
         if running_builds:
             raise ApplicationError(
-                Errors.conflict_error(message="There are already running builds right now")
+                Errors.conflict_error(
+                    message="There are already running builds right now"
+                )
             )
 
         build = Build(

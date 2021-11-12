@@ -59,7 +59,9 @@ def create_container(settings):
 
         subscriber_instances = {}
         for domain_event, subscriber_data in event_handlers.items():
-            subscriber_data["subscribers"].insert(0, store_domain_even_subscriber_id)
+            subscriber_data["subscribers"].insert(
+                0, store_domain_even_subscriber_id
+            )
             subscriber_instances[domain_event] = {"subscribers": []}
             for subscriber_id in subscriber_data["subscribers"]:
                 subscriber = getattr(
@@ -68,7 +70,9 @@ def create_container(settings):
 
                 subscriber.subscribe_to(domain_event)
 
-                subscriber_instances[domain_event]["subscribers"].append(subscriber)
+                subscriber_instances[domain_event]["subscribers"].append(
+                    subscriber
+                )
 
     class Container:
         @classmethod
@@ -82,9 +86,9 @@ def create_container(settings):
 
         @classmethod
         def event_handlers(cls, event_name: str) -> Generator:
-            domain_event_subscribers = subscriber_instances.get(event_name, {}).get(
-                "subscribers", []
-            )
+            domain_event_subscribers = subscriber_instances.get(
+                event_name, {}
+            ).get("subscribers", [])
 
             for domain_event_subscriber in domain_event_subscribers:
                 yield domain_event_subscriber
@@ -115,7 +119,9 @@ def _get_service_from_file(services_file: str) -> Dict:
             continue
 
         if service.attrib.get("alias"):
-            services[service.attrib["id"]] = {"alias": service.attrib.get("alias")}
+            services[service.attrib["id"]] = {
+                "alias": service.attrib.get("alias")
+            }
 
             continue
 
@@ -152,7 +158,12 @@ def _import_cls(full_class_name: str):
 
 
 def _create_service(
-    services, service_container, service_provider_cls, service_id: str, info, settings
+    services,
+    service_container,
+    service_provider_cls,
+    service_id: str,
+    info,
+    settings,
 ):
     service_key = service_id.replace(".", "_")
     if hasattr(service_container, service_key):
@@ -194,7 +205,11 @@ def _create_service(
             )
 
     service_cls = _import_cls(info.get("class_name"))
-    setattr(service_container, service_key, service_provider_cls(service_cls, **args))
+    setattr(
+        service_container,
+        service_key,
+        service_provider_cls(service_cls, **args),
+    )
 
     return getattr(service_container, service_key)
 
@@ -222,14 +237,18 @@ def _get_event_handlers(event_handlers_file: str):
             if event_handler.tag != "handler":
                 continue
 
-            events[event_class_name]["subscribers"].append(event_handler.attrib["id"])
+            events[event_class_name]["subscribers"].append(
+                event_handler.attrib["id"]
+            )
 
     return events
 
 
 def _ensure_file_exist(services_file: str):
     if not os.path.exists(services_file):
-        raise FileNotFoundError("File {} does not exists".format(services_file))
+        raise FileNotFoundError(
+            "File {} does not exists".format(services_file)
+        )
 
 
 def _ensure_file_is_valid(services_file: str):

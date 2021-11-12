@@ -29,14 +29,18 @@ class DataGathererImpl(DataGatherer):
         pages_collection = self._client[self._database][corpus]
         pages = []
 
-        documents = pages_collection.find({
-            "is_indexable": {"$eq": True},
-            "status_code": {"$eq": 200},
-            "document_type": {"$eq": "web_page"}
-        })
+        documents = pages_collection.find(
+            {
+                "is_indexable": {"$eq": True},
+                "status_code": {"$eq": 200},
+                "document_type": {"$eq": "web_page"},
+            }
+        )
 
         for document in documents:
-            content = [section for _, section in document.get("content").items()]
+            content = [
+                section for _, section in document.get("content").items()
+            ]
             pages.append(
                 Page(
                     Url(document.get("address")),

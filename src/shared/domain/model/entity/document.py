@@ -2,7 +2,7 @@ import abc
 
 
 class Document(metaclass=abc.ABCMeta):
-    TYPE = ''
+    TYPE = ""
 
     @property
     def type(self) -> str:

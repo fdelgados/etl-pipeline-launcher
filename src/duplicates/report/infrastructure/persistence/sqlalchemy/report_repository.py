@@ -2,7 +2,11 @@ from typing import Optional
 
 import shared.infrastructure.environment.globalvars as glob
 from shared.infrastructure.persistence.sqlalchemy.repository import Repository
-from duplicates.report.domain.model.report import ReportRepository, Report, ReportId
+from duplicates.report.domain.model.report import (
+    ReportRepository,
+    Report,
+    ReportId,
+)
 
 
 class ReportRepositoryImpl(ReportRepository, Repository):

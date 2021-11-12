@@ -7,7 +7,9 @@ from corpus.build.domain.model.page import (
     UnableToSavePageError,
 )
 
-from shared.infrastructure.persistence.mongodb.repository import MongoDbRepository
+from shared.infrastructure.persistence.mongodb.repository import (
+    MongoDbRepository,
+)
 
 
 class MongoDbPageRepository(PageRepository, MongoDbRepository):

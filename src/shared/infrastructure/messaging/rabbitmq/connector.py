@@ -17,7 +17,8 @@ class RabbitMqConnector:
             connection_settings = glob.settings.rabbit_connection_settings()
 
         credentials = pika.PlainCredentials(
-            connection_settings.get("user"), connection_settings.get("password")
+            connection_settings.get("user"),
+            connection_settings.get("password"),
         )
 
         try:

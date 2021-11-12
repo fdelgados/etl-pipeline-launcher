@@ -21,10 +21,12 @@ class Errors:
 
     @staticmethod
     def access_token_expired():
-        return Error(
-            2002,
-            "Access token has expired. You can use the refresh token to obtain a new one",
+        message = (
+            "Access token has expired. You can use the refresh token "
+            "to obtain a new one"
         )
+
+        return Error(2002, message)
 
     @staticmethod
     def missing_access_token():
@@ -40,7 +42,9 @@ class Errors:
         entity_id = kwargs.get("entity_id")
 
         if entity_name and entity_id:
-            return Error(code, f"{entity_name} identified by <{entity_id}> not found")
+            return Error(
+                code, f"{entity_name} identified by <{entity_id}> not found"
+            )
 
         if entity_name:
             return Error(code, f"{entity_name} not found")
@@ -53,7 +57,7 @@ class Errors:
         if kwargs.get("message"):
             return Error(code, f'Conflict. {kwargs.get("message")}.')
 
-        return Error(code, 'Conflict.')
+        return Error(code, "Conflict.")
 
 
 class ApplicationError(RuntimeError):

@@ -14,7 +14,9 @@ class CommandBusImpl(CommandBus):
         command_fullname = class_fullname(command)
         module, command_name = command_fullname.rsplit(".", maxsplit=1)
 
-        handler_id = "{}.{}_handler".format(module, camel_to_snake_case(command_name))
+        handler_id = "{}.{}_handler".format(
+            module, camel_to_snake_case(command_name)
+        )
 
         command_handler: CommandHandler = glob.container.get(handler_id)
 

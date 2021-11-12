@@ -35,7 +35,9 @@ class DomainEvent(metaclass=abc.ABCMeta):
 
         properties = self.__sanitize_property_names()
 
-        return json.dumps(properties, ensure_ascii=False, default=json_converter)
+        return json.dumps(
+            properties, ensure_ascii=False, default=json_converter
+        )
 
     def __sanitize_property_names(self) -> Dict:
         properties = {}

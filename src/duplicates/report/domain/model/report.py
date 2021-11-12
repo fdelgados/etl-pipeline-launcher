@@ -10,7 +10,9 @@ from shared.domain.model.valueobject.uid import Uuid
 from shared.domain.model.aggregate import AggregateRoot
 from shared.domain.model.repository import Repository
 from shared.domain.model.entity.user import User
-from duplicates.shared.domain.model.similarity_threshold import SimilarityThreshold
+from duplicates.shared.domain.model.similarity_threshold import (
+    SimilarityThreshold,
+)
 from duplicates.shared.domain.model.k_shingle_size import KShingleSize
 from duplicates.report.domain.event.reportcreated import ReportCreated
 

@@ -5,7 +5,9 @@ from pika import exceptions
 import shared.infrastructure.environment.globalvars as glob
 from shared.domain.bus.event import EventBus, DomainEvent
 from shared.domain.service.logging.logger import Logger
-from shared.infrastructure.messaging.rabbitmq.connector import RabbitMqConnector
+from shared.infrastructure.messaging.rabbitmq.connector import (
+    RabbitMqConnector,
+)
 
 
 def _build_message(event: DomainEvent):
@@ -31,7 +33,9 @@ class RabbitMqEventBus(EventBus):
         try:
             channel = connection.channel()
             channel.exchange_declare(
-                exchange=self._exchange_name, exchange_type="direct", durable=True
+                exchange=self._exchange_name,
+                exchange_type="direct",
+                durable=True,
             )
             channel.basic_publish(
                 exchange=self._exchange_name,

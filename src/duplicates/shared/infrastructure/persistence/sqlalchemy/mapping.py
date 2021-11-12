@@ -42,7 +42,9 @@ class DuplicatesMapping(Mapping):
                 default=Status.created().value,
             ),
             Column("k_shingle_size", KShingleSizeType, nullable=False),
-            Column("similarity_threshold", SimilarityThresholdType, nullable=False),
+            Column(
+                "similarity_threshold", SimilarityThresholdType, nullable=False
+            ),
             Column("started_on", DateTime, nullable=False),
             Column("completed_on", DateTime, nullable=True),
             Column("total_pages", Integer, nullable=False, default=0),

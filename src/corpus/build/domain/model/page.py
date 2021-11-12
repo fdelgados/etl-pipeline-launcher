@@ -13,7 +13,7 @@ from corpus.build.domain.model.build import BuildId
 
 
 class Page(AggregateRoot, Document):
-    TYPE = 'web_page'
+    TYPE = "web_page"
 
     def __init__(
         self,
@@ -116,7 +116,10 @@ class Page(AggregateRoot, Document):
         return self.is_canonical
 
     def is_redirection(self) -> bool:
-        return self._status_code in [HTTPStatus.MOVED_PERMANENTLY, HTTPStatus.FOUND]
+        return self._status_code in [
+            HTTPStatus.MOVED_PERMANENTLY,
+            HTTPStatus.FOUND,
+        ]
 
     def is_ok(self) -> bool:
         return self._status_code in [HTTPStatus.OK, HTTPStatus.NOT_MODIFIED]
@@ -163,7 +166,9 @@ class Page(AggregateRoot, Document):
         self._content = content
 
     def content_text(self) -> str:
-        return " ".join([text_piece for _, text_piece in self._content.items()])
+        return " ".join(
+            [text_piece for _, text_piece in self._content.items()]
+        )
 
     @property
     def modified_on(self) -> datetime:

@@ -29,7 +29,6 @@ from corpus.build.domain.service.page_retriever import (
 
 from corpus.build.domain.model.corpus import Corpus
 
-
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
@@ -39,10 +38,13 @@ class PageRetrieverImpl(PageRetriever):
     _STRING_SEPARATOR = " "
     _ACTION_ON_429_STATUS = "retry"  # or 'exit'
     _REQUEST_HEADERS = {
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,"
+        "image/webp,*/*;q=0.8",
         "Accept-Encoding": "gzip, deflate, br",
-        "Accept-Language": "en-GB,en-US;q=0.9,en;q=0.8,es;q=0.7,ca;q=0.6,it;q=0.5",
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Accept-Language": "en-GB,en-US;q=0.9,en;q=0.8,es;q=0.7,ca;q=0.6,"
+        "it;q=0.5",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/92.0.4515.107 Safari/537.36",
     }
     _EXCLUDE_REQUEST_HEADERS = ["If-Modified-Since"]

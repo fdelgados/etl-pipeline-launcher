@@ -12,9 +12,9 @@ class CommandNotRegisteredError(CommandError):
     def __init__(self, command: Command) -> None:
         command_class = type(command).__name__
 
-        super().__init__(
-            f"The command <{command_class}> hasn't a command handler associated"
-        )
+        message = "The command <{}> hasn't a command handler associated"
+
+        super().__init__(message.format(command_class))
 
 
 class CommandNotCallableError(CommandError):

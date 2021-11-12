@@ -57,4 +57,6 @@ class CorpusMapping(Mapping):
             extend_existing=True,
         )
 
-        mapper_registry.map_imperatively(Corpus, corpus_table, column_prefix="_")
+        mapper_registry.map_imperatively(
+            Corpus, corpus_table, column_prefix="_"
+        )

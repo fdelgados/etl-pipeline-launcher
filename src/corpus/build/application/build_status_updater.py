@@ -43,7 +43,9 @@ class UpdateTotalPagesOnUrlsRetrieved(UpdateBuildSubscriber):
 
 class UpdateBuildStatsOnBuildCompleted(UpdateBuildSubscriber):
     def __init__(
-        self, build_repository: BuildRepository, build_stats_service: BuildStats
+        self,
+        build_repository: BuildRepository,
+        build_stats_service: BuildStats,
     ):
         super().__init__(build_repository)
 
@@ -65,7 +67,9 @@ class UpdateBuildStatsOnBuildCompleted(UpdateBuildSubscriber):
 
 class UpdateBuildStatsOnBuildAborted(UpdateBuildSubscriber):
     def __init__(
-        self, build_repository: BuildRepository, build_stats_service: BuildStats
+        self,
+        build_repository: BuildRepository,
+        build_stats_service: BuildStats,
     ):
         super().__init__(build_repository)
 

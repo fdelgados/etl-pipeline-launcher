@@ -1,6 +1,9 @@
 import shared.infrastructure.environment.globalvars as glob
 
-from duplicates.similarity.domain.model.duplicate import DuplicateRepository, Duplicate
+from duplicates.similarity.domain.model.duplicate import (
+    DuplicateRepository,
+    Duplicate,
+)
 from shared.infrastructure.persistence.sqlalchemy.repository import Repository
 
 

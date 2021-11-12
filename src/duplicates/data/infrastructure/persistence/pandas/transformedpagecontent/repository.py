@@ -16,7 +16,9 @@ class TransformedPageContentRepositoryImpl(TransformedPageContentRepository):
         self._data_frame = None
 
     def save_all(
-        self, report_name: str, transformed_page_content: List[TransformedPageContent]
+        self,
+        report_name: str,
+        transformed_page_content: List[TransformedPageContent],
     ):
         content = []
 
@@ -25,7 +27,9 @@ class TransformedPageContentRepositoryImpl(TransformedPageContentRepository):
                 {"url": clean_page.url.address, "content": clean_page.content}
             )
 
-        content_df = pd.DataFrame(content, columns=["url", "content"], dtype="object")
+        content_df = pd.DataFrame(
+            content, columns=["url", "content"], dtype="object"
+        )
 
         content_file = glob.settings.duplicates_content_file(report_name)
 

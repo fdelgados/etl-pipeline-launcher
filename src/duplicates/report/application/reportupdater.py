@@ -17,10 +17,14 @@ class UpdateReportOnDataLoaded(DomainEventSubscriber):
         super().__init__()
 
         self._report_repository = report_repository
-        self._transformed_page_content_repository = transformed_page_content_repository
+        self._transformed_page_content_repository = (
+            transformed_page_content_repository
+        )
 
     def handle(self, domain_event: DataLoaded) -> None:
-        report = self._report_repository.report_of_id(ReportId(domain_event.report_id))
+        report = self._report_repository.report_of_id(
+            ReportId(domain_event.report_id)
+        )
 
         if not report:
             raise ApplicationError(
@@ -29,8 +33,10 @@ class UpdateReportOnDataLoaded(DomainEventSubscriber):
                 )
             )
 
-        report.total_pages = self._transformed_page_content_repository.size_of_report(
-            report.name
+        report.total_pages = (
+            self._transformed_page_content_repository.size_of_report(
+                report.name
+            )
         )
 
         self._report_repository.save(report)

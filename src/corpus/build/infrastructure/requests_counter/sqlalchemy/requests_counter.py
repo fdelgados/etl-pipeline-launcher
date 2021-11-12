@@ -16,7 +16,9 @@ class RequestsCounterImpl(RequestsCounter):
     def count_failed(self, build_id: BuildId) -> int:
         return self._count_by_result(build_id, ExtractionFailed.type_name())
 
-    def _count_by_result(self, build_id: BuildId, domain_event_type: str) -> int:
+    def _count_by_result(
+        self, build_id: BuildId, domain_event_type: str
+    ) -> int:
         sentence = """
             SELECT COUNT(*) AS requests FROM event_store
             WHERE build_id = :build_id

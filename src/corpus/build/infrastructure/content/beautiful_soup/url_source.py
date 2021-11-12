@@ -41,9 +41,13 @@ class UrlSourceImpl(UrlSource):
 
         return list(self.__urls.values())
 
-    def _sitemaps_urls(self, sitemap_url: str, sitemaps_url_pattern: Optional[str]):
+    def _sitemaps_urls(
+        self, sitemap_url: str, sitemaps_url_pattern: Optional[str]
+    ):
         if sitemaps_url_pattern:
-            return self._retrieve_sitemaps_from_root(sitemap_url, sitemaps_url_pattern)
+            return self._retrieve_sitemaps_from_root(
+                sitemap_url, sitemaps_url_pattern
+            )
 
         return [sitemap_url]
 
