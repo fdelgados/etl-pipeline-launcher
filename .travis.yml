@@ -30,14 +30,24 @@ jobs:
     - stage: push
       name: "Tag and push build"
       script:
-        - docker-compose -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.production.yml build application
-        - docker tag nlp:latest fdelgados/nlpemagistercom_application:$TRAVIS_BRANCH
+        - docker-compose -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.production.yml -f ./docker/compose/emagister.com/docker-compose.yml -f ./docker/compose/emagister.com/docker-compose.production.yml build application
+        - docker tag nlp-emagistercom:latest fdelgados/nlp-emagister.com:$TRAVIS_BRANCH
+        - docker-compose -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.production.yml -f ./docker/compose/emagister.it/docker-compose.yml -f ./docker/compose/emagister.it/docker-compose.production.yml build application
+        - docker tag nlp-emagisterit:latest fdelgados/nlp-emagister.it:$TRAVIS_BRANCH
       deploy:
       - provider: script
-        script: docker push fdelgados/nlpemagistercom_application:$TRAVIS_BRANCH
+        script: docker push fdelgados/nlp-emagister.com:$TRAVIS_BRANCH
         on:
           branch: master
       - provider: script
-        script: docker push fdelgados/nlpemagistercom_application:$TRAVIS_BRANCH
+        script: docker push fdelgados/nlp-emagister.com:$TRAVIS_BRANCH
+        on:
+          tags: true
+      - provider: script
+        script: docker push fdelgados/nlp-emagister.it:$TRAVIS_BRANCH
+        on:
+          branch: master
+      - provider: script
+        script: docker push fdelgados/nlp-emagister.it:$TRAVIS_BRANCH
         on:
           tags: true

@@ -14,7 +14,6 @@ services:
     build:
       context: ../..
       dockerfile: docker/services/application/Dockerfile
-    image: nlp
     depends_on:
       - database
       - rabbitmq

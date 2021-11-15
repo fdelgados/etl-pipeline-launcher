@@ -12,6 +12,7 @@ services:
       - MYSQL_ROOT_PASSWORD=JzMn4q5VR5zb
 
   application:
+    image: nlp-emagisterit
     environment:
       - SITE=emagister.it
     ports:
