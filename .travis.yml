@@ -30,13 +30,13 @@ jobs:
     - stage: push
       script:
         - docker-compose -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.production.yml build application
-        - docker tag nlpemagistercom_application:latest fdelgados/nlpemagistercom_application:latest:$TRAVIS_BRANCH
+        - docker tag nlpemagistercom_application:latest fdelgados/nlpemagistercom_application:$TRAVIS_BRANCH
       deploy:
       - provider: script
-        script: docker push fdelgados/nlpemagistercom_application:latest:$TRAVIS_BRANCH
+        script: docker push fdelgados/nlpemagistercom_application:$TRAVIS_BRANCH
         on:
           branch: master
       - provider: script
-        script: docker push fdelgados/nlpemagistercom_application:latest:$TRAVIS_BRANCH
+        script: docker push fdelgados/nlpemagistercom_application:$TRAVIS_BRANCH
         on:
           tags: true
