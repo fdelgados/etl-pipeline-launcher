@@ -28,6 +28,7 @@ jobs:
       script:
         - docker-compose -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.test.yml run --rm --no-deps static-analysis
     - stage: push
+      name: "Tag and push build"
       script:
         - docker-compose -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.production.yml build application
         - docker tag nlp:latest fdelgados/nlpemagistercom_application:$TRAVIS_BRANCH
