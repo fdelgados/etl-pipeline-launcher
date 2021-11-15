@@ -2,7 +2,10 @@ services:
   - docker
 
 env:
-  - DOCKER_COMPOSE_VERSION=1.29.2
+  global:
+    - DOCKER_COMPOSE_VERSION=1.29.2
+    - secure: "E7XDoFb7hqC+SkcSCWq0c9+4LnBi3NkLUBWdBQFSLCwOtWu4oVoLGy+puu9L7Oiypa/4LJWDmyPSMEi3+rCuDPsGW7AVfLNyhYqQhIXJ4iaPAuJ/ElOkmilzLuS7De2jQiruSZvvSB2HOcGxlu3M85zlFONu4A2Xgv+PVwtXVa+fPAOccGWX9Y3qdwkDepeIjKJWjEjshhs8bgLgBvMTpsQYb9v+3FhSaHF2F+1gGGbq1sXtlPH16fECnXktoFfvTQGxXr9E5gjv6qs5WUj0fLSHakgMYYl03Sik2BX1YC1P+Gs7Cr5aArwUNzxcBjrpLOuo5RomKudJKqE06U3xorAApxP61n0Q89kjxLn8B91GDCG/a77qpFfBv9n8SHJyKGK2N8T4qV1zeqhUgNS82lx2/ZrdwdddaWtaKiu/psvM+NFiYYSuwAiXFdCOBUh+UDgB4W1vjcFRA4gd9zq4g5l5fJyFVrEQs8yW1bV4XVP4A+fZ8jPvWHSmIXLKDAigiid7BAUwHMrtrDPnLlQTySRo6ET8lsoG1TU1VLlvaOY9nxEVxh1bs4yBuVWLrKop5/AlBbnJF2VbupH7wdr+fMCbHFFpFZb9msmxNvgA8EsoYlHQhntSqDs6K6hSOjCzHy8x+5WxuSeVZ8FOofkB7ch6P/L37lVb0lGAdHs3gQE="
+    - secure: "aK187nbfhtnXP2MXFlu8Gq6fy371iDPb29fYjFhLVxKhq7AIcpAfiL7/2ynjQEIliRMjjpotYPYkECqoGh10rGrQx7U76KbGnDyO5uiE0oIiB+cR/eafGh67LzUvIYLb7GXhCx4IKMKxYt0AMaeoF6Q4LVLJCkJe7VpYn7W8tPH6jNK+1AOfuCKfgPQRnJxm1+i0wmViyPhVyNEXAQIwsK0CT6nM3DSB6AalbaLLyEuuXzIBgpWF6pR5MrU/50QxtxHa7Ubo8LrVbTPE1lzEEaPPZZQc/zSv/xHvPiXXHkhjD4hQ8wgpPaM4z25i45vzEquyVpi1GWAbHpkw/JnTbq8wMY2nhyRDhpKYmTApJa9vWFSP26f7hssGsYjftkunrCXHwHOHGBn5vVnje6TAtvR70Q/B8ORpOd39eEXZZE9KPIMPsnRmgQQpMbGIK80p7d1eb0JzSbBVQn6jkz2RVcFz71aKX5OmZgLC4ta7b/LANQeYAaHn4brgzCdkZT0tDMRL9j3pPwlKPq4SIt8SCXKWeFwXtstdzwh9kgn9UcMhOM/Ad/nZaMa30tqBYU5QXAC15/htLZ3tWW0qu64ULQwax45oQZEC8aYu7/9CSJJ5UaEl5h3NNes4woZgrCXbRMunHLtOWx2SFjNJJvOxBJOzFD0XQtw1W7BNAfy1/Bo="
 
 before_install:
   - sudo rm /usr/local/bin/docker-compose
@@ -11,6 +14,8 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
   - docker --version
   - docker-compose version
+  - echo "Loging into Docker Hub"
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
 jobs:
   include:
@@ -22,3 +27,16 @@ jobs:
       name: "Static Analysis"
       script:
         - docker-compose -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.test.yml run --rm --no-deps static-analysis
+    - stage: push
+      script:
+        - docker-compose -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.production.yml build application
+        - docker tag nlpemagistercom_application:latest fdelgados/nlpemagistercom_application:latest:$TRAVIS_BRANCH
+      deploy:
+      - provider: script
+        script: docker push fdelgados/nlpemagistercom_application:latest:$TRAVIS_BRANCH
+        on:
+          branch: master
+      - provider: script
+        script: docker push fdelgados/nlpemagistercom_application:latest:$TRAVIS_BRANCH
+        on:
+          tags: true
