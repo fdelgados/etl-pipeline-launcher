@@ -3,6 +3,7 @@ FROM python:3.9-slim-buster
 ARG REQUIREMENTS_FILE=requirements.txt
 
 EXPOSE 5000
+EXPOSE 80
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
