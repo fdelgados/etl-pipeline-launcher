@@ -7,3 +7,6 @@ public_key_file = "/export/certs/identity_access.pem"
 
 [flask]
 flask_env = "production"
+
+[api]
+port = 80

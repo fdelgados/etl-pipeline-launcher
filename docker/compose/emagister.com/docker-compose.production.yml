@@ -6,6 +6,8 @@ services:
       - ENVIRONMENT=production
       - FLASK_ENV=production
       - FLASK_DEBUG=0
+    ports:
+      - "80:5000"
   worker:
     environment:
       - ENVIRONMENT=production
