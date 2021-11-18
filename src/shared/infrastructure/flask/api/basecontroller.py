@@ -58,11 +58,10 @@ class BaseController(Resource):
             status_code = HTTPStatus.BAD_REQUEST
         if (
             exception.error == Errors.authorization()
+            or exception.error == Errors.missing_access_token()
             or exception.error == Errors.access_token_expired()
         ):
             status_code = HTTPStatus.UNAUTHORIZED
-        if exception.error == Errors.missing_access_token():
-            status_code = HTTPStatus.FORBIDDEN
 
         if exception.error == Errors.entity_not_found():
             status_code = HTTPStatus.NOT_FOUND
