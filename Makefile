@@ -1,47 +1,47 @@
-# these will speed up builds, for docker-compose >= 1.25
+SITE=
+ENV?=development
+
 export COMPOSE_DOCKER_CLI_BUILD=1
 export DOCKER_BUILDKIT=1
 
-SITE=
-ENV=development
+.PHONY: help
+help: ## Show make targets
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {sub("\\\\n",sprintf("\n%22c"," "), $$2);printf " \033[36m%-20s\033[0m  %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-SERVICE=
+all: destroy build start ## Destroy, build and start container (destroy build start)
+reload: stop start ## Reload container (stop start)
 
-all: down build up
-reload: down up
+.PHONY: build
+build: ## Build docker container
+	@docker-compose -p nlp.$(SITE) -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.$(ENV).yml -f ./docker/compose/$(SITE)/docker-compose.yml -f ./docker/compose/$(SITE)/docker-compose.$(ENV).yml build
 
-network:
-	docker network create nlp_net
+start: CMD=up -d application ## Start container
+stop: CMD=stop ## Stop container
+destroy: CMD=down --remove-orphans ## Destroy container
 
-build:
-	docker-compose -p nlp.$(SITE) -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.$(ENV).yml -f ./docker/compose/$(SITE)/docker-compose.yml -f ./docker/compose/$(SITE)/docker-compose.$(ENV).yml build
+start stop destroy:
+	@docker-compose -p nlp.$(SITE) -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.$(ENV).yml -f ./docker/compose/$(SITE)/docker-compose.yml -f ./docker/compose/$(SITE)/docker-compose.$(ENV).yml $(CMD)
 
-up:
-	docker-compose -p nlp.$(SITE) -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.$(ENV).yml -f ./docker/compose/$(SITE)/docker-compose.yml -f ./docker/compose/$(SITE)/docker-compose.$(ENV).yml up -d database application rabbitmq redis mailhog mongo mongo-express
+.PHONY: test
+test: unit-tests ## Run all tests
 
-down:
-	docker-compose -p nlp.$(SITE) -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.$(ENV).yml -f ./docker/compose/$(SITE)/docker-compose.yml -f ./docker/compose/$(SITE)/docker-compose.$(ENV).yml down --remove-orphans
+unit-tests: ## Run unit tests
+	@docker-compose -p nlp.test -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.test.yml run --rm --no-deps --entrypoint=pytest application /var/www/tests/unit
 
-test: up
-	docker-compose -p nlp.$(SITE) -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.development.yml -f ./docker/compose/$(SITE)/docker-compose.yml -f ./docker/compose/$(SITE)/docker-compose.$(ENV).yml run --rm --no-deps --entrypoint=pytest application /var/www/tests/unit /var/www/tests/integration /var/www/tests/e2e
+e2e-tests: start ## Run end to end tests
+	@docker-compose -p nlp.test -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.test.yml run --rm --no-deps --entrypoint=pytest application /var/www/tests/e2e
 
-unit-tests:
-	docker-compose -p nlp.test -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.test.yml run --rm --no-deps application sh -c "pytest /var/www/tests/unit"
+integration-tests: start ## Run integration tests
+	@docker-compose -p nlp.test -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.development.yml -f ./docker/compose/test/docker-compose.yml -f ./docker/compose/docker-compose.development.yml run --rm --no-deps --entrypoint=pytest application /var/www/tests/integration
 
-integration-tests: up
-	docker-compose -p nlp.test -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.development.yml -f ./docker/compose/test/docker-compose.yml -f ./docker/compose/docker-compose.development.yml run --rm --no-deps --entrypoint=pytest application /var/www/tests/integration
+static-analysis: ## Run python linter
+	@docker-compose -p nlp.$(SITE) -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.test.yml run --rm --no-deps static-analysis
 
-e2e-tests: up
-	docker-compose -p nlp.test -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.development.yml -f ./docker/compose/test/docker-compose.yml -f ./docker/compose/docker-compose.development.yml run --rm --no-deps --entrypoint=pytest application /var/www/tests/e2e
 
-logs:
-	docker-compose -p nlp.$(SITE) -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.$(ENV).yml -f ./docker/compose/$(SITE)/docker-compose.yml -f ./docker/compose/$(SITE)/docker-compose.$(ENV).yml logs --tail=25 application
+reload-workers: stop-workers run-workers ## Reload RabbitMQ workers
 
-static-analysis:
-	docker-compose -p nlp.$(SITE) -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.test.yml run --rm --no-deps static-analysis
+run-workers: CMD=up -d ## Run RabbitMQ workers
+stop-workers: CMD=stop ## Stop RabbitMQ workers
 
-run-workers:
-	docker-compose -p nlp.$(SITE) -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.$(ENV).yml up -d worker
-
-reload-workers:
-	docker-compose -p nlp.$(SITE) restart worker
+stop-workers run-workers:
+	@docker-compose -p nlp.$(SITE) -f ./docker/compose/docker-compose.yml -f ./docker/compose/docker-compose.$(ENV).yml $(CMD) worker
