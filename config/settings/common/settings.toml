@@ -4,6 +4,7 @@ root_dir = "/var/www"
 logs_dir = "/log"
 contexts_dir = "/var/www/src"
 configs_dir = "/var/www/config"
+entry_point = "/var/www/src/shared/infrastructure/flask/entrypoint/run.py"
 store_domain_event_subscriber.id = "shared.application.event.store.store_domain_event_on_published"
 store_domain_event_subscriber.class_name = "shared.application.event.store.StoreDomainEventOnPublished"
 contexts.corpus.event_store.enabled = true

@@ -131,6 +131,9 @@ class Settings:
     def base_url(self) -> str:
         return self._get("application", "baseurl")
 
+    def api_port(self) -> str:
+        return str(self._get("api", "port"))
+
     def api_url(self) -> str:
         url = self.base_url()
         port = self._get("api", "port")
@@ -200,8 +203,11 @@ class Settings:
     def command(self, command: str):
         return self._commands.get("commands", {}).get(command)
 
-    def _app_root_dir(self) -> str:
+    def get_app_root_dir(self) -> str:
         return self._get("application", "root_dir")
+
+    def get_app_entry_point(self) -> str:
+        return self._get("application", "entry_point")
 
     def contexts(self) -> List:
         return self._contexts
@@ -282,19 +288,15 @@ class Settings:
 
         return context_event_store.get("id")
 
-    def duplicates_content_file(self, report_name: str) -> str:
+    def duplicates_content_file(self, tenant_id: str) -> str:
         file_pattern = self._get("duplicates", "content_file")
 
-        return file_pattern.format(
-            self._site, report_name.replace(" ", "_").lower()
-        )
+        return file_pattern.format(self._site, tenant_id)
 
-    def duplicates_minhashes_file(self, report_name: str) -> str:
+    def duplicates_minhashes_file(self, tenant_id: str) -> str:
         file_pattern = self._get("duplicates", "minhashes_file")
 
-        return file_pattern.format(
-            self._site, report_name.replace(" ", "_").lower()
-        )
+        return file_pattern.format(self._site, tenant_id)
 
     def api_path(self):
         return "/{}".format(self.api_version())
