@@ -1,6 +1,7 @@
 import hashlib
 import time
 import re
+from flask import make_response
 from typing import Optional, Dict, Union
 
 from http import HTTPStatus
@@ -34,6 +35,9 @@ class BaseController(Resource):
 
     def ask(self, query: Query) -> Optional[Response]:
         return self._query_bus.ask(query)
+
+    def base_url(self) -> str:
+        return glob.settings.api_url()
 
     @classmethod
     def api_generic_error(cls, error: Exception):
@@ -107,26 +111,24 @@ class BaseController(Resource):
 
         return error_data, status_code, headers
 
-    def json_response(self, *args, **kwargs) -> Union[Dict, str]:
-        response = {}
+    def _json_response(
+        self,
+        response: Union[str, Dict],
+        status_code: int,
+        headers: Optional[Dict] = None
+    ):
+        response = make_response(response, status_code)
 
-        if "_links" in kwargs:
-            response["links"] = kwargs.pop("_links")
+        if headers:
+            response.headers = headers
 
-        if args:
-            if len(args) == 1:
-                response["data"] = self._camelize_keys(args[0])
-            else:
-                response["data"] = [
-                    self._camelize_keys(data_dict) for data_dict in args
-                ]
-            return response
-        if kwargs:
-            response["data"] = self._camelize_keys(kwargs)
+        return response
 
-            return response
+    def response_ok(self, response: Dict, headers: Optional[Dict] = None):
+        return self._json_response(response, HTTPStatus.OK, headers)
 
-        return ""
+    def response_accepted(self, headers: Optional[Dict] = None):
+        return self._json_response("", HTTPStatus.ACCEPTED, headers)
 
     def _camelize_keys(self, dict_obj: Dict):
         assert type(dict_obj) == dict

@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 
 <services>
-    <service id="corpus.build.application.build_info_retriever.retrieve_build_info_query_handler"
-             class="corpus.build.application.build_info_retriever.RetrieveBuildInfoQueryHandler">
+    <service id="corpus.build.application.buildservice.building_progress_query_handler"
+             class="corpus.build.application.buildservice.BuildingProgressQueryHandler">
         <argument name="build_repository" value="corpus.build.domain.model.build.build_repository" type="service" />
         <argument name="requests_counter" value="corpus.build.domain.service.requests_counter.requests_counter" type="service" />
     </service>
 
-    <service id="corpus.build.application.build_starter.start_build_command_handler"
-             class="corpus.build.application.build_starter.StartBuildCommandHandler">
+    <service id="corpus.build.application.buildservice.build_list_query_handler"
+             class="corpus.build.application.buildservice.BuildListQueryHandler">
+        <argument name="build_repository" value="corpus.build.domain.model.build.build_repository" type="service" />
+        <argument name="requests_counter" value="corpus.build.domain.service.requests_counter.requests_counter" type="service" />
+    </service>
+
+    <service id="corpus.build.application.buildservice.start_build_command_handler"
+             class="corpus.build.application.buildservice.StartBuildCommandHandler">
         <argument name="build_repository" value="corpus.build.domain.model.build.build_repository" type="service" />
         <argument name="event_bus" value="shared.domain.bus.event.event_bus" type="service" />
     </service>

@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Dict, Optional
 import abc
+
+from typing import Any
+from dataclasses import dataclass
 
 
 class QueryError(RuntimeError):
@@ -30,22 +31,18 @@ class Query(metaclass=abc.ABCMeta):
     pass
 
 
-class QueryHandler(metaclass=abc.ABCMeta):
-    @abc.abstractmethod
-    def handle(self, query: Query) -> Optional[Response]:
+class Response(metaclass=abc.ABCMeta):
+    def value(self) -> Any:
         raise NotImplementedError
 
 
-class Response(metaclass=abc.ABCMeta):
-    def to_dict(self) -> Dict:
-        properties = {}
-        for property_name, value in self.__dict__.items():
-            properties[property_name.lstrip("_")] = value
-
-        return properties
+class QueryHandler(metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def handle(self, query: Query) -> Response:
+        raise NotImplementedError
 
 
 class QueryBus(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def ask(self, query: Query) -> Optional[Response]:
+    def ask(self, query: Query) -> Response:
         raise NotImplementedError

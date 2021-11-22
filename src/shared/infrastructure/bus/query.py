@@ -1,4 +1,3 @@
-from typing import Optional
 from shared.utils import camel_to_snake_case, class_fullname
 from shared.domain.bus.query import (
     Query,
@@ -12,7 +11,7 @@ import shared.infrastructure.environment.globalvars as glob
 
 
 class QueryBusImpl(QueryBus):
-    def ask(self, query: Query) -> Optional[Response]:
+    def ask(self, query: Query) -> Response:
 
         query_fullname = class_fullname(query)
         module, query_name = query_fullname.rsplit(".", maxsplit=1)
