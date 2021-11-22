@@ -115,7 +115,7 @@ class BaseController(Resource):
         self,
         response: Union[str, Dict],
         status_code: int,
-        headers: Optional[Dict] = None
+        headers: Optional[Dict] = None,
     ):
         response = make_response(response, status_code)
 
