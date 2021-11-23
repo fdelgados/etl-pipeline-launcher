@@ -21,13 +21,17 @@ class TransformedPageContent:
 
 class TransformedPageContentRepository(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def save_all(
+    def add_all(
         self,
-        report_name: str,
+        tenant_id: str,
         transformed_page_content: List[TransformedPageContent],
-    ):
+    ) -> None:
         raise NotImplementedError
 
     @abc.abstractmethod
-    def size_of_report(self, report_name: str) -> int:
+    def get_all(self, tenant_id: str) -> List[TransformedPageContent]:
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def size(self, tenant_id: str) -> int:
         raise NotImplementedError

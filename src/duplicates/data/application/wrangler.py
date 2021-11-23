@@ -44,8 +44,9 @@ class WrangleDataOnReportCreated(DomainEventSubscriber):
 
         clean_pages = self._data_transformer.transform(pages)
 
-        self._transformed_page_content_repository.save_all(
-            report.name, clean_pages
+        self._transformed_page_content_repository.add_all(
+            report.tenant_id,
+            clean_pages,
         )
 
         self._event_bus.publish(DataLoaded(report.report_id.value))

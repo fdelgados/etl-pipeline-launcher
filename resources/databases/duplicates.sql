@@ -84,3 +84,28 @@ CREATE TABLE `duplicates`
 
 CREATE INDEX `duplicates_similarity`
     ON duplicates (`similarity`);
+
+DROP TABLE IF EXISTS `event_store`;
+CREATE TABLE `event_store`
+(
+    `id`           INT AUTO_INCREMENT,
+    `aggregate_id` VARCHAR(255) NOT NULL,
+    `event_name`   VARCHAR(200) NOT NULL,
+    `event_data`   JSON         NOT NULL,
+    `occurred_on`  DATETIME     NOT NULL,
+    PRIMARY KEY `pk_event_store` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE INDEX `event_store_event_name_index`
+    ON event_store (`event_name`);
+
+CREATE INDEX `event_store_aggregate_id_index`
+    ON event_store (`aggregate_id`);
+
+ALTER TABLE `event_store`
+    ADD COLUMN `report_id` CHAR(36)
+        GENERATED ALWAYS AS (
+                event_data ->> "$.report_id"
+            );
+CREATE INDEX `event_store_event_data_index`
+    ON event_store (`report_id`);

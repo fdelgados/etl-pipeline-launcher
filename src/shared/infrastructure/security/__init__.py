@@ -20,6 +20,7 @@ def authorization_required(scope: str):
                 glob.settings.application_id(),
                 scope,
                 glob.settings.token_issuer(),
+                glob.settings.verify_token_expiration_time(),
             )
 
             try:

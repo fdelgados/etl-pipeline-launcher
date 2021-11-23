@@ -28,7 +28,7 @@ services:
       - ../../export:/export
       - ../../log:/log
       - ../../bin:/var/www/bin
-      - ../../resources/data/content:/var/www/data/content
+      - ../../.data:/var/www/data
     environment:
       - FLASK_APP=shared/infrastructure/flask/entrypoint/run.py
       - PYTHONDONTWRITEBYTECODE=1

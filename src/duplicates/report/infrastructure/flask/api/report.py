@@ -5,8 +5,10 @@ from flask_restx import Namespace
 import shared.infrastructure.environment.globalvars as glob
 from shared.infrastructure.security import authorization_required
 from shared.infrastructure.flask.api.basecontroller import BaseController
-from duplicates.report.application.reportcreator import ReportCreatorCommand
-from duplicates.report.application.identity_generator import NextIdentityQuery
+from duplicates.report.application.reportservice import (
+    ReportCreatorCommand,
+    NextIdentityQuery,
+)
 
 report_api = Namespace(
     "report", description="Near duplicates report generator"
@@ -20,7 +22,7 @@ class ReportController(BaseController):
         params = request.get_json()
 
         next_identity_response = self.ask(NextIdentityQuery())
-        report_id = next_identity_response.report_id
+        report_id = next_identity_response.value()
 
         command = ReportCreatorCommand(
             report_id,

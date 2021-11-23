@@ -231,6 +231,9 @@ class Settings:
     def token_issuer(self) -> str:
         return self._get("identity_access", "token_issuer")
 
+    def verify_token_expiration_time(self) -> bool:
+        return self._get("identity_access", "verify_token_expiration_time")
+
     def db_mapping_classes(self):
         contexts_dir = self._config.get("application").get("contexts_dir")
 
@@ -291,12 +294,12 @@ class Settings:
     def duplicates_content_file(self, tenant_id: str) -> str:
         file_pattern = self._get("duplicates", "content_file")
 
-        return file_pattern.format(self._site, tenant_id)
+        return file_pattern.format(tenant_id, self._site)
 
     def duplicates_minhashes_file(self, tenant_id: str) -> str:
         file_pattern = self._get("duplicates", "minhashes_file")
 
-        return file_pattern.format(self._site, tenant_id)
+        return file_pattern.format(tenant_id, self._site)
 
     def api_path(self):
         return "/{}".format(self.api_version())

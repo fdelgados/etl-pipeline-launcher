@@ -13,6 +13,7 @@ contexts.corpus.event_store.id = "corpus.domain.event.event_store.event_store"
 [identity_access]
 token_issuer = "http://localhost"
 public_key_file = "/export/certs/identity_access.pem"
+verify_token_expiration_time = false
 
 [api]
 title = "Corpus Builder API"

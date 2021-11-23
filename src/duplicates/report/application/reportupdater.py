@@ -33,10 +33,8 @@ class UpdateReportOnDataLoaded(DomainEventSubscriber):
                 )
             )
 
-        report.total_pages = (
-            self._transformed_page_content_repository.size_of_report(
-                report.name
-            )
+        report.total_pages = self._transformed_page_content_repository.size(
+            report.tenant_id
         )
 
         self._report_repository.save(report)

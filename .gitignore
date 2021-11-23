@@ -4,9 +4,8 @@ out
 .mongodb-data*
 export
 log
+.data
 .hypothesis
 .venv
 .pytest_cache
-resources/git
-resources/data/content
 __pycache__

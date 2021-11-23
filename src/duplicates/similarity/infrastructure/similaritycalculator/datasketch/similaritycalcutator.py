@@ -1,100 +1,71 @@
-import re
-import pandas as pd
-import xxhash
-
-from typing import List, Set
-
-from datasketch import MinHash, LeanMinHash
+from typing import List, Dict
 
 from duplicates.similarity.domain.model.duplicate import (
     Duplicate,
     DuplicateRepository,
 )
+from duplicates.similarity.domain.model.minhash import (
+    MinHash,
+    MinHashRepository,
+)
+from duplicates.data.domain.model.transformedpagecontent import (
+    TransformedPageContentRepository,
+    TransformedPageContent,
+)
 from duplicates.similarity.domain.service.similaritycalculator import (
     SimilarityCalculator,
 )
 from duplicates.report.domain.model.report import Report
-from duplicates.shared.domain.model.k_shingle_size import KShingleSize
-
-import shared.infrastructure.environment.globalvars as glob
-from shared.domain.model.valueobject.url import Url
 
 
 class SimilarityCalculatorImpl(SimilarityCalculator):
-    def __init__(self, duplicate_repository: DuplicateRepository):
+    def __init__(
+        self,
+        duplicate_repository: DuplicateRepository,
+        minhash_repository: MinHashRepository,
+        page_repository: TransformedPageContentRepository,
+    ):
         self._duplicate_repository = duplicate_repository
+        self._minhash_repository = minhash_repository
+        self._page_repository = page_repository
 
     def calculate(self, report: Report):
-        content_file = glob.settings.duplicates_content_file(report.name)
+        pages = self._page_repository.get_all(report.tenant_id)
 
-        data_frame = pd.read_csv(content_file)
-        minhashes = _compute_minhashes(data_frame, report.k_shingle_size)
+        minhashes = self._minhash_repository.get_all_of_tenant(
+            report.tenant_id
+        )
 
-        self._compute_similarities(report, minhashes, data_frame)
+        self._calculate_similarities(report, minhashes, pages)
 
-    def _compute_similarities(
-        self, report: Report, minhashes, pages: pd.DataFrame
+    def _calculate_similarities(
+        self,
+        report: Report,
+        minhashes: Dict[str, MinHash],
+        pages: List[TransformedPageContent],
     ):
-        num_of_minhashes = len(minhashes)
+        num_of_pages = len(pages)
 
-        for x in range(num_of_minhashes):
-            page_x = pages.iloc[x]
-            url_x = page_x["url"]
+        for x in range(num_of_pages):
+            page_x = pages[x]
+            url_x = page_x.url
+            address_x = url_x.address
 
-            for y in range(num_of_minhashes):
+            for y in range(num_of_pages):
                 if x >= y:
                     continue
 
-                similarity = minhashes[x].jaccard(minhashes[y])
+                page_y = pages[y]
+                url_y = page_y.url
+                address_y = url_y.address
+
+                similarity = minhashes[address_x].jaccard(minhashes[address_y])
 
                 if similarity < report.similarity_threshold.value:
                     continue
 
-                page_y = pages.iloc[y]
-                url_y = page_y["url"]
-
                 duplicate = Duplicate(
-                    report.report_id, Url(url_x), Url(url_y), similarity
+                    report.report_id, url_x, url_y, similarity
                 )
 
                 self._duplicate_repository.add(duplicate)
-
-
-def _tokenize(text: str) -> List:
-    return re.split(r"\W+", text)
-
-
-def _minhash(tokens: Set[str], num_of_permutations: int = 128) -> LeanMinHash:
-    min_hash = MinHash(
-        num_perm=num_of_permutations, hashfunc=xxhash.xxh64_intdigest
-    )
-
-    for token in tokens:
-        min_hash.update(token.encode("utf8"))
-
-    return LeanMinHash(min_hash)
-
-
-def _shingle(words: List[str], size: KShingleSize) -> Set:
-    shingles = set()
-
-    for index in range(len(words) - size.value + 1):
-        shingle = words[index : index + size.value]
-        shingle = " ".join(shingle)
-
-        shingles.add(shingle)
-
-    return shingles
-
-
-def _compute_minhashes(
-    pages: pd.DataFrame, k_shingle_size: KShingleSize
-) -> List[LeanMinHash]:
-    minhashes = []
-
-    for _, row in pages.iterrows():
-        minhashes.append(
-            _minhash(_shingle(_tokenize(row["content"]), k_shingle_size))
-        )
-
-    return minhashes

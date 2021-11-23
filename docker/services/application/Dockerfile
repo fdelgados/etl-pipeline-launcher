@@ -19,7 +19,7 @@ COPY $REQUIREMENTS_FILE /tmp/
 RUN pip install -r /tmp/$REQUIREMENTS_FILE
 
 RUN mkdir -p /var/www/src
-RUN mkdir -p /var/www/data/content
+RUN mkdir -p /var/www/data
 RUN mkdir -p /export/certs
 RUN mkdir -p /log
 COPY src/ /var/www/src

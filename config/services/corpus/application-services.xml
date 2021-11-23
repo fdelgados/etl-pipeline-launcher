@@ -52,8 +52,8 @@
         <argument name="build_stats_service" value="corpus.build.domain.service.build_stats.build_stats" type="service" />
     </service>
 
-    <service id="corpus.build.application.identity_generator.next_identity_query_handler"
-             class="corpus.build.application.identity_generator.NextIdentityQueryHandler">
+    <service id="corpus.build.application.buildservice.next_identity_query_handler"
+             class="corpus.build.application.buildservice.NextIdentityQueryHandler">
         <argument name="build_repository" value="corpus.build.domain.model.build.build_repository" type="service"/>
     </service>
 
