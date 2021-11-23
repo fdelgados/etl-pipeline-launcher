@@ -30,4 +30,14 @@
 
     <service id="duplicates.similarity.infrastructure.persistence.filesystem.minhashrepository.min_hash_repository_impl"
              class="duplicates.similarity.infrastructure.persistence.filesystem.minhashrepository.MinHashRepositoryImpl" />
+
+    <service id="duplicates.infrastructure.persistence.sqlalchemy.dbal.sql_alchemy_dbal_service"
+             class="shared.infrastructure.persistence.sqlalchemy.dbal.SqlAlchemyDbalService">
+        <argument name="context" value="duplicates" type="parameter" />
+    </service>
+
+    <service id="duplicates.infrastructure.event.mysql.eventstore.mysql_event_store"
+             class="shared.infrastructure.event.mysql.eventstore.MysqlEventStore">
+        <argument name="db_service" value="duplicates.infrastructure.persistence.sqlalchemy.dbal.sql_alchemy_dbal_service" type="service" />
+    </service>
 </services>

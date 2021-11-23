@@ -9,6 +9,8 @@ store_domain_event_subscriber.id = "shared.application.event.store.store_domain_
 store_domain_event_subscriber.class_name = "shared.application.event.store.StoreDomainEventOnPublished"
 contexts.corpus.event_store.enabled = true
 contexts.corpus.event_store.id = "corpus.domain.event.event_store.event_store"
+contexts.duplicates.event_store.enabled = true
+contexts.duplicates.event_store.id = "duplicates.domain.event.event_store.event_store"
 
 [identity_access]
 token_issuer = "http://localhost"
