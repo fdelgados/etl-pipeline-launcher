@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nlp-emagistercom-deployment
+  labels:
+    app: nlp-emagistercom
+  namespace: nlp-emagistercom
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nlp-emagistercom
+  template:
+    metadata:
+      labels:
+        app: nlp-emagistercom
+    spec:
+      containers:
+        - name: nlp-emagistercom
+          image: nlp-emagistercom:latest
+          imagePullPolicy: Never
+          ports:
+          - containerPort: 5000
+          env:
+          - name: ENVIRONMENT
+            value: production
+          - name: FLASK_ENV
+            value: production
+          - name: FLASK_DEBUG
+            value: "0"
+        - name: nlp-mysql-server
+          image: mysql-server:latest
+          imagePullPolicy: Never
+          env:
+            - name: MYSQL_ROOT_HOST
+              value: "%"
+            - name: MYSQL_ROOT_PASSWORD
+              value: HyMn4q6UR6wa
+        - name: nlp-mongo
+          image: mongo:5.0-focal
+          imagePullPolicy: Never
+        - name: nlp-mongo-express
+          image: mongo-express:0.32
+          imagePullPolicy: Never
+        - name: nlp-redis
+          image: redis:alpine
+          imagePullPolicy: Never
+        - name: nlp-rabbitmq
+          image: rabbitmq:3-management-alpine
+          imagePullPolicy: Never
+        - name: nlp-mailhog
+          image: mailhog/mailhog:latest
+          imagePullPolicy: Never
