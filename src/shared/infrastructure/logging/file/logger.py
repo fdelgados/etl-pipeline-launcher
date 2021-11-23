@@ -1,3 +1,4 @@
+import os
 import logging
 
 from typing import Optional
@@ -29,6 +30,11 @@ class FileLogger(Logger):
         formatter = logging.Formatter(
             "%(asctime)s :: %(levelname)s :: %(message)s"
         )
+
+        file = f"{settings.logs_dir()}/{logfile}.log"
+        if not os.path.isfile(file):
+            open(file, "w")
+
         file_handler = logging.FileHandler(
             f"{settings.logs_dir()}/{logfile}.log"
         )
