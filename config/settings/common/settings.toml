@@ -1,4 +1,5 @@
 [application]
+baseurl = "http://localhost"
 id = "fc050f989329b47f861e5760c713c820"
 root_dir = "/var/www"
 logs_dir = "/log"

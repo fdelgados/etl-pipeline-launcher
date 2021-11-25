@@ -8,6 +8,8 @@ from shared.infrastructure.flask.api.basecontroller import BaseController
 from duplicates.report.application.reportservice import (
     ReportCreatorCommand,
     NextIdentityQuery,
+    ReportProgressQuery,
+    ReportProgressResponse,
 )
 
 report_api = Namespace(
@@ -43,3 +45,25 @@ class ReportController(BaseController):
         }
 
         return response
+
+
+@report_api.route("/<string:report_id>")
+class BuildInfoController(BaseController):
+    @authorization_required("get:report-info")
+    def get(self, user, report_id: str):
+        query = ReportProgressQuery(report_id)
+
+        response: ReportProgressResponse = self.ask(query)
+
+        return self.response_ok(self._serialize(response))
+
+    def _serialize(self, response: ReportProgressResponse) -> dict:
+        report_dto = response.value()
+
+        representation = report_dto.__dict__
+
+        representation["_links"] = {
+            "self": f"{self.base_url()}/reports/{report_dto.id}"
+        }
+
+        return representation

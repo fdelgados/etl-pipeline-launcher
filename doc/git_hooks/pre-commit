@@ -7,7 +7,7 @@ then
     flake8 --ignore=E203,W503 $MODIFIED_FILES
     if [ $? -eq 0 ]
     then
-        make unit-tests
+        make unit-tests SITE=test
     else
         exit 1
     fi

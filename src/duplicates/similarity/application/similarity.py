@@ -15,7 +15,11 @@ from duplicates.report.domain.model.report import (
     Report,
     ReportId,
 )
+from duplicates.similarity.domain.event.analysisstarted import AnalysisStarted
 from duplicates.similarity.domain.event.pageanalyzed import PageAnalyzed
+from duplicates.similarity.domain.event.analysiscompleted import (
+    AnalysisCompleted,
+)
 from duplicates.similarity.domain.model.duplicate import (
     Duplicate,
     DuplicateRepository,
@@ -83,6 +87,9 @@ class SimilarityCalculatorService:
         minhashes: Dict[str, MinHash],
         pages: List[TransformedPageContent],
     ):
+
+        self._event_bus.publish(AnalysisStarted(report.report_id.value))
+
         num_of_pages = len(pages)
 
         for x in range(num_of_pages):
@@ -114,3 +121,5 @@ class SimilarityCalculatorService:
             self._event_bus.publish(
                 PageAnalyzed(report.report_id.value, url_x.address)
             )
+
+        self._event_bus.publish(AnalysisCompleted(report.report_id.value))

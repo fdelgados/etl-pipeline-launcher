@@ -13,16 +13,16 @@ from shared.infrastructure.persistence.mongodb.repository import (
 
 
 class MongoDbPageRepository(PageRepository, MongoDbRepository):
-    def __init__(self, database: str):
-        super().__init__(database)
+    def __init__(self):
+        super().__init__()
 
         self._collection = None
 
     def save(self, page: Page) -> None:
         tmp_collection = self.database[f"{page.corpus_name}_tmp"]
-        tmp_collection.create_index("address", unique=True)
 
         try:
+            tmp_collection.create_index("address", unique=True)
             tmp_collection.update_one(
                 {"address": page.url.address},
                 {

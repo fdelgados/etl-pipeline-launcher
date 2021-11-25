@@ -32,4 +32,7 @@
 
     <service id="duplicates.similarity.domain.model.minhash.min_hash_repository"
              alias="duplicates.similarity.infrastructure.persistence.filesystem.minhashrepository.min_hash_repository_impl" />
+
+    <service id="duplicates.report.domain.service.statsretriever.report_stats_retriever"
+             alias="duplicates.report.infrastructure.statsretriever.mysql.statsretriever.report_stats_retriever_impl" />
 </services>

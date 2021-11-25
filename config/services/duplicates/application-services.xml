@@ -38,8 +38,24 @@
     </service>
 
     <service id="duplicates.report.application.reportupdater.update_report_on_data_loaded"
-             class="duplicates.report.application.reportupdater.UpdateReportOnDataLoaded">
+             class="duplicates.report.application.reportupdater.UpdateTotalPagesOnDataLoaded">
         <argument name="report_repository" value="duplicates.report.domain.model.report.report_repository" type="service"/>
         <argument name="transformed_page_content_repository" value="duplicates.data.domain.model.transformedpagecontent.transformed_page_content_repository" type="service" />
+    </service>
+
+    <service id="duplicates.report.application.reportupdater.update_stats_on_analysis_completed"
+             class="duplicates.report.application.reportupdater.UpdateStatsOnAnalysisCompleted">
+        <argument name="report_repository" value="duplicates.report.domain.model.report.report_repository" type="service"/>
+    </service>
+
+    <service id="duplicates.report.application.reportupdater.update_stats_on_analysis_started"
+             class="duplicates.report.application.reportupdater.UpdateStatsOnAnalysisStarted">
+        <argument name="report_repository" value="duplicates.report.domain.model.report.report_repository" type="service"/>
+    </service>
+
+    <service id="duplicates.report.application.reportservice.report_progress_query_handler"
+             class="duplicates.report.application.reportservice.ReportProgressQueryHandler">
+        <argument name="report_repository" value="duplicates.report.domain.model.report.report_repository" type="service"/>
+        <argument name="stats_retriever" value="duplicates.report.infrastructure.statsretriever.mysql.statsretriever.report_stats_retriever_impl" type="service" />
     </service>
 </services>

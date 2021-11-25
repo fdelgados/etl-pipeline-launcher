@@ -10,7 +10,7 @@ from shared.domain.service.persistence.dbal import (
 class SqlAlchemyDbalService(DbalService):
     def __init__(self, context: str):
         dsn = glob.settings.database_dsn(context)
-        self._connection = create_engine(dsn)
+        self._connection = create_engine(dsn, pool_recycle=1)
 
     def execute(self, sentence: str, **parameters):
         with self._connection.connect() as connection:

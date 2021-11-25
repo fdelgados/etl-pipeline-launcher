@@ -22,14 +22,14 @@ class ReportId(Uuid):
 
 
 class Status:
+    _CANCELLED = -1
     _CREATED = 0
-    _COMPUTATION_IN_PROGRESS = 1
-    _CANCELLED = 2
-    _COMPLETED = 3
+    _ANALYSIS_IN_PROGRESS = 1
+    _COMPLETED = 2
 
     _STATUS = {
         _CREATED: "Created",
-        _COMPUTATION_IN_PROGRESS: "Computation in progress",
+        _ANALYSIS_IN_PROGRESS: "Analysis in progress",
         _CANCELLED: "Cancelled",
         _COMPLETED: "Completed",
     }
@@ -55,8 +55,8 @@ class Status:
     def cancel(self) -> Status:
         return Status(self._CANCELLED)
 
-    def computation_in_progress(self) -> Status:
-        return Status(self._COMPUTATION_IN_PROGRESS)
+    def analysis_in_progress(self) -> Status:
+        return Status(self._ANALYSIS_IN_PROGRESS)
 
     def __dict__(self):
         return self.serialize()
@@ -145,12 +145,24 @@ class Report(AggregateRoot):
     def started_on(self) -> datetime:
         return self._started_on
 
-    def complete(self):
+    def complete(self) -> None:
         self._status = self._status.complete()
         self._completed_on = datetime.now()
 
+    def start_analysis(self) -> None:
+        self._status = self._status.analysis_in_progress()
+
+    @property
     def is_completed(self) -> bool:
         return self._completed
+
+    @property
+    def completed_on(self) -> Optional[datetime]:
+        return self._completed_on
+
+    @property
+    def status(self) -> Status:
+        return self._status
 
     def cancel(self):
         self._status = self._status.cancel()

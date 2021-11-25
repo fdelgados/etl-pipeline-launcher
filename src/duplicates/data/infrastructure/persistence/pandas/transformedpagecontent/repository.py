@@ -23,6 +23,7 @@ class TransformedPageContentRepositoryImpl(TransformedPageContentRepository):
         self,
         tenant_id: str,
         transformed_page_content: List[TransformedPageContent],
+        as_new: Optional[bool] = True,
     ) -> None:
         records = []
         for clean_page in transformed_page_content:
@@ -35,14 +36,14 @@ class TransformedPageContentRepositoryImpl(TransformedPageContentRepository):
 
         data_frame = pd.DataFrame(data=records)
 
-        try:
-            current_data_frame = _get_data_frame(tenant_id)
-
-            data_frame = data_frame.append(
-                current_data_frame, ignore_index=True
-            )
-        except FileNotFoundError:
-            pass
+        if not as_new:
+            try:
+                current_data_frame = _get_data_frame(tenant_id)
+                data_frame = data_frame.append(
+                    current_data_frame, ignore_index=True
+                )
+            except FileNotFoundError:
+                pass
 
         data_frame.drop_duplicates(
             subset=[self._URL_COLUMN],

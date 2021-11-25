@@ -5,9 +5,7 @@
              class="corpus.build.infrastructure.persistence.sqlalchemy.build_repository.BuildRepositoryImpl" />
 
     <service id="corpus.build.infrastructure.persistence.mongodb.page_repository.mongo_db_page_repository"
-             class="corpus.build.infrastructure.persistence.mongodb.page_repository.MongoDbPageRepository">
-        <argument name="database" value="web_corpus" type="parameter" />
-    </service>
+             class="corpus.build.infrastructure.persistence.mongodb.page_repository.MongoDbPageRepository" />
 
     <service id="corpus.build.infrastructure.content.beautiful_soup.page_retriever.page_retriever_impl"
              class="corpus.build.infrastructure.content.beautiful_soup.page_retriever.PageRetrieverImpl">
@@ -36,7 +34,5 @@
     </service>
 
     <service id="corpus.build.infrastructure.corpus_manager.mongodb.corpus_manager.corpus_manager_impl"
-             class="corpus.build.infrastructure.corpus_manager.mongodb.corpus_manager.CorpusManagerImpl">
-        <argument name="database" value="web_corpus" type="parameter" />
-    </service>
+             class="corpus.build.infrastructure.corpus_manager.mongodb.corpus_manager.CorpusManagerImpl" />
 </services>

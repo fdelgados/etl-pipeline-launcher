@@ -5,9 +5,7 @@
              class="duplicates.report.infrastructure.persistence.sqlalchemy.report_repository.ReportRepositoryImpl" />
 
     <service id="duplicates.data.infrastructure.datagatherer.mongodb.datagatherer.data_gatherer_impl"
-             class="duplicates.data.infrastructure.datagatherer.mongodb.datagatherer.DataGathererImpl">
-        <argument name="database" value="web_corpus" type="parameter" />
-    </service>
+             class="duplicates.data.infrastructure.datagatherer.mongodb.datagatherer.DataGathererImpl" />
 
     <service id="duplicates.data.infrastructure.datatransformer.textcleaner.datatransformer.data_transformer_impl"
              class="duplicates.data.infrastructure.datatransformer.textcleaner.datatransformer.DataTransformerImpl" />
@@ -38,6 +36,11 @@
 
     <service id="duplicates.infrastructure.event.mysql.eventstore.mysql_event_store"
              class="shared.infrastructure.event.mysql.eventstore.MysqlEventStore">
+        <argument name="db_service" value="duplicates.infrastructure.persistence.sqlalchemy.dbal.sql_alchemy_dbal_service" type="service" />
+    </service>
+
+    <service id="duplicates.report.infrastructure.statsretriever.mysql.statsretriever.report_stats_retriever_impl"
+             class="duplicates.report.infrastructure.statsretriever.mysql.statsretriever.ReportStatsRetrieverImpl">
         <argument name="db_service" value="duplicates.infrastructure.persistence.sqlalchemy.dbal.sql_alchemy_dbal_service" type="service" />
     </service>
 </services>

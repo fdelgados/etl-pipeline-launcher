@@ -1,6 +1,6 @@
 import abc
 
-from typing import List
+from typing import List, Optional
 
 from shared.domain.model.valueobject.url import Url
 
@@ -25,6 +25,7 @@ class TransformedPageContentRepository(metaclass=abc.ABCMeta):
         self,
         tenant_id: str,
         transformed_page_content: List[TransformedPageContent],
+        as_new: Optional[bool] = True,
     ) -> None:
         raise NotImplementedError
 

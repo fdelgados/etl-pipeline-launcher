@@ -12,7 +12,7 @@ class ReportCreated(DomainEvent):
         k_shingle_size: int,
         similarity_threshold: float,
     ):
-        super().__init__()
+        super().__init__(report_id)
 
         self._report_id = report_id
         self._name = name

@@ -13,4 +13,12 @@
         <handler id="duplicates.similarity.application.similarity.calculate_similarities_on_data_loaded" />
         <handler id="duplicates.report.application.reportupdater.update_report_on_data_loaded" />
     </event>
+
+    <event class="duplicates.similarity.domain.event.analysiscompleted.AnalysisCompleted">
+        <handler id="duplicates.report.application.reportupdater.update_stats_on_analysis_completed" />
+    </event>
+
+    <event class="duplicates.similarity.domain.event.analysisstarted.AnalysisStarted">
+        <handler id="duplicates.report.application.reportupdater.update_stats_on_analysis_started" />
+    </event>
 </events>
