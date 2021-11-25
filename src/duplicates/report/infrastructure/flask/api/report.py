@@ -32,6 +32,7 @@ class ReportController(BaseController):
             params.get("similarity_threshold"),
             params.get("k_shingle_size"),
             user,
+            params.get("similarity_threshold_margin", 0.0)
         )
 
         self.dispatch(command)

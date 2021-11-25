@@ -18,11 +18,13 @@ class Duplicate(AggregateRoot):
         a_url: Url,
         another_url: Url,
         similarity: float,
+        is_in_allowed_margin: bool
     ):
         self._report_id = report_id
         self._a_url = a_url
         self._another_url = another_url
         self._similarity = similarity
+        self._is_in_allowed_margin = is_in_allowed_margin
 
         self.record_event(
             DuplicityDetected(
@@ -30,6 +32,7 @@ class Duplicate(AggregateRoot):
                 self._a_url.address,
                 self._another_url.address,
                 self._similarity,
+                self._is_in_allowed_margin
             )
         )
 

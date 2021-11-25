@@ -6,6 +6,7 @@ from sqlalchemy import (
     Integer,
     Float,
     MetaData,
+    Boolean,
 )
 
 from sqlalchemy.orm import registry
@@ -45,6 +46,12 @@ class DuplicatesMapping(Mapping):
             Column(
                 "similarity_threshold", SimilarityThresholdType, nullable=False
             ),
+            Column(
+                "similarity_threshold_margin",
+                Float,
+                nullable=False,
+                default=0.0,
+            ),
             Column("started_on", DateTime, nullable=False),
             Column("completed_on", DateTime, nullable=True),
             Column("total_pages", Integer, nullable=False, default=0),
@@ -69,6 +76,12 @@ class DuplicatesMapping(Mapping):
             Column("url", UrlType, primary_key=True),
             Column("duplicate_url", UrlType, primary_key=True),
             Column("similarity", Float, nullable=False),
+            Column(
+                "is_in_allowed_margin",
+                Boolean,
+                nullable=False,
+                default=False,
+            ),
             extend_existing=True,
         )
 

@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS `reports`
     `status` TINYINT(1) DEFAULT 0 NOT NULL,
     `k_shingle_size` TINYINT(1) NOT NULL,
     `similarity_threshold` DECIMAL(2, 1) NOT NULL,
+    `similarity_threshold_margin` DECIMAL(3, 2) NOT NULL DEFAULT 0.0,
     `started_on` DATETIME NOT NULL,
     `completed_on` DATETIME DEFAULT NULL,
     `total_pages` INT NOT NULL DEFAULT 0,
@@ -75,11 +76,15 @@ CREATE TABLE IF NOT EXISTS `duplicates`
     `url` VARCHAR(255) NOT NULL,
     `duplicate_url` VARCHAR(255) NOT NULL,
     `similarity` DECIMAL(8, 7) NOT NULL,
+    `is_in_allowed_margin` TINYINT(1) NOT NULL DEFAULT 0,
     PRIMARY KEY `pk_duplicates` (`report_id`, `url`, `duplicate_url`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE INDEX IF NOT EXISTS `duplicates_similarity`
     ON duplicates (`similarity`);
+
+CREATE INDEX IF NOT EXISTS `duplicates_is_in_allowed_margin`
+    ON duplicates (`is_in_allowed_margin`);
 
 CREATE TABLE IF NOT EXISTS `event_store`
 (

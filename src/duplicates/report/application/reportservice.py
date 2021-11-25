@@ -31,6 +31,7 @@ class ReportCreatorCommand(Command):
     similarity_threshold: float
     k_shingle_size: int
     user: User
+    similarity_threshold_margin: float = 0.0
 
 
 class ReportCreatorCommandHandler(CommandHandler):
@@ -54,6 +55,7 @@ class ReportCreatorCommandHandler(CommandHandler):
             command.user,
             KShingleSize(command.k_shingle_size),
             SimilarityThreshold(command.similarity_threshold),
+            command.similarity_threshold_margin,
         )
 
         self._report_repository.save(report)

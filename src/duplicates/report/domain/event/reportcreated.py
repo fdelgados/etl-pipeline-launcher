@@ -11,6 +11,7 @@ class ReportCreated(DomainEvent):
         tenant_id: str,
         k_shingle_size: int,
         similarity_threshold: float,
+        similarity_threshold_margin: float,
     ):
         super().__init__(report_id)
 
@@ -21,6 +22,7 @@ class ReportCreated(DomainEvent):
         self._tenant_id = tenant_id
         self._k_shingle_size = k_shingle_size
         self._similarity_threshold = similarity_threshold
+        self._similarity_threshold_margin = similarity_threshold_margin
 
     @property
     def report_id(self) -> str:
@@ -49,3 +51,7 @@ class ReportCreated(DomainEvent):
     @property
     def similarity_threshold(self) -> float:
         return self._similarity_threshold
+
+    @property
+    def similarity_threshold_margin(self) -> float:
+        return self._similarity_threshold_margin
