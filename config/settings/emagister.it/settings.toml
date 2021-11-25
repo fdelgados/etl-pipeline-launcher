@@ -3,27 +3,3 @@ timezone = "Europe/Rome"
 
 [api]
 port = 5005
-
-[mongodb]
-connection.host = "mongodb-emagister.it"
-databases.web_corpus = "corpus_emagister_it"
-
-[database]
-host = "nlp.mysql.emagister.it"
-[database.corpus]
-  name = "corpus"
-  user = "corpus"
-  password = "wTUbtEmk2S6R"
-[database.duplicates]
-  name = "duplicates"
-  user = "duplicates"
-  password = "wTUbtEmk2S6R"
-
-[mail]
-host = "mail-emagister.it"
-
-[redis]
-host = "redis-emagister.it"
-
-[rabbitmq]
-connection.host = "rabbitmq-emagister.it"

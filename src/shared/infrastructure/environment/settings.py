@@ -141,26 +141,32 @@ class Settings:
         return "{}:{}{}".format(url, port, self.api_prefix())
 
     def database_dsn(self, context: str) -> str:
-        database_config = self._config.get("database")
-        host = database_config.get("host")
-
-        database_config = database_config.get(context)
-
         return "mysql+pymysql://{}:{}@{}/{}?charset=utf8mb4".format(
-            database_config.get("user"),
-            database_config.get("password"),
-            host,
-            database_config.get("name"),
+            os.environ.get(f"{context.upper()}_DATABASE_USER"),
+            os.environ.get(f"{context.upper()}_DATABASE_PASSWORD"),
+            os.environ.get("MARIA_DB_HOST"),
+            os.environ.get(f"{context.upper()}_DATABASE_NAME"),
         )
 
-    def mongodb_connection_settings(self) -> str:
-        return self._config.get("mongodb").get("connection")
+    def mongodb_connection_settings(self) -> dict:
+        return {
+            "host": os.environ.get("MONGO_HOST"),
+            "port": int(os.environ.get("MONGO_PORT")),
+            "username": os.environ.get("MONGO_INITDB_USER"),
+            "password": os.environ.get("MONGO_INITDB_PASSWORD"),
+            "database": os.environ.get("MONGO_INITDB_DATABASE"),
+        }
 
-    def mongodb_databases(self):
-        return self._config.get("mongodb").get("databases")
+    def rabbit_connection_settings(self) -> dict:
+        connection_settings = self._config.get("rabbitmq").get("connection")
 
-    def rabbit_connection_settings(self):
-        return self._config.get("rabbitmq").get("connection")
+        return {
+            "host": os.environ.get("RABBITMQ_HOST"),
+            "port": os.environ.get("RABBITMQ_PORT"),
+            "user": os.environ.get("RABBITMQ_USER"),
+            "password": os.environ.get("RABBITMQ_PASSWORD"),
+            "vhost": connection_settings.get("vhost")
+        }
 
     def rabbit_publish_exchange(self):
         exchanges = self._config.get("rabbitmq").get("exchanges")
@@ -185,10 +191,10 @@ class Settings:
         )
 
     def redis_host(self):
-        return self._get("redis", "host")
+        return os.environ.get("REDIS_HOST")
 
     def redis_port(self):
-        return self._get("redis", "port")
+        return os.environ.get("REDIS_PORT")
 
     def redis_database(self, database: str) -> int:
         databases = self._get("redis", "databases")

@@ -1,6 +1,6 @@
 CREATE DATABASE IF NOT EXISTS corpus CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-CREATE USER 'corpus'@'%' IDENTIFIED BY 'wTUbtEmk2S6R';
+CREATE USER IF NOT EXISTS 'corpus'@'%' IDENTIFIED BY 'wTUbtEmk2S6R';
 
 GRANT INSERT, SELECT, UPDATE, DELETE ON corpus.* TO 'corpus';
 
@@ -11,7 +11,7 @@ USE `corpus`;
 -- FUNCTIONS
 DELIMITER //
 
-CREATE FUNCTION UUID_TO_BIN(uuid CHAR(36))
+CREATE FUNCTION IF NOT EXISTS UUID_TO_BIN(uuid CHAR(36))
     RETURNS BINARY(16) DETERMINISTIC
 BEGIN
     RETURN UNHEX(CONCAT(REPLACE(uuid, '-', '')));
@@ -32,9 +32,7 @@ END; //
 DELIMITER ;
 
 -- TABLES
-
-DROP TABLE IF EXISTS `event_store`;
-CREATE TABLE `event_store`
+CREATE TABLE IF NOT EXISTS `event_store`
 (
     `id`           INT AUTO_INCREMENT,
     `aggregate_id` VARCHAR(255) NOT NULL,
@@ -44,22 +42,21 @@ CREATE TABLE `event_store`
     PRIMARY KEY `pk_event_store` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE INDEX `event_store_event_name_index`
+CREATE INDEX IF NOT EXISTS `event_store_event_name_index`
     ON event_store (`event_name`);
 
-CREATE INDEX `event_store_aggregate_id_index`
+CREATE INDEX IF NOT EXISTS `event_store_aggregate_id_index`
     ON event_store (`aggregate_id`);
 
 ALTER TABLE `event_store`
-ADD COLUMN `build_id` CHAR(36)
+ADD COLUMN IF NOT EXISTS `build_id` CHAR(36)
 GENERATED ALWAYS AS (
-    event_data ->> "$.build_id"
+    JSON_UNQUOTE(JSON_EXTRACT(event_data, "$.build_id"))
 );
-CREATE INDEX `event_store_event_data_index`
+CREATE INDEX IF NOT EXISTS `event_store_event_data_index`
     ON event_store (`build_id`);
 
-DROP TABLE IF EXISTS `builds`;
-CREATE TABLE `builds`
+CREATE TABLE IF NOT EXISTS `builds`
 (
     `id` BINARY(16) NOT NULL,
     `tenant_id` CHAR(36) NOT NULL,
@@ -75,18 +72,17 @@ CREATE TABLE `builds`
     PRIMARY KEY `pk_builds` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE INDEX `builds_launcher_index`
+CREATE INDEX IF NOT EXISTS `builds_launcher_index`
     ON builds (`tenant_id`, `started_by`);
 
-CREATE INDEX `builds_launcher_name_index`
+CREATE INDEX IF NOT EXISTS `builds_launcher_name_index`
     ON builds (`name`);
 
-CREATE INDEX `builds_launcher_corpus_name_index`
+CREATE INDEX IF NOT EXISTS `builds_launcher_corpus_name_index`
     ON builds (`corpus_name`);
 
 
-DROP TABLE IF EXISTS `corpora`;
-CREATE TABLE `corpora`
+CREATE TABLE IF NOT EXISTS `corpora`
 (
     `name` VARCHAR(25) NOT NULL,
     `tenant_id` CHAR(36) NOT NULL,

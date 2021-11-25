@@ -1,5 +1,5 @@
 [application]
-baseurl = "http://localhost"
+baseurl = "http://35.240.60.105"
 
 [identity_access]
 token_issuer = "http://localhost"

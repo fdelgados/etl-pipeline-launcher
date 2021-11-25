@@ -1,26 +1,2 @@
 [application]
 timezone = "Europe/Madrid"
-
-[mongodb]
-connection.host = "mongodb-emagister.com"
-databases.web_corpus = "corpus_emagister_com"
-
-[database]
-host = "nlp.mysql.emagister.com"
-[database.corpus]
-  name = "corpus"
-  user = "corpus"
-  password = "wTUbtEmk2S6R"
-[database.duplicates]
-  name = "duplicates"
-  user = "duplicates"
-  password = "wTUbtEmk2S6R"
-
-[mail]
-host = "mail-emagister.com"
-
-[redis]
-host = "redis-emagister.com"
-
-[rabbitmq]
-connection.host = "rabbitmq-emagister.com"
