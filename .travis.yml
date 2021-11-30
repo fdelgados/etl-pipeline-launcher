@@ -16,7 +16,6 @@ before_install:
   - docker-compose version
   - echo "Loging into Docker Hub"
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - export ENVIRONMENT=test
 
 jobs:
   include:

@@ -35,7 +35,8 @@ services:
       - ../bin:/var/www/bin
       - ../.data:/var/www/data
     restart: always
-    env_file: ./.env
+    environment:
+      - REQUIREMENTS_FILE
     ports:
       - "5000:5000"
     command: gunicorn --bind 0.0.0.0:5000 shared.infrastructure.flask.entrypoint.run:app
@@ -91,7 +92,9 @@ services:
     restart: always
     ports:
       - "27017:27017"
-    env_file: ./.env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD
     volumes:
       - ../resources/mongodb/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
       - ../.mongodb-data:/data/db
