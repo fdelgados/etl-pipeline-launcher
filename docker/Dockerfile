@@ -1,6 +1,6 @@
 FROM python:3.9-slim-buster
 
-ARG REQUIREMENTS_FILE=requirements.txt
+ARG REQUIREMENTS_FILE
 
 EXPOSE 5000
 EXPOSE 80

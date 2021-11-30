@@ -35,8 +35,6 @@ services:
       - ../bin:/var/www/bin
       - ../.data:/var/www/data
     restart: always
-    environment:
-      - REQUIREMENTS_FILE
     ports:
       - "5000:5000"
     command: gunicorn --bind 0.0.0.0:5000 shared.infrastructure.flask.entrypoint.run:app
@@ -58,9 +56,9 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile
+      args:
+        - REQUIREMENTS_FILE=${REQUIREMENTS_FILE}
     entrypoint: flake8 --ignore=E203,W503 .
-    environment:
-      - REQUIREMENTS_FILE
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
