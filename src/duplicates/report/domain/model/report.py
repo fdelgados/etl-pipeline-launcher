@@ -151,7 +151,7 @@ class Report(AggregateRoot):
     @property
     def max_similarity_allowed(self) -> float:
         return self.similarity_threshold.value \
-               - self._similarity_threshold_margin
+            - self._similarity_threshold_margin
 
     @property
     def started_on(self) -> datetime:
