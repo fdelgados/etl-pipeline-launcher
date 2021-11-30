@@ -1,12 +1,12 @@
 from pymongo import MongoClient
 
-import shared.infrastructure.environment.globalvars as glob
+from shared.infrastructure.environment.environment import Environment
 from corpus.build.domain.service.corpus_manager import CorpusManager
 
 
 class CorpusManagerImpl(CorpusManager):
     def __init__(self):
-        connection_settings = glob.settings.mongodb_connection_settings()
+        connection_settings = Environment.mongodb_connection_settings()
 
         self._database = connection_settings.get("database")
         self._client = MongoClient(

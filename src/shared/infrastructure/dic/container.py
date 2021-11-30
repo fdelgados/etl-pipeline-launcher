@@ -1,14 +1,19 @@
 import os
 import os.path
+import glob
 from typing import List, Dict, Generator, Optional, Any
 from importlib import util
 from xml.etree import ElementTree
 from dependency_injector import containers
 
 
-def create_container(settings):
-    services_files = settings.services_files()
-    event_handlers_files = settings.event_handlers_files()
+def create_container(settings: dict):
+    services_dir = os.path.join(
+        settings.get("application").get("configs_dir"), "services/"
+    )
+
+    services_files = glob.glob(f"{services_dir}**/*-services.xml")
+    event_handlers_files = glob.glob(f"{services_dir}**/event-handlers.xml")
 
     service_container = containers.DynamicContainer()
     services = _get_services(services_files)
@@ -37,10 +42,11 @@ def create_container(settings):
             service_provider_cls,
             service_id,
             info,
-            settings,
         )
 
-    store_domain_even_subscriber = settings.store_domain_even_subscriber()
+    store_domain_even_subscriber = settings.get("application").get(
+        "store_domain_event_subscriber"
+    )
     store_domain_even_subscriber_id = store_domain_even_subscriber.get("id")
 
     service_cls = _import_cls(store_domain_even_subscriber.get("class_name"))
@@ -163,7 +169,6 @@ def _create_service(
     service_provider_cls,
     service_id: str,
     info,
-    settings,
 ):
     service_key = service_id.replace(".", "_")
     if hasattr(service_container, service_key):
@@ -177,16 +182,6 @@ def _create_service(
             args[argument["name"]] = os.environ.get(argument["value"])
         elif argument.get("type") == "parameter":
             args[argument["name"]] = argument["value"]
-        elif argument.get("type") == "settings":
-            method = getattr(settings, argument["value"])
-            method_arguments = argument["args"]
-
-            if not method_arguments:
-                value = method()
-            else:
-                value = method(*argument["args"].split(","))
-
-            args[argument["name"]] = value
         elif argument.get("type") == "service":
             dependency_service_id = argument["value"]
 
@@ -201,7 +196,6 @@ def _create_service(
                 service_provider_cls,
                 dependency_service_id,
                 dependency_service_info,
-                settings,
             )
 
     service_cls = _import_cls(info.get("class_name"))

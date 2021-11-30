@@ -1,6 +1,6 @@
 from typing import Optional, List
 
-import shared.infrastructure.environment.globalvars as glob
+from shared.infrastructure.environment.environment import Environment
 
 from shared.infrastructure.persistence.sqlalchemy.repository import Repository
 
@@ -14,7 +14,7 @@ from corpus.build.domain.model.build import (
 
 class BuildRepositoryImpl(BuildRepository, Repository):
     def __init__(self):
-        super().__init__(Build, glob.settings.database_dsn("corpus"))
+        super().__init__(Build, Environment.database_dsn("corpus"))
 
     def builds_of_tenant(self, tenant_id: str) -> List[Build]:
         return self.find_all(

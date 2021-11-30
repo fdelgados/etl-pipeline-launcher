@@ -11,7 +11,10 @@ from pika import exceptions
 from shared.application.bootstrap import Bootstrap
 from shared.infrastructure.logging.file.logger import FileLogger
 from shared.domain.service.logging.logger import Logger
-from shared.infrastructure.messaging.rabbitmq.connector import RabbitMqConnector
+from shared.infrastructure.messaging.rabbitmq.connector import (
+    RabbitMqConnector,
+)
+from shared.infrastructure.environment.environment import Environment
 
 bootstrap = Bootstrap()
 
@@ -79,7 +82,9 @@ def _build_command(command_name, message):
     return command
 
 
-def consume(exchange_name: str, routing_keys: Dict, logger: Logger, channel) -> None:
+def consume(
+    exchange_name: str, routing_keys: Dict, logger: Logger, channel
+) -> None:
     logger.info(" [*] Connecting to server...")
 
     try:
@@ -96,7 +101,9 @@ def consume(exchange_name: str, routing_keys: Dict, logger: Logger, channel) -> 
                 result = channel.queue_declare(queue=queue_name, durable=True)
                 queue_name = result.method.queue
                 channel.queue_bind(
-                    queue=queue_name, exchange=exchange_name, routing_key=routing_key
+                    queue=queue_name,
+                    exchange=exchange_name,
+                    routing_key=routing_key,
                 )
 
                 channel.basic_consume(
@@ -120,7 +127,7 @@ def consume(exchange_name: str, routing_keys: Dict, logger: Logger, channel) -> 
 
 
 exchanges = bootstrap.settings.subscribed_events()
-connection_settings = bootstrap.settings.rabbit_connection_settings()
+connection_settings = Environment.rabbit_connection_settings()
 file_logger = FileLogger()
 connector = RabbitMqConnector(file_logger)
 
@@ -140,7 +147,12 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "-w", "--worker", dest="worker", help="Worker name", default=None, metavar=""
+    "-w",
+    "--worker",
+    dest="worker",
+    help="Worker name",
+    default=None,
+    metavar="",
 )
 
 parser.add_argument(
@@ -185,5 +197,8 @@ connection_channel = connection.channel()
 
 for subscribed_exchange, listening_routing_keys in exchanges.items():
     consume(
-        subscribed_exchange, listening_routing_keys, file_logger, connection_channel
+        subscribed_exchange,
+        listening_routing_keys,
+        file_logger,
+        connection_channel,
     )

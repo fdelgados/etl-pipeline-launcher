@@ -5,7 +5,6 @@ from sqlalchemy import (
     DateTime,
     Integer,
     Float,
-    MetaData,
     Boolean,
 )
 
@@ -25,8 +24,8 @@ from duplicates.shared.infrastructure.persistence.sqlalchemy.type import (
 
 
 class DuplicatesMapping(Mapping):
-    def _do_mapping(self, metadata: MetaData) -> None:
-        mapper_registry = registry(metadata=metadata)
+    def map_entities(self) -> None:
+        mapper_registry = registry()
 
         reports_table = Table(
             "reports",

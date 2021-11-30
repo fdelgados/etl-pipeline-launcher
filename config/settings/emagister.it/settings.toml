@@ -1,5 +1,2 @@
 [application]
 timezone = "Europe/Rome"
-
-[api]
-port = 5005

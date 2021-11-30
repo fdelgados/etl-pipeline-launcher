@@ -1,4 +1,3 @@
-import os
 import unittest
 
 import pytest
@@ -11,10 +10,7 @@ class TestBuild(unittest.TestCase):
     _settings = None
 
     def setUp(self) -> None:
-        self._settings = Settings(
-            os.environ.get("SITE"),
-            os.environ.get("ENVIRONMENT", "development"),
-        )
+        self._settings = Settings()
 
     @pytest.mark.usefixtures("restart_api")
     def test_foo(self) -> None:

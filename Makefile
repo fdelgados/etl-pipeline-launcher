@@ -1,11 +1,5 @@
-SITE=
-
 export COMPOSE_DOCKER_CLI_BUILD=1
 export DOCKER_BUILDKIT=1
-
-ifdef SITE
-export SITE=$(SITE)
-endif
 
 .PHONY: help
 help: ## Show make targets
@@ -28,14 +22,14 @@ start stop destroy:
 .PHONY: test
 test: unit-tests ## Run all tests
 
-unit-tests: stop ## Run unit tests
-	@docker-compose -f ./docker/docker-compose.yml run --rm --no-deps --entrypoint=pytest application /var/www/tests/unit
+unit-tests: ## Run unit tests
+	@docker-compose -f ./docker/docker-compose.yml run --rm --no-deps --entrypoint="pytest /var/www/tests/unit" application
 
 e2e-tests: start ## Run end to end tests
-	@docker-compose -f ./docker/docker-compose.yml run --rm --no-deps --entrypoint=pytest application /var/www/tests/e2e
+	@docker-compose -f ./docker/docker-compose.yml run --rm --no-deps --entrypoint="pytest /var/www/tests/e2e" application
 
 integration-tests: start ## Run integration tests
-	@docker-compose -f ./docker/docker-compose.yml run --rm --no-deps --entrypoint=pytest application /var/www/tests/integration
+	@docker-compose -f ./docker/docker-compose.yml run --rm --no-deps --entrypoint="pytest /var/www/tests/integration" application
 
 static-analysis: ## Run python linter
 	@docker-compose -f ./docker/docker-compose.yml --rm --no-deps static-analysis

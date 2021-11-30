@@ -1,4 +1,4 @@
-from sqlalchemy import Table, String, Column, DateTime, Integer, JSON, MetaData
+from sqlalchemy import Table, String, Column, DateTime, Integer, JSON
 
 from sqlalchemy.orm import registry
 
@@ -13,9 +13,8 @@ from corpus.shared.infrastructure.persistence.sqlalchemy.type import (
 
 
 class CorpusMapping(Mapping):
-    def _do_mapping(self, metadata: MetaData) -> None:
-
-        mapper_registry = registry(metadata=metadata)
+    def map_entities(self) -> None:
+        mapper_registry = registry()
 
         build_table = Table(
             "builds",

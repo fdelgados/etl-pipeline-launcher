@@ -2,7 +2,7 @@ from pymongo import MongoClient
 
 from typing import List
 
-import shared.infrastructure.environment.globalvars as glob
+from shared.infrastructure.environment.environment import Environment
 
 from shared.domain.model.valueobject.url import Url
 
@@ -12,7 +12,7 @@ from duplicates.data.domain.service.datagatherer import DataGatherer
 
 class DataGathererImpl(DataGatherer):
     def __init__(self):
-        connection_settings = glob.settings.mongodb_connection_settings()
+        connection_settings = Environment.mongodb_connection_settings()
 
         self._database = connection_settings.get("database")
         self._client = MongoClient(
@@ -33,7 +33,12 @@ class DataGathererImpl(DataGatherer):
                 "is_indexable": {"$eq": True},
                 "status_code": {"$eq": 200},
                 "document_type": {"$eq": "web_page"},
-            }
+            },
+            {
+                "_id": 0,
+                "address": 1,
+                "content": 1,
+            },
         )
 
         for document in documents:

@@ -28,4 +28,7 @@
     <service id="shared.infrastructure.bus.event.inmemory.in_memory_event_bus"
              class="shared.infrastructure.bus.event.inmemory.InMemoryEventBus" />
 
+    <service id="shared.infrastructure.environment.settings"
+             class="shared.infrastructure.environment.settings.Settings" />
+
 </services>

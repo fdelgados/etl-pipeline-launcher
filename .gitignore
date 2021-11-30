@@ -1,7 +1,7 @@
 out
-.redis-data*
-.mariadb-data*
-.mongodb-data*
+.redis-data
+.mariadb-data
+.mongodb-data
 export
 log
 .data
@@ -9,4 +9,4 @@ log
 .venv
 .pytest_cache
 __pycache__
-docker/.env
+docker/*.env

@@ -17,15 +17,11 @@ class ReportStatsRetrieverImpl(ReportStatsRetriever):
 
     def retrieve(self, report: Report) -> ReportStats:
         return ReportStats(
-            self._get_stats_from_event_store(report, PageAnalyzed.type_name()),
-            self._get_stats_from_event_store(
-                report, DuplicityDetected.type_name()
-            ),
+            self._get_analysis_stats(report),
+            self._get_duplicity_stats(report),
         )
 
-    def _get_stats_from_event_store(
-        self, report: Report, event_type: str
-    ) -> int:
+    def _get_analysis_stats(self, report: Report) -> int:
 
         sentence = """
             SELECT COUNT(*) AS requests FROM event_store
@@ -36,7 +32,24 @@ class ReportStatsRetrieverImpl(ReportStatsRetriever):
         result = self._db_service.execute(
             sentence,
             report_id=report.report_id.value,
-            event=event_type,
+            event=PageAnalyzed.type_name(),
+        )
+
+        return result.scalar()
+
+    def _get_duplicity_stats(self, report: Report) -> int:
+
+        sentence = """
+            SELECT COUNT(*) AS requests FROM event_store
+            WHERE report_id = :report_id
+            AND event_name = :event
+            GROUP BY aggregate_id
+        """
+
+        result = self._db_service.execute(
+            sentence,
+            report_id=report.report_id.value,
+            event=DuplicityDetected.type_name(),
         )
 
         return result.scalar()

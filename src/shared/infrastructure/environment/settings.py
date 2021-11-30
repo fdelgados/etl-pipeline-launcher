@@ -1,5 +1,4 @@
 import os
-import re
 import glob
 import collections
 from typing import Dict, Any, Optional, List
@@ -9,27 +8,14 @@ from setuptools import find_packages
 
 
 class Settings:
-    def __init__(self, site: str, environment: Optional[str] = "development"):
-        self._environment = environment
+    def __init__(self):
+        self._environment = os.environ.get("ENVIRONMENT", "development")
+        self._site = os.environ.get("SITE")
 
-        if not site:
-            raise ValueError("A site name must be provided")
+        settings_dir = Settings.settings_dir()
+        services_dir = f"{Settings.configs_dir()}/services"
 
-        self._site = site
-
-        configs_dir = "/var/www/config"
-        settings_dir = f"{configs_dir}/settings"
-        services_dir = f"{configs_dir}/services"
-        contexts_dir = "/var/www/src"
-
-        self._contexts = list(
-            filter(
-                lambda context: "." not in context,
-                find_packages(where=contexts_dir),
-            )
-        )
-
-        self._config = toml.load(f"{settings_dir}/common/settings.toml")
+        self._config = Settings.common_settings()
         common_environment_config = toml.load(
             f"{settings_dir}/common/settings.{self._environment}.toml"
         )
@@ -37,19 +23,21 @@ class Settings:
         self._dict_merge(self._config, common_environment_config)
 
         if not self.is_test():
-            country_config = toml.load(
+            site_config = toml.load(
                 f"{settings_dir}/{self._site}/settings.toml"
             )
-            self._dict_merge(self._config, country_config)
+            self._dict_merge(self._config, site_config)
 
-            country_env_file = "{}/{}/settings.{}.toml".format(
+            site_env_file = "{}/{}/settings.{}.toml".format(
                 settings_dir,
                 self._site,
                 self._environment,
             )
-            country_environment_config = toml.load(country_env_file)
 
-            self._dict_merge(self._config, country_environment_config)
+            if os.path.isfile(site_env_file):
+                site_environment_config = toml.load(site_env_file)
+
+                self._dict_merge(self._config, site_environment_config)
 
         self._subscribed_events = {}
         subscribed_events_files = glob.glob(
@@ -77,6 +65,18 @@ class Settings:
             else:
                 dct[key] = merge_dct[key]
 
+    @staticmethod
+    def common_settings() -> dict:
+        return toml.load(f"{Settings.settings_dir()}/common/settings.toml")
+
+    @staticmethod
+    def configs_dir() -> str:
+        return "/var/www/config"
+
+    @staticmethod
+    def settings_dir() -> str:
+        return f"{Settings.configs_dir()}/settings"
+
     def environment(self) -> str:
         return self._environment
 
@@ -92,15 +92,6 @@ class Settings:
     def site(self) -> str:
         return self._site
 
-    def flask_config(self) -> Dict:
-        if not self._config.get("flask"):
-            return {}
-
-        return {
-            key.upper(): value
-            for (key, value) in self._config.get("flask").items()
-        }
-
     def _get(
         self, section: str, entry: str, default: Optional[Any] = None
     ) -> Any:
@@ -109,17 +100,11 @@ class Settings:
     def application_id(self) -> str:
         return self._get("application", "id")
 
-    def api_version(self) -> int:
-        return self._get("api", "version")
-
     def api_title(self) -> str:
         return self._get("api", "title")
 
-    def api_doc_path(self) -> str:
-        return self._get("api", "doc_path", "/doc")
-
-    def api_version_str(self) -> str:
-        return self._get("api", "version_str").format(self.api_version())
+    def api_version(self) -> int:
+        return self._get("api", "version")
 
     def api_prefix(self, path: Optional[str] = None) -> str:
         api_prefix = self._get("api", "prefix").format(self.api_version())
@@ -140,34 +125,6 @@ class Settings:
 
         return "{}:{}{}".format(url, port, self.api_prefix())
 
-    def database_dsn(self, context: str) -> str:
-        return "mysql+pymysql://{}:{}@{}/{}?charset=utf8mb4".format(
-            os.environ.get(f"{context.upper()}_DATABASE_USER"),
-            os.environ.get(f"{context.upper()}_DATABASE_PASSWORD"),
-            os.environ.get("MARIA_DB_HOST"),
-            os.environ.get(f"{context.upper()}_DATABASE_NAME"),
-        )
-
-    def mongodb_connection_settings(self) -> dict:
-        return {
-            "host": os.environ.get("MONGO_HOST"),
-            "port": int(os.environ.get("MONGO_PORT")),
-            "username": os.environ.get("MONGO_INITDB_USER"),
-            "password": os.environ.get("MONGO_INITDB_PASSWORD"),
-            "database": os.environ.get("MONGO_INITDB_DATABASE"),
-        }
-
-    def rabbit_connection_settings(self) -> dict:
-        connection_settings = self._config.get("rabbitmq").get("connection")
-
-        return {
-            "host": os.environ.get("RABBITMQ_HOST"),
-            "port": os.environ.get("RABBITMQ_PORT"),
-            "user": os.environ.get("RABBITMQ_USER"),
-            "password": os.environ.get("RABBITMQ_PASSWORD"),
-            "vhost": connection_settings.get("vhost")
-        }
-
     def rabbit_publish_exchange(self):
         exchanges = self._config.get("rabbitmq").get("exchanges")
 
@@ -184,11 +141,6 @@ class Settings:
             return {}
 
         return self._subscribed_events.get(exchange, {}).get(event, {})
-
-    def store_domain_even_subscriber(self) -> Dict:
-        return self._config.get("application").get(
-            "store_domain_event_subscriber"
-        )
 
     def redis_host(self):
         return os.environ.get("REDIS_HOST")
@@ -215,18 +167,16 @@ class Settings:
     def get_app_entry_point(self) -> str:
         return self._get("application", "entry_point")
 
-    def contexts(self) -> List:
-        return self._contexts
+    @staticmethod
+    def contexts() -> List:
+        contexts_dir = "/var/www/src"
 
-    def services_files(self) -> List:
-        services_dir = os.path.join(self._configs_dir(), "services/")
-
-        return glob.glob(f"{services_dir}**/*-services.xml")
-
-    def event_handlers_files(self) -> str:
-        services_dir = os.path.join(self._configs_dir(), "services/")
-
-        return glob.glob(f"{services_dir}**/event-handlers.xml")
+        return list(
+            filter(
+                lambda context: "." not in context,
+                find_packages(where=contexts_dir),
+            )
+        )
 
     def public_key(self) -> str:
         with open(
@@ -239,39 +189,6 @@ class Settings:
 
     def verify_token_expiration_time(self) -> bool:
         return self._get("identity_access", "verify_token_expiration_time")
-
-    def db_mapping_classes(self):
-        contexts_dir = self._config.get("application").get("contexts_dir")
-
-        context_mapping_files = {}
-        mapping_modules = []
-        for context in self.contexts():
-            mapping_file = (
-                "{}/{}/shared/infrastructure/persistence"
-                "/sqlalchemy/mapping.py"
-            )
-
-            mapping_files = glob.glob(
-                mapping_file.format(contexts_dir, context)
-            )
-
-            context_mapping_files[context] = mapping_files
-
-        for context, files in context_mapping_files.items():
-            mapping_class_prefix = (
-                context.replace("_", " ").title().replace(" ", "")
-            )
-            for file in files:
-                module_name = file.replace(f"{contexts_dir}/", "").replace(
-                    "/", "."
-                )
-                module_name = re.sub(r"\.py$", "", module_name)
-                module_name = "{}.{}Mapping".format(
-                    module_name, mapping_class_prefix
-                )
-                mapping_modules.append(module_name)
-
-        return mapping_modules
 
     def event_store_config_for_context(self, context: str) -> Dict:
         context_config = self._get("application", "contexts", {}).get(context)
@@ -309,9 +226,6 @@ class Settings:
 
     def api_path(self):
         return "/{}".format(self.api_version())
-
-    def logs_dir(self):
-        return self._get("application", "logs_dir")
 
     def _configs_dir(self):
         return self._get("application", "configs_dir")

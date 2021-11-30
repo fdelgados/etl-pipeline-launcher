@@ -1,12 +1,12 @@
-CREATE DATABASE IF NOT EXISTS duplicates CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS duplicates_emagister_com CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-CREATE USER IF NOT EXISTS 'duplicates'@'%' IDENTIFIED BY 'wTUbtEmk2S6R';
+CREATE USER IF NOT EXISTS 'emagister_com'@'%' IDENTIFIED BY 'wTUbtEmk2S6R';
 
-GRANT INSERT, SELECT, UPDATE, DELETE ON duplicates.* TO 'duplicates';
+GRANT INSERT, SELECT, UPDATE, DELETE ON duplicates_emagister_com.* TO 'emagister_com';
 
 FLUSH PRIVILEGES;
 
-USE `duplicates`;
+USE duplicates_emagister_com;
 
 -- FUNCTIONS
 DELIMITER //

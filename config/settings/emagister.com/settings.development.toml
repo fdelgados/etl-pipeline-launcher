@@ -1,3 +1,0 @@
-[identity_access]
-token_issuer = "http://localhost"
-public_key_file = "/export/certs/identity_access.pem"

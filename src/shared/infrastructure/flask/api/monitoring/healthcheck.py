@@ -12,8 +12,10 @@ health_check = Namespace("health_check", description="Health check endpoint")
 @health_check.route("/health-check")
 class HealthCheckController(BaseController):
     def get(self):
-        return self.response_ok({
-            "status": "OK",
-            "version": glob.settings.api_version(),
-            "date": datetime.now(),
-        })
+        return self.response_ok(
+            {
+                "status": "OK",
+                "version": glob.settings.api_version(),
+                "date": datetime.now(),
+            }
+        )
