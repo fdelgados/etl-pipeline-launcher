@@ -77,7 +77,7 @@ class Report(AggregateRoot):
         creator: User,
         k_shingle_size: KShingleSize,
         similarity_threshold: SimilarityThreshold,
-        similarity_threshold_margin: float = 0.0
+        similarity_threshold_margin: float = 0.0,
     ):
         self._report_id = report_id
         self._name = name
@@ -150,8 +150,9 @@ class Report(AggregateRoot):
 
     @property
     def max_similarity_allowed(self) -> float:
-        return self.similarity_threshold.value \
-            - self._similarity_threshold_margin
+        return (
+            self.similarity_threshold.value - self._similarity_threshold_margin
+        )
 
     @property
     def started_on(self) -> datetime:
