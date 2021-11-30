@@ -58,7 +58,7 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-    command: flake8 --ignore=E203,W503 .
+    entrypoint: flake8 --ignore=E203,W503 .
     environment:
       - REQUIREMENTS_FILE
 

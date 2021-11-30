@@ -26,7 +26,8 @@ jobs:
     - stage: tests
       name: "Static Analysis"
       script:
-        - make static-analysis
+        - docker-compose -f ./docker/docker-compose.yml build static-analysis
+        - docker-compose -f ./docker/docker-compose.yml run static-analysis
     - stage: push
       name: "Tag and push build"
       script:

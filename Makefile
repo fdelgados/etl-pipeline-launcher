@@ -31,10 +31,6 @@ e2e-tests: start ## Run end to end tests
 integration-tests: start ## Run integration tests
 	@docker-compose -f ./docker/docker-compose.yml run --rm --no-deps --entrypoint="pytest /var/www/tests/integration" application
 
-static-analysis: ## Run python linter
-	@docker-compose -f ./docker/docker-compose.yml run --rm --no-deps static-analysis
-
-
 reload-workers: stop-workers run-workers ## Reload RabbitMQ workers
 
 run-workers: CMD=up -d ## Run RabbitMQ workers
