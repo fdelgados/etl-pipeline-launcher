@@ -22,11 +22,12 @@ jobs:
     - stage: tests
       name: "Unit Tests"
       script:
-        - make test
+        - docker-compose -f ./docker/docker-compose.yml build --build-arg PYTHON_DEPS=requirements-devel.txt
+        - docker-compose -f ./docker/docker-compose.yml run --entrypoint="pytest /var/www/tests/unit" application
     - stage: tests
       name: "Static Analysis"
       script:
-        - docker-compose -f ./docker/docker-compose.yml build static-analysis
+        - docker-compose -f ./docker/docker-compose.yml build --build-arg PYTHON_DEPS=requirements-devel.txt static-analysis
         - docker-compose -f ./docker/docker-compose.yml run static-analysis
     - stage: push
       name: "Tag and push build"

@@ -1,6 +1,6 @@
 FROM python:3.9-slim-buster
 
-ARG REQUIREMENTS_FILE
+ARG PYTHON_DEPS=requirements.txt
 
 EXPOSE 5000
 EXPOSE 80
@@ -15,8 +15,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 CMD /usr/local/bin/python -m pip install --upgrade pip
 
 COPY requirements.txt /tmp/
-COPY $REQUIREMENTS_FILE /tmp/
-RUN pip install -r /tmp/$REQUIREMENTS_FILE
+COPY $PYTHON_DEPS /tmp/
+RUN pip install -r /tmp/$PYTHON_DEPS
 
 RUN mkdir -p /var/www/src
 RUN mkdir -p /var/www/data

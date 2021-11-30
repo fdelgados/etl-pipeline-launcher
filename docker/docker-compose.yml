@@ -18,8 +18,6 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-      args:
-        - REQUIREMENTS_FILE=${REQUIREMENTS_FILE}
     depends_on:
       - mariadb
       - rabbitmq
@@ -35,6 +33,39 @@ services:
       - ../bin:/var/www/bin
       - ../.data:/var/www/data
     restart: always
+    environment:
+      - MARIA_DB_HOST
+      - DUPLICATES_EMAGISTER_COM_DATABASE_NAME
+      - DUPLICATES_EMAGISTER_COM_DATABASE_USER
+      - DUPLICATES_EMAGISTER_COM_DATABASE_PASSWORD
+      - CORPUS_EMAGISTER_COM_DATABASE_NAME
+      - CORPUS_EMAGISTER_COM_DATABASE_USER
+      - CORPUS_EMAGISTER_COM_DATABASE_PASSWORD
+      - DUPLICATES_EMAGISTER_IT_DATABASE_NAME
+      - DUPLICATES_EMAGISTER_IT_DATABASE_USER
+      - DUPLICATES_EMAGISTER_IT_DATABASE_PASSWORD
+      - CORPUS_EMAGISTER_IT_DATABASE_NAME
+      - CORPUS_EMAGISTER_IT_DATABASE_USER
+      - CORPUS_EMAGISTER_IT_DATABASE_PASSWORD
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+      - ENVIRONMENT
+      - FLASK_ENV
+      - FLASK_DEBUG
+      - MONGO_HOST
+      - MONGO_PORT
+      - MONGO_EMAGISTER_COM_INITDB_DATABASE
+      - MONGO_EMAGISTER_COM_INITDB_USER
+      - MONGO_EMAGISTER_COM_INITDB_PASSWORD
+      - MONGO_EMAGISTER_IT_INITDB_DATABASE
+      - MONGO_EMAGISTER_IT_INITDB_USER
+      - MONGO_EMAGISTER_IT_INITDB_PASSWORD
+      - REDIS_HOST
+      - REDIS_PORT
+      - RABBITMQ_HOST
+      - RABBITMQ_PORT
+      - RABBITMQ_USER
+      - RABBITMQ_PASSWORD
     ports:
       - "5000:5000"
     command: gunicorn --bind 0.0.0.0:5000 shared.infrastructure.flask.entrypoint.run:app
@@ -56,8 +87,6 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-      args:
-        - REQUIREMENTS_FILE=${REQUIREMENTS_FILE}
     entrypoint: flake8 --ignore=E203,W503 .
 
   rabbitmq:
