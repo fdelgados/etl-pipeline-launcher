@@ -20,7 +20,7 @@
              alias="corpus.infrastructure.persistence.sqlalchemy.dbal.sql_alchemy_dbal_service" />
 
     <service id="corpus.domain.event.event_store.event_store"
-             alias="corpus.infrastructure.event.mysql.eventstore.mysql_event_store" />
+             alias="corpus.infrastructure.event.sqlalchemy.eventstore.sqlalchemy_event_store" />
 
     <service id="corpus.build.domain.service.requests_counter.requests_counter"
              alias="corpus.build.infrastructure.requests_counter.sqlalchemy.requests_counter.requests_counter_impl" />
