@@ -24,6 +24,7 @@ class BuildStatusType(types.TypeDecorator):
         pass
 
     impl = types.INTEGER
+    cache_ok = True
 
     def process_bind_param(self, build_status, dialect):
         return build_status.value

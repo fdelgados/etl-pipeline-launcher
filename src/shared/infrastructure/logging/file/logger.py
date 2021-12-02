@@ -31,7 +31,7 @@ class FileLogger(Logger):
 
         file = f"{logs_dir}/{logfile}.log"
         if not os.path.isfile(file):
-            open(file, "w")
+            open(file, "a").close()
 
         file_handler = logging.FileHandler(file)
         logging.StreamHandler()

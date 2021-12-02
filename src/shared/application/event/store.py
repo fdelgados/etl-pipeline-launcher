@@ -1,9 +1,11 @@
 from shared.utils import class_fullname
+from shared.domain.model.valueobject.uid import Uuid
 from shared.domain.bus.event import (
     DomainEvent,
     DomainEventSubscriber,
     EventStore,
 )
+from shared.domain.event.storedevent import StoredEvent
 import shared.infrastructure.environment.globalvars as glob
 
 
@@ -20,6 +22,14 @@ class StoreDomainEventOnPublished(DomainEventSubscriber):
         if not event_store or not isinstance(event_store, EventStore):
             return None
 
-        event_store.append(domain_event)
+        stored_event = StoredEvent(
+            str(Uuid()),
+            domain_event.aggregate_id,
+            domain_event.occurred_on,
+            domain_event.serialize(),
+            domain_event.type_name(),
+        )
+
+        event_store.append(stored_event)
 
         return None

@@ -15,9 +15,9 @@ class Bootstrap:
 
         self.logger = FileLogger("boot")
 
-        self.generate_db_maps()
+        self._generate_db_maps()
 
-    def generate_db_maps(self) -> Bootstrap:
+    def _generate_db_maps(self) -> Bootstrap:
         self.logger.info("Generating database tables mappings")
         for mapping_class in self._db_mapping_classes():
             module_name, class_name = mapping_class.rsplit(".", 1)

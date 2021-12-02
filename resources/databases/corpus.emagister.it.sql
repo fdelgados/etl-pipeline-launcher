@@ -34,7 +34,7 @@ DELIMITER ;
 -- TABLES
 CREATE TABLE IF NOT EXISTS `event_store`
 (
-    `id`           INT AUTO_INCREMENT,
+    `id`           CHAR(36),
     `aggregate_id` VARCHAR(255) NOT NULL,
     `event_name`   VARCHAR(200) NOT NULL,
     `event_data`   JSON         NOT NULL,

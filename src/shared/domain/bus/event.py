@@ -2,6 +2,7 @@ import abc
 import json
 from datetime import datetime
 from typing import List, Dict, Optional, Any
+from shared.domain.event.storedevent import StoredEvent
 
 
 class DomainEvent(metaclass=abc.ABCMeta):
@@ -80,13 +81,13 @@ class EventBus(metaclass=abc.ABCMeta):
 
 class EventStore(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def append(self, domain_event: DomainEvent) -> None:
+    def append(self, stored_event: StoredEvent) -> None:
         raise NotImplementedError
 
     @abc.abstractmethod
-    def events_since(self, domain_event_id: int) -> List[DomainEvent]:
+    def events_since(self, domain_event_id: int) -> List[StoredEvent]:
         raise NotImplementedError
 
     @abc.abstractmethod
-    def events_by_type(self, *type_name: str, **kwargs) -> List[DomainEvent]:
+    def events_by_type(self, type_name: str, **kwargs) -> List[StoredEvent]:
         raise NotImplementedError

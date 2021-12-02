@@ -34,9 +34,9 @@
         <argument name="context" value="duplicates" type="parameter" />
     </service>
 
-    <service id="duplicates.infrastructure.event.mysql.eventstore.mysql_event_store"
-             class="shared.infrastructure.event.mysql.eventstore.MysqlEventStore">
-        <argument name="db_service" value="duplicates.infrastructure.persistence.sqlalchemy.dbal.sql_alchemy_dbal_service" type="service" />
+    <service id="duplicates.infrastructure.event.sqlalchemy.eventstore.sqlalchemy_event_store"
+             class="shared.infrastructure.event.sqlalchemy.eventstore.SqlAlchemyEventStore">
+        <argument name="context" value="duplicates" type="parameter" />
     </service>
 
     <service id="duplicates.report.infrastructure.statsretriever.mysql.statsretriever.report_stats_retriever_impl"

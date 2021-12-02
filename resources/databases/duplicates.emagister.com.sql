@@ -88,7 +88,7 @@ CREATE INDEX IF NOT EXISTS `duplicates_is_in_allowed_margin`
 
 CREATE TABLE IF NOT EXISTS `event_store`
 (
-    `id`           INT AUTO_INCREMENT,
+    `id`           CHAR(36),
     `aggregate_id` VARCHAR(255) NOT NULL,
     `event_name`   VARCHAR(200) NOT NULL,
     `event_data`   JSON         NOT NULL,

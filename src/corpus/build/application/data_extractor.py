@@ -84,9 +84,12 @@ class ExtractDataOnBuildStarted(DomainEventSubscriber):
 
             self._log("critical", str(error))
         finally:
-            self._build_repository.save(build)
+            try:
+                self._build_repository.save(build)
+                self._event_bus.publish(*build.pull_events())
 
-            self._event_bus.publish(*build.pull_events())
+            except RuntimeError as err:
+                self._log("critical", str(err))
 
     def _find_build(self, tenant_id: str, build_id: BuildId) -> Build:
         build = self._build_repository.build_of_tenant_and_id(
@@ -151,6 +154,10 @@ class ExtractDataOnBuildStarted(DomainEventSubscriber):
                 self._publish_extraction_failed(build, url)
 
                 raise
+            except RuntimeError as error:
+                self._log("critical", f"{url}: {str(error)}")
+
+                self._publish_extraction_failed(build, url)
 
         return retrieve_page_content
 

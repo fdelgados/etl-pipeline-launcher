@@ -26,9 +26,9 @@ class Environment:
         return {
             "host": os.environ.get("MONGO_HOST"),
             "port": int(os.environ.get("MONGO_PORT")),
-            "username": db_user,
-            "password": db_password,
-            "database": db_name,
+            "username": os.environ.get(db_user),
+            "password": os.environ.get(db_password),
+            "database": os.environ.get(db_name),
         }
 
     @staticmethod
