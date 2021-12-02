@@ -10,3 +10,4 @@ log
 .pytest_cache
 __pycache__
 docker/*.env
+/docker/env.prod
