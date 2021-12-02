@@ -32,7 +32,7 @@ RUN pip install -e ./
 COPY tests/ tests/
 COPY config/ config/
 COPY bin/ bin/
-CMD chmod a+x bin/run_workers.py
-CMD chmod a+x bin/console.py
+#CMD chmod a+x bin/run_workers.py
+#CMD chmod a+x bin/console.py
 
 WORKDIR /var/www/src
