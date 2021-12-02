@@ -33,6 +33,8 @@ services:
       - ../bin:/var/www/bin
       - ../.data:/var/www/data
     restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       - MARIA_DB_HOST
       - DUPLICATES_EMAGISTER_COM_DATABASE_NAME
