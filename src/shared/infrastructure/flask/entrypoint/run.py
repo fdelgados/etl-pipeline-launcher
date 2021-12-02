@@ -1,7 +1,7 @@
 import os
 import time
 
-from flask import Flask
+from flask import Flask, request
 from flask_restx import Api
 
 from shared.domain.errors.errors import ApplicationError
@@ -23,7 +23,8 @@ app.config.from_mapping(bootstrap.flask_config())
 
 @app.before_request
 def before_request_func():
-    os.environ["SITE"] = "emagister.com"
+    site = request.headers.get("Site")
+    os.environ["SITE"] = site
 
     gvars.settings = Settings()
     gvars.container = container.create_container(
