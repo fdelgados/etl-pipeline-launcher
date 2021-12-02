@@ -18,7 +18,7 @@ class InMemoryEventBus(EventBus):
             jobs.append(
                 multiprocessing.Process(
                     target=subscriber.handle,
-                    args=(domain_event, ),
+                    args=(domain_event,),
                 )
             )
 

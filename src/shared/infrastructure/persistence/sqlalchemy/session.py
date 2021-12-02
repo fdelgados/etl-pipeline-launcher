@@ -1,4 +1,3 @@
-import threading
 from contextlib import contextmanager
 
 from sqlalchemy import create_engine
@@ -13,19 +12,14 @@ class ScopedSessionError(RuntimeError):
 
 class SessionBuilder:
     _sessions = {}
-    # _lock = threading.Lock()
 
     @classmethod
     def build(cls, dsn: str) -> scoped_session:
         if not cls._sessions.get(dsn):
-            # with cls._lock:
             if not cls._sessions.get(dsn):
                 session_factory = sessionmaker(
                     bind=create_engine(
-                        dsn,
-                        pool_recycle=500,
-                        pool_size=20,
-                        max_overflow=0
+                        dsn, pool_recycle=500, pool_size=20, max_overflow=0
                     )
                 )
                 cls._sessions[dsn] = scoped_session(session_factory)
@@ -60,5 +54,4 @@ def session_scope(dsn: str):
 
         raise ScopedSessionError(str(error))
     finally:
-        # session.close()
         safe_session.remove()

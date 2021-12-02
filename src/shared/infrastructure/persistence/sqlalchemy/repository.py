@@ -19,32 +19,23 @@ class Repository(BaseRepository):
     def add(self, aggregate: AggregateRoot) -> None:
         with session_scope(self._dsn) as session:
             session.add(aggregate)
-            # session.commit()
 
     def save(self, aggregate: AggregateRoot) -> None:
         with session_scope(self._dsn) as session:
             session.add(aggregate)
-            # session.commit()
 
     def find(self, **kwargs) -> AggregateRoot:
         session = self._session()
 
         return session.query(self._aggregate).filter_by(**kwargs).first()
-        # with session_scope(self._dsn) as session:
-        #     result = session.query(self._aggregate).filter_by(**kwargs).first()
-        #
-        # return result
 
     def find_all(self, order_by: Dict = None, **kwargs) -> List[AggregateRoot]:
-        # with session_scope(self._dsn) as session:
         session = self._session()
         query = session.query(self._aggregate).filter_by(**kwargs)
         if order_by:
             for field, direction in order_by.items():
                 if direction == "desc":
-                    order_expression = desc(
-                        self._aggregate.__dict__[field]
-                    )
+                    order_expression = desc(self._aggregate.__dict__[field])
                 else:
                     order_expression = asc(self._aggregate.__dict__[field])
 

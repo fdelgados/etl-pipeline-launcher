@@ -9,10 +9,7 @@ from shared.domain.event.storedevent import StoredEvent
 
 from shared.infrastructure.environment.environment import Environment
 
-from shared.infrastructure.persistence.sqlalchemy.session import (
-    session_scope,
-    SessionFactory
-)
+from shared.infrastructure.persistence.sqlalchemy.session import session_scope
 
 
 def _map_stored_event():

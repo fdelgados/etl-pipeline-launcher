@@ -35,5 +35,3 @@ class StoredEvent:
     @property
     def event_name(self) -> str:
         return self._event_name
-
-
