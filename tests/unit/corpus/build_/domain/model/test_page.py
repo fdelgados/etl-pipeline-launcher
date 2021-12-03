@@ -14,4 +14,6 @@ class TestPage(unittest.TestCase):
         page = PageCreator().with_canonical_url().build()
 
         self.assertFalse(page.is_canonical, "Page should be non canonical")
-        self.assertFalse(page.is_fully_indexable(), "Page should be non indexable")
+        self.assertFalse(
+            page.is_fully_indexable(), "Page should be non indexable"
+        )
