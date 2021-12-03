@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 
 <events>
-    <event class="corpus.build.domain.event.page_added.PageAdded" />
-
     <event class="corpus.build.domain.event.build_started.BuildStarted">
         <handler id="corpus.build.application.data_extractor.extract_data_on_build_started" />
     </event>
@@ -13,12 +11,10 @@
 
     <event class="corpus.build.domain.event.build_completed.BuildCompleted">
         <handler id="corpus.build.application.build_status_updater.update_build_stats_on_build_completed" />
-        <handler id="corpus.build.application.corpus_rotator.rotate_corpus_on_build_completed" />
     </event>
 
     <event class="corpus.build.domain.event.build_aborted.BuildAborted">
         <handler id="corpus.build.application.build_status_updater.update_build_stats_on_build_aborted" />
-        <handler id="corpus.build.application.corpus_cleaner.clean_corpus_on_build_aborted" />
     </event>
 
 </events>

@@ -120,10 +120,12 @@ class BuildAssembler:
         count_successful = build.successful_requests
         count_failed = build.failed_requests
 
-        if not build.is_completed:
-            count_successful = self._requests_counter.count_successful(
-                build.id
-            )
+        if build.is_dead:
+            count_successful = None
+            count_failed = None
+
+        if build.is_running:
+            count_successful = self._requests_counter.count_successful(build)
             count_failed = self._requests_counter.count_failed(build.id)
 
         return BuildDto(

@@ -5,8 +5,10 @@ from shared.domain.model.aggregate import AggregateRoot
 from shared.domain.model.repository import Repository as BaseRepository
 
 from shared.infrastructure.persistence.sqlalchemy.session import (
+    init,
+    engines,
+    sessions,
     session_scope,
-    SessionFactory,
 )
 
 
@@ -14,7 +16,9 @@ class Repository(BaseRepository):
     def __init__(self, aggregate: AggregateRoot, dsn: str):
         self._aggregate = aggregate
         self._dsn = dsn
-        self._session = SessionFactory.create(self._dsn)
+        init(self._dsn)
+        self._session = sessions[self._dsn]
+        self._engine = engines[self._dsn]
 
     def add(self, aggregate: AggregateRoot) -> None:
         with session_scope(self._dsn) as session:
@@ -27,7 +31,11 @@ class Repository(BaseRepository):
     def find(self, **kwargs) -> AggregateRoot:
         session = self._session()
 
-        return session.query(self._aggregate).filter_by(**kwargs).first()
+        result = session.query(self._aggregate).filter_by(**kwargs).first()
+        session.close()
+        self._engine.dispose()
+
+        return result
 
     def find_all(self, order_by: Dict = None, **kwargs) -> List[AggregateRoot]:
         session = self._session()
@@ -42,5 +50,8 @@ class Repository(BaseRepository):
                 query = query.order_by(order_expression)
 
         results = query.all()
+
+        session.close()
+        self._engine.dispose()
 
         return results

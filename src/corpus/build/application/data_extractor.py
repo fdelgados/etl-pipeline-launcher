@@ -154,7 +154,7 @@ class ExtractDataOnBuildStarted(DomainEventSubscriber):
                 self._publish_extraction_failed(build, url)
 
                 raise
-            except RuntimeError as error:
+            except Exception as error:
                 self._log("critical", f"{url}: {str(error)}")
 
                 self._publish_extraction_failed(build, url)

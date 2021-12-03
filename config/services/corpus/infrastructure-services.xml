@@ -31,8 +31,7 @@
     <service id="corpus.build.infrastructure.requests_counter.sqlalchemy.requests_counter.requests_counter_impl"
              class="corpus.build.infrastructure.requests_counter.sqlalchemy.requests_counter.RequestsCounterImpl">
         <argument name="db_service" value="corpus.infrastructure.persistence.sqlalchemy.dbal.sql_alchemy_dbal_service" type="service" />
+        <argument name="page_repository" value="corpus.build.domain.model.page.page_repository" type="service" />
     </service>
 
-    <service id="corpus.build.infrastructure.corpus_manager.mongodb.corpus_manager.corpus_manager_impl"
-             class="corpus.build.infrastructure.corpus_manager.mongodb.corpus_manager.CorpusManagerImpl" />
 </services>

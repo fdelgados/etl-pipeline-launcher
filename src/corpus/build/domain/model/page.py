@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import abc
 from typing import Dict, Optional
 from datetime import datetime
@@ -8,7 +10,6 @@ from shared.domain.model.aggregate import AggregateRoot
 from shared.domain.model.repository import Repository
 from shared.domain.model.entity.document import Document
 
-from corpus.build.domain.event.page_added import PageAdded
 from corpus.build.domain.model.build import BuildId
 
 
@@ -39,18 +40,6 @@ class Page(AggregateRoot, Document):
         self._canonical_url = None
         self._datalayer = {}
         self._content = {}
-
-        page_requested = PageAdded(
-            self._tenant_id,
-            self._build_id.value,
-            self._url.address,
-            self._status_code,
-            self._status,
-            self._modified_on,
-            self._corpus_name,
-        )
-
-        self.record_event(page_requested)
 
     def content_by_tag(self, tag_name: str) -> Optional[str]:
         return self._content.get(tag_name)
@@ -174,6 +163,10 @@ class Page(AggregateRoot, Document):
     def modified_on(self) -> datetime:
         return self._modified_on
 
+    @property
+    def build_id(self) -> BuildId:
+        return self._build_id
+
     def __repr__(self):
         return "<Page {} ({})>".format(self._url.address, self._status_code)
 
@@ -186,4 +179,10 @@ class UnableToSavePageError(RuntimeError):
 
 
 class PageRepository(Repository, metaclass=abc.ABCMeta):
-    pass
+    @abc.abstractmethod
+    def size(self, build_id: str) -> int:
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def count_by_build(self, build_id: BuildId) -> int:
+        raise NotImplementedError

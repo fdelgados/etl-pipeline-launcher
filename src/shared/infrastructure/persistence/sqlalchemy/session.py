@@ -1,55 +1,39 @@
 from contextlib import contextmanager
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm import sessionmaker
 
 import shared.infrastructure.environment.globalvars as gvars
-
-from shared.infrastructure.logging.file.logger import FileLogger
 
 
 class ScopedSessionError(RuntimeError):
     pass
 
 
-class SessionBuilder:
-    _sessions = {}
-
-    @classmethod
-    def build(cls, dsn: str) -> scoped_session:
-        if not cls._sessions.get(dsn):
-            if not cls._sessions.get(dsn):
-                settings = gvars.settings.environment_settings()
-                timeout = settings.get("mariadb").get("wait_timeout")
-                session_factory = sessionmaker(
-                    bind=create_engine(
-                        dsn,
-                        pool_recycle=timeout,
-                        pool_size=20,
-                        max_overflow=0,
-                    )
-                )
-                cls._sessions[dsn] = scoped_session(session_factory)
-                FileLogger("sqlalchemy.engine")
-
-        return cls._sessions[dsn]
+engines = {}
+sessions = {}
 
 
-class SessionFactory:
-    _safe_session = None
+def init(dsn):
+    global engines, sessions
 
-    @classmethod
-    def create(cls, dsn: str):
-        if not cls._safe_session:
-            cls._safe_session = SessionBuilder.build(dsn)
+    settings = gvars.settings.environment_settings()
+    timeout = settings.get("mariadb").get("wait_timeout")
 
-        return cls._safe_session
+    engines[dsn] = create_engine(dsn, pool_recycle=timeout)
+
+    sessions[dsn] = sessionmaker(bind=engines[dsn])
 
 
 @contextmanager
 def session_scope(dsn: str):
-    safe_session = SessionFactory.create(dsn)
-    session = safe_session()
+    global engines, sessions
+
+    init(dsn)
+
+    engine = engines[dsn]
+    Session = sessions[dsn]
+    session = Session()
 
     try:
         yield session
@@ -61,4 +45,5 @@ def session_scope(dsn: str):
 
         raise ScopedSessionError(str(error))
     finally:
-        safe_session.remove()
+        session.close()
+        engine.dispose()

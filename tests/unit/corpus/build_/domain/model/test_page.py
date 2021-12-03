@@ -2,18 +2,8 @@ import unittest
 
 from unit.builders.pagecreator import PageCreator
 
-from corpus.build.domain.event.page_added import PageAdded
-
 
 class TestPage(unittest.TestCase):
-    def test_if_domain_event_has_been_recorded(self) -> None:
-        page = PageCreator().build()
-
-        events = page.pull_events()
-
-        self.assertEqual(len(events), 1, "Page should have an event")
-        self.assertIsInstance(events[0], PageAdded, "Event should be PageRequested")
-
     def test_if_redirected_url_is_not_fully_indexable(self) -> None:
         page = PageCreator().with_redirection().build()
 

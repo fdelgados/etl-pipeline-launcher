@@ -25,9 +25,6 @@
     <service id="corpus.build.domain.service.requests_counter.requests_counter"
              alias="corpus.build.infrastructure.requests_counter.sqlalchemy.requests_counter.requests_counter_impl" />
 
-    <service id="corpus.build.domain.service.corpus_manager.corpus_manager"
-             alias="corpus.build.infrastructure.corpus_manager.mongodb.corpus_manager.corpus_manager_impl" />
-
     <service id="corpus.build.domain.service.build_stats.build_stats"
              class="corpus.build.domain.service.build_stats.BuildStats">
         <argument name="requests_counter" value="corpus.build.domain.service.requests_counter.requests_counter" type="service" />

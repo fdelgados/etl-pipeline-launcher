@@ -1,6 +1,7 @@
 from typing import List
 from pymongo import errors
 
+from corpus.build.domain.model.build import BuildId
 from corpus.build.domain.model.page import (
     PageRepository,
     Page,
@@ -16,20 +17,16 @@ class MongoDbPageRepository(PageRepository, MongoDbRepository):
     def __init__(self):
         super().__init__()
 
-        self._collection = None
+        self._collection = self.database["course-pages"]
 
     def save(self, page: Page) -> None:
-        tmp_collection = self.database[f"{page.corpus_name}_tmp"]
-
         try:
-            tmp_collection.create_index("address", unique=True)
-            tmp_collection.update_one(
+            self._collection.update_one(
                 {"address": page.url.address},
                 {
                     "$set": {
-                        "corpus": page.corpus_name,
-                        "document_type": page.type,
                         "tenant_id": page.tenant_id,
+                        "build_id": page.build_id.value,
                         "address": page.url.address,
                         "status": page.status,
                         "status_code": page.status_code,
@@ -53,6 +50,12 @@ class MongoDbPageRepository(PageRepository, MongoDbRepository):
             raise UnableToSavePageError(
                 f"Cannot save page content ({page.url.address}). {str(error)}"
             )
+
+    def size(self, corpus: str) -> int:
+        return self._collection.count()
+
+    def count_by_build(self, build_id: BuildId) -> int:
+        return self._collection.count_documents({"build_id": build_id.value})
 
     def add(self, page: Page) -> None:
         pass

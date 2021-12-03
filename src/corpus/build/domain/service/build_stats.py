@@ -8,6 +8,6 @@ class BuildStats:
 
     def update_counts(self, build: Build):
         build.successful_requests = self._requests_counter.count_successful(
-            build.id
+            build
         )
         build.failed_requests = self._requests_counter.count_failed(build.id)

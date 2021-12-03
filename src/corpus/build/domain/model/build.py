@@ -134,6 +134,17 @@ class Build(AggregateRoot):
         return self._status.is_completed()
 
     @property
+    def is_running(self) -> bool:
+        return self._status.is_running()
+
+    @property
+    def is_dead(self) -> bool:
+        if self._status.is_aborted():
+            return True
+
+        return self._status.is_cancelled()
+
+    @property
     def started_on(self) -> datetime:
         return self._started_on
 

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 
 <events>
-    <event class="duplicates.similarity.domain.event.duplicitydetected.DuplicityDetected" />
-
     <event class="duplicates.similarity.domain.event.pageanalyzed.PageAnalyzed" />
 
     <event class="duplicates.report.domain.event.reportcreated.ReportCreated">

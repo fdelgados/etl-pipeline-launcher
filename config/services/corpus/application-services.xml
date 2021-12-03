@@ -57,14 +57,4 @@
         <argument name="build_repository" value="corpus.build.domain.model.build.build_repository" type="service"/>
     </service>
 
-    <service id="corpus.build.application.corpus_rotator.rotate_corpus_on_build_completed"
-             class="corpus.build.application.corpus_rotator.RotateCorpusOnBuildCompleted">
-        <argument name="corpus_manager" value="corpus.build.domain.service.corpus_manager.corpus_manager" type="service"/>
-    </service>
-
-    <service id="corpus.build.application.corpus_cleaner.clean_corpus_on_build_aborted"
-             class="corpus.build.application.corpus_cleaner.CleanCorpusOnBuildAborted">
-        <argument name="corpus_manager" value="corpus.build.domain.service.corpus_manager.corpus_manager" type="service"/>
-    </service>
-
 </services>
