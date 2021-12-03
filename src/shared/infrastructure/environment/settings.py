@@ -69,6 +69,19 @@ class Settings:
     def common_settings() -> dict:
         return toml.load(f"{Settings.settings_dir()}/common/settings.toml")
 
+    def environment_settings(self) -> dict:
+        common_settings = Settings.common_settings()
+
+        settings_dir = Settings.settings_dir()
+        environment = self.environment()
+        environment_settings = toml.load(
+            f"{settings_dir}/common/settings.{environment}.toml"
+        )
+
+        self._dict_merge(environment_settings, common_settings)
+
+        return environment_settings
+
     @staticmethod
     def configs_dir() -> str:
         return "/var/www/config"

@@ -10,3 +10,7 @@ flask_env = "production"
 
 [api]
 port = 80
+
+
+[mariadb]
+wait_timeout = 28700

@@ -26,6 +26,9 @@ version_str = "v{:d}"
 version = 1
 doc_path = "/corpus-builder/api/doc"
 
+[mariadb]
+wait_timeout = 500
+
 [redis]
 databases.cache = 0
 databases.corpus_config = 1
