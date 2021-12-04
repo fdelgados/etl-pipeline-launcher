@@ -1,19 +1,16 @@
 import os
 import os.path
-import glob
 from typing import List, Dict, Generator, Optional, Any
 from importlib import util
 from xml.etree import ElementTree
 from dependency_injector import containers
 
+from shared.infrastructure.environment.settings import Settings
 
-def create_container(settings: dict):
-    services_dir = os.path.join(
-        settings.get("application").get("configs_dir"), "services/"
-    )
 
-    services_files = glob.glob(f"{services_dir}**/*-services.xml")
-    event_handlers_files = glob.glob(f"{services_dir}**/event-handlers.xml")
+def create_container(settings: Settings):
+    services_files = settings.services_files()
+    event_handlers_files = settings.event_handlers_files()
 
     service_container = containers.DynamicContainer()
     services = _get_services(services_files)
@@ -44,9 +41,7 @@ def create_container(settings: dict):
             info,
         )
 
-    store_domain_even_subscriber = settings.get("application").get(
-        "store_domain_event_subscriber"
-    )
+    store_domain_even_subscriber = settings.store_domain_even_subscriber()
     store_domain_even_subscriber_id = store_domain_even_subscriber.get("id")
 
     service_cls = _import_cls(store_domain_even_subscriber.get("class_name"))

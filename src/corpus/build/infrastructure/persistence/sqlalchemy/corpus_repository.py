@@ -2,14 +2,14 @@ from typing import Optional, List
 
 from shared.infrastructure.persistence.sqlalchemy.repository import Repository
 
-from shared.infrastructure.environment.environment import Environment
+import shared.infrastructure.environment.globalvars as global_vars
 
 from corpus.build.domain.model.corpus import Corpus, CorpusRepository
 
 
 class CorpusRepositoryImpl(CorpusRepository, Repository):
     def __init__(self):
-        super().__init__(Corpus, Environment.database_dsn("corpus"))
+        super().__init__(Corpus, global_vars.settings.database_dsn("corpus"))
 
     def corpus_of_tenant_and_name(
         self, tenant_id: str, name: str

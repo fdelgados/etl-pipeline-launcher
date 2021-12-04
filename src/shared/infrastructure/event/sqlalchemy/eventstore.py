@@ -7,7 +7,7 @@ from sqlalchemy.orm import registry
 from shared.domain.bus.event import EventStore
 from shared.domain.event.storedevent import StoredEvent
 
-from shared.infrastructure.environment.environment import Environment
+import shared.infrastructure.environment.globalvars as global_vars
 
 from shared.infrastructure.persistence.sqlalchemy.session import session_scope
 
@@ -38,7 +38,7 @@ class SqlAlchemyEventStore(EventStore):
     def __init__(self, context: str):
         _map_stored_event()
 
-        self._dsn = Environment.database_dsn(context)
+        self._dsn = global_vars.settings.database_dsn(context)
 
     def append(self, stored_event: StoredEvent) -> None:
         with session_scope(self._dsn) as session:

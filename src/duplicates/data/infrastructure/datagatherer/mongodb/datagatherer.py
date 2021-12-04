@@ -2,7 +2,7 @@ from pymongo import MongoClient
 
 from typing import List
 
-from shared.infrastructure.environment.environment import Environment
+import shared.infrastructure.environment.globalvars as global_vars
 
 from shared.domain.model.valueobject.url import Url
 
@@ -12,15 +12,15 @@ from duplicates.data.domain.service.datagatherer import DataGatherer
 
 class DataGathererImpl(DataGatherer):
     def __init__(self):
-        connection_settings = Environment.mongodb_connection_settings()
+        connect_settings = global_vars.settings.mongodb_connection_settings()
 
-        self._database = connection_settings.get("database")
+        self._database = connect_settings.get("database")
         self._client = MongoClient(
-            connection_settings.get("host"),
-            port=connection_settings.get("port"),
-            username=connection_settings.get("username"),
-            password=connection_settings.get("password"),
-            authSource=connection_settings.get("database"),
+            connect_settings.get("host"),
+            port=connect_settings.get("port"),
+            username=connect_settings.get("username"),
+            password=connect_settings.get("password"),
+            authSource=connect_settings.get("database"),
             connect=False,
         )
 

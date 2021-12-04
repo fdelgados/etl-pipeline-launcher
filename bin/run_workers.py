@@ -14,7 +14,7 @@ from shared.domain.service.logging.logger import Logger
 from shared.infrastructure.messaging.rabbitmq.connector import (
     RabbitMqConnector,
 )
-from shared.infrastructure.environment.environment import Environment
+import shared.infrastructure.environment.globalvars as global_vars
 
 bootstrap = Bootstrap()
 
@@ -127,7 +127,7 @@ def consume(
 
 
 exchanges = bootstrap.settings.subscribed_events()
-connection_settings = Environment.rabbit_connection_settings()
+connection_settings = global_vars.settings.rabbit_connection_settings()
 file_logger = FileLogger()
 connector = RabbitMqConnector(file_logger)
 

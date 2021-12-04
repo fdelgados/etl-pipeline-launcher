@@ -1,7 +1,7 @@
 from sqlalchemy import text, exc
 
 from shared.infrastructure.persistence.sqlalchemy.session import engines
-from shared.infrastructure.environment.environment import Environment
+import shared.infrastructure.environment.globalvars as global_vars
 from shared.domain.service.persistence.dbal import (
     DbalService,
     DbalServiceError,
@@ -10,7 +10,7 @@ from shared.domain.service.persistence.dbal import (
 
 class SqlAlchemyDbalService(DbalService):
     def __init__(self, context: str):
-        dsn = Environment.database_dsn(context)
+        dsn = global_vars.settings.database_dsn(context)
         self._db_engine = engines.get(dsn)
 
     def execute(self, sentence: str, **parameters):
