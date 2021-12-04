@@ -1,17 +1,29 @@
 from __future__ import annotations
 
+import os
 import re
 import glob
+import time
 
 from importlib import util
 
 from shared.infrastructure.environment.settings import Settings
 from shared.infrastructure.logging.file.logger import FileLogger
+import shared.infrastructure.environment.globalvars as global_vars
+import shared.infrastructure.dic.container as container
 
 
 class Bootstrap:
     def __init__(self):
+        global_vars.settings = Settings()
+        global_vars.container = container.create_container(
+            global_vars.settings
+        )
+
         self.settings = Settings.common_settings()
+
+        os.environ["TZ"] = global_vars.settings.time_zone()
+        time.tzset()
 
         self.logger = FileLogger("boot")
 
@@ -39,11 +51,11 @@ class Bootstrap:
         return self
 
     def _db_mapping_classes(self):
-        contexts_dir = self.settings.get("application").get("contexts_dir")
+        contexts_dir = global_vars.settings.contexts_dir()
 
         context_mapping_files = {}
         mapping_modules = []
-        for context in Settings.contexts():
+        for context in global_vars.settings.contexts():
             mapping_file = (
                 "{}/{}/shared/infrastructure/persistence"
                 "/sqlalchemy/mapping.py"
@@ -70,35 +82,3 @@ class Bootstrap:
                 mapping_modules.append(module_name)
 
         return mapping_modules
-
-    def api_title(self) -> str:
-        return self.settings.get("api").get("title")
-
-    def api_doc_path(self) -> str:
-        return self.settings.get("api").get("doc_path", "/doc")
-
-    def api_version(self) -> int:
-        return self.settings.get("api").get("version")
-
-    def api_version_str(self) -> str:
-        return (
-            self.settings.get("api")
-            .get("version_str")
-            .format(self.api_version())
-        )
-
-    def api_prefix(self, path: str) -> str:
-        api_prefix = (
-            self.settings.get("api").get("prefix").format(self.api_version())
-        )
-
-        return f"{api_prefix}/{path}"
-
-    def flask_config(self) -> dict:
-        if not self.settings.get("flask"):
-            return {}
-
-        return {
-            key.upper(): value
-            for (key, value) in self.settings.get("flask").items()
-        }

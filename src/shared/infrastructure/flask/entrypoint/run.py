@@ -1,13 +1,8 @@
-import os
-import time
-
-from flask import Flask, request
+from flask import Flask
 from flask_restx import Api
 
 from shared.domain.errors.errors import ApplicationError
-import shared.infrastructure.environment.globalvars as gvars
-from shared.infrastructure.environment.settings import Settings
-import shared.infrastructure.dic.container as container
+import shared.infrastructure.environment.globalvars as global_vars
 from shared.infrastructure.flask.api.basecontroller import BaseController
 from shared.application.bootstrap import Bootstrap
 from shared.infrastructure.flask.api.monitoring.healthcheck import health_check
@@ -18,29 +13,29 @@ from duplicates.report.infrastructure.flask.api.report import report_api
 bootstrap = Bootstrap()
 
 app = Flask(__name__)
-app.config.from_mapping(bootstrap.flask_config())
+app.config.from_mapping(global_vars.settings.flask_config())
 
-
-@app.before_request
-def before_request_func():
-    site = request.headers.get("Site")
-    os.environ["SITE"] = site
-
-    gvars.settings = Settings()
-    gvars.container = container.create_container(
-        gvars.settings.common_settings()
-    )
-
-    os.environ["TZ"] = gvars.settings.time_zone()
-    time.tzset()
+#
+# @app.before_request
+# def before_request_func():
+#     site = request.headers.get("Site")
+#     os.environ["SITE"] = site
+#
+#     global_vars.settings = Settings()
+#     global_vars.container = container.create_container(
+#         global_vars.settings.common_settings()
+#     )
+#
+#     os.environ["TZ"] = global_vars.settings.time_zone()
+#     time.tzset()
 
 
 bootstrap.logger.info("Bootstrapping API")
 api = Api(
     app,
-    doc=bootstrap.api_doc_path(),
-    title=bootstrap.api_title(),
-    version=bootstrap.api_version_str(),
+    doc=global_vars.settings.api_doc_path(),
+    title=global_vars.settings.api_title(),
+    version=global_vars.settings.api_version_str(),
 )
 
 
@@ -54,8 +49,8 @@ def handle_generic_error(error):
     return BaseController.api_generic_error(error)
 
 
-api.add_namespace(health_check, path=bootstrap.api_prefix("monitor"))
-api.add_namespace(build_api, path=bootstrap.api_prefix("builds"))
-api.add_namespace(corpus_api, path=bootstrap.api_prefix("corpora"))
+api.add_namespace(health_check, path=global_vars.settings.api_prefix("monitor"))
+api.add_namespace(build_api, path=global_vars.settings.api_prefix("builds"))
+api.add_namespace(corpus_api, path=global_vars.settings.api_prefix("corpora"))
 
-api.add_namespace(report_api, path=bootstrap.api_prefix("reports"))
+api.add_namespace(report_api, path=global_vars.settings.api_prefix("reports"))
