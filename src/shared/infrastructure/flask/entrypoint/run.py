@@ -15,21 +15,6 @@ bootstrap = Bootstrap()
 app = Flask(__name__)
 app.config.from_mapping(global_vars.settings.flask_config())
 
-#
-# @app.before_request
-# def before_request_func():
-#     site = request.headers.get("Site")
-#     os.environ["SITE"] = site
-#
-#     global_vars.settings = Settings()
-#     global_vars.container = container.create_container(
-#         global_vars.settings.common_settings()
-#     )
-#
-#     os.environ["TZ"] = global_vars.settings.time_zone()
-#     time.tzset()
-
-
 bootstrap.logger.info("Bootstrapping API")
 api = Api(
     app,
