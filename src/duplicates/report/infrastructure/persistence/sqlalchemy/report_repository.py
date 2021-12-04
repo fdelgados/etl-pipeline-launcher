@@ -12,8 +12,7 @@ from duplicates.report.domain.model.report import (
 class ReportRepositoryImpl(ReportRepository, Repository):
     def __init__(self):
         super().__init__(
-            Report,
-            global_vars.settings.database_dsn("duplicates")
+            Report, global_vars.settings.database_dsn("duplicates")
         )
 
     def report_of_id(self, report_id: ReportId) -> Optional[Report]:

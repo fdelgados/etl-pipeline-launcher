@@ -10,12 +10,14 @@ class RabbitMqConnector:
         self._logger = logger
         self._connection = None
 
-    def connect(self, connect_settings: Optional[Dict] = None) -> \
-            pika.BlockingConnection:
+    def connect(
+        self, connect_settings: Optional[Dict] = None
+    ) -> pika.BlockingConnection:
 
         if not connect_settings:
-            connect_settings = global_vars.settings\
-                .rabbit_connection_settings()
+            connect_settings = (
+                global_vars.settings.rabbit_connection_settings()
+            )
 
         credentials = pika.PlainCredentials(
             connect_settings.get("user"),

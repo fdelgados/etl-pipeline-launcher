@@ -49,7 +49,9 @@ def handle_generic_error(error):
     return BaseController.api_generic_error(error)
 
 
-api.add_namespace(health_check, path=global_vars.settings.api_prefix("monitor"))
+api.add_namespace(
+    health_check, path=global_vars.settings.api_prefix("monitor")
+)
 api.add_namespace(build_api, path=global_vars.settings.api_prefix("builds"))
 api.add_namespace(corpus_api, path=global_vars.settings.api_prefix("corpora"))
 
