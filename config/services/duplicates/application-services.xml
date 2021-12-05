@@ -5,6 +5,7 @@
              class="duplicates.report.application.reportservice.ReportCreatorCommandHandler">
         <argument name="logger" value="shared.domain.service.logging.logger.logger" type="service"/>
         <argument name="report_repository" value="duplicates.report.domain.model.report.report_repository" type="service"/>
+        <argument name="build_repository" value="duplicates.report.domain.model.build.build_repository" type="service" />
         <argument name="event_bus" value="shared.domain.bus.event.event_bus" type="service"/>
     </service>
 

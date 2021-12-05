@@ -24,7 +24,7 @@ class DataGathererImpl(DataGatherer):
             connect=False,
         )
 
-    def gather(self, corpus: str) -> List[Page]:
+    def gather(self, corpus: str, corpus_build_id: str) -> List[Page]:
         pages_collection = self._client[self._database][corpus]
         pages = []
 
@@ -32,7 +32,7 @@ class DataGathererImpl(DataGatherer):
             {
                 "is_indexable": {"$eq": True},
                 "status_code": {"$eq": 200},
-                "document_type": {"$eq": "web_page"},
+                "build_id": corpus_build_id,
             },
             {
                 "_id": 0,

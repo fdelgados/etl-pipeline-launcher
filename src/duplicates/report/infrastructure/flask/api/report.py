@@ -26,12 +26,12 @@ class ReportController(BaseController):
         report_id = next_identity_response.value()
 
         command = ReportCreatorCommand(
+            user.tenant_id(),
             report_id,
             params.get("corpus"),
             params.get("similarity_threshold"),
             params.get("k_shingle_size"),
             user,
-            params.get("similarity_threshold_margin", 0.0),
         )
 
         self.dispatch(command)
@@ -47,9 +47,9 @@ class ReportController(BaseController):
 
 
 @report_api.route("/<string:report_id>")
-class BuildInfoController(BaseController):
+class ReportProgressController(BaseController):
     @authorization_required("get:report-info")
-    def get(self, _, report_id: str):
+    def get(self, user, report_id: str):
         query = ReportProgressQuery(report_id)
 
         response: ReportProgressResponse = self.ask(query)

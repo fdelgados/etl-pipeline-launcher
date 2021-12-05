@@ -23,15 +23,17 @@ from duplicates.report.domain.service.statsretriever import (
     ReportStatsRetriever,
 )
 
+from duplicates.report.domain.model.build import BuildRepository
+
 
 @dataclass(frozen=True)
 class ReportCreatorCommand(Command):
+    tenant_id: str
     report_id: str
     corpus: str
     similarity_threshold: float
     k_shingle_size: int
     user: User
-    similarity_threshold_margin: float = 0.0
 
 
 class ReportCreatorCommandHandler(CommandHandler):
@@ -39,23 +41,31 @@ class ReportCreatorCommandHandler(CommandHandler):
         self,
         logger: Logger,
         report_repository: ReportRepository,
+        build_repository: BuildRepository,
         event_bus: EventBus,
     ):
         self._logger = logger
         self._report_repository = report_repository
         self._event_bus = event_bus
+        self._build_repository = build_repository
 
     def handle(self, command: ReportCreatorCommand) -> None:
         self._logger.info("Create a new pages near duplicates report")
+
+        build = self._build_repository.last_build(
+            command.tenant_id,
+            command.corpus
+        )
 
         report = Report(
             ReportId(command.report_id),
             self._report_repository.generate_unique_name(),
             command.corpus,
+            build.id,
+            build.corpus_version,
             command.user,
             KShingleSize(command.k_shingle_size),
             SimilarityThreshold(command.similarity_threshold),
-            command.similarity_threshold_margin,
         )
 
         self._report_repository.save(report)

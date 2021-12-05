@@ -107,7 +107,7 @@ class SimilarityCalculatorService:
 
                 similarity = minhash_x.jaccard(minhashes[address_y])
 
-                if similarity < report.max_similarity_allowed:
+                if similarity < report.similarity_threshold.value:
                     continue
 
                 duplicate = Duplicate(
@@ -115,7 +115,6 @@ class SimilarityCalculatorService:
                     url_x,
                     url_y,
                     similarity,
-                    similarity < report.similarity_threshold.value
                 )
 
                 self._duplicate_repository.add(duplicate)

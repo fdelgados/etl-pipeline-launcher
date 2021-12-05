@@ -74,20 +74,22 @@ class Report(AggregateRoot):
         report_id: ReportId,
         name: str,
         from_corpus: str,
+        corpus_build_id: str,
+        corpus_version: str,
         creator: User,
         k_shingle_size: KShingleSize,
         similarity_threshold: SimilarityThreshold,
-        similarity_threshold_margin: float = 0.0,
     ):
         self._report_id = report_id
         self._name = name
         self._from_corpus = from_corpus
+        self._corpus_build_id = corpus_build_id
+        self._corpus_version = corpus_version
         self._creator = creator
         self._created_by = self._creator.username()
         self._tenant_id = self._creator.tenant_id()
         self._k_shingle_size = k_shingle_size
         self._similarity_threshold = similarity_threshold
-        self._similarity_threshold_margin = similarity_threshold_margin
         self._completed_on = None
         self._total_pages = 0
         self._duplicated_pages = 0
@@ -101,11 +103,12 @@ class Report(AggregateRoot):
             self._report_id.value,
             self._name,
             self._from_corpus,
+            self._corpus_build_id,
+            self._corpus_version,
             self._created_by,
             self._tenant_id,
             self._k_shingle_size.value,
             self._similarity_threshold.value,
-            self._similarity_threshold_margin,
         )
 
         self._started_on = report_created.occurred_on
@@ -143,16 +146,6 @@ class Report(AggregateRoot):
     @property
     def similarity_threshold(self) -> SimilarityThreshold:
         return self._similarity_threshold
-
-    @property
-    def similarity_threshold_margin(self) -> float:
-        return self._similarity_threshold_margin
-
-    @property
-    def max_similarity_allowed(self) -> float:
-        return (
-            self.similarity_threshold.value - self._similarity_threshold_margin
-        )
 
     @property
     def started_on(self) -> datetime:
