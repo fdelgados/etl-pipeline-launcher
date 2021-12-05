@@ -22,7 +22,7 @@ class ReportStatsRetrieverImpl(ReportStatsRetriever):
     def _get_analysis_stats(self, report: Report) -> int:
 
         sentence = """
-            SELECT COUNT(*) AS requests FROM event_store
+            SELECT COUNT(DISTINCT aggregate_id) AS requests FROM event_store
             WHERE report_id = :report_id
             AND event_name = :event
         """

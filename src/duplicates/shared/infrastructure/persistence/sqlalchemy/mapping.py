@@ -5,7 +5,6 @@ from sqlalchemy import (
     DateTime,
     Integer,
     Float,
-    Boolean,
 )
 
 from sqlalchemy.orm import registry
@@ -35,6 +34,8 @@ class DuplicatesMapping(Mapping):
             Column("created_by", String(60), nullable=False),
             Column("name", String(60), nullable=False),
             Column("from_corpus", String(25), nullable=False),
+            Column("corpus_build_id", String(36), nullable=False),
+            Column("corpus_version", String(14), nullable=False),
             Column(
                 "status",
                 ReportStatusType,
@@ -75,12 +76,6 @@ class DuplicatesMapping(Mapping):
             Column("url", UrlType, primary_key=True),
             Column("duplicate_url", UrlType, primary_key=True),
             Column("similarity", Float, nullable=False),
-            Column(
-                "is_in_allowed_margin",
-                Boolean,
-                nullable=False,
-                default=False,
-            ),
             extend_existing=True,
         )
 

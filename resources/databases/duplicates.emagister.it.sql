@@ -9,13 +9,14 @@ FLUSH PRIVILEGES;
 USE duplicates_emagister_it;
 
 -- TABLES
-
 CREATE TABLE IF NOT EXISTS `reports`
 (
     `id` BINARY(16) NOT NULL,
     `tenant_id` CHAR(36) NOT NULL,
     `name` VARCHAR(60) NOT NULL,
     `from_corpus` VARCHAR(25) NOT NULL,
+    `corpus_build_id` CHAR(36) NOT NULL,
+    `corpus_version` CHAR(14) NOT NULL,
     `created_by` VARCHAR(30) NOT NULL,
     `status` TINYINT(1) DEFAULT 0 NOT NULL,
     `k_shingle_size` TINYINT(1) NOT NULL,
@@ -53,15 +54,12 @@ CREATE TABLE IF NOT EXISTS `duplicates`
     `url` VARCHAR(255) NOT NULL,
     `duplicate_url` VARCHAR(255) NOT NULL,
     `similarity` DECIMAL(8, 7) NOT NULL,
-    `is_in_allowed_margin` TINYINT(1) NOT NULL DEFAULT 0,
     PRIMARY KEY `pk_duplicates` (`report_id`, `url`, `duplicate_url`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE INDEX IF NOT EXISTS `duplicates_similarity`
     ON duplicates (`similarity`);
 
-CREATE INDEX IF NOT EXISTS `duplicates_is_in_allowed_margin`
-    ON duplicates (`is_in_allowed_margin`);
 
 CREATE TABLE IF NOT EXISTS `event_store`
 (

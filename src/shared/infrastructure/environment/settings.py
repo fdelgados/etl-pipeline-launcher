@@ -54,6 +54,8 @@ class Settings:
         for commands_file in commands_files:
             self._dict_merge(self._commands, toml.load(commands_file))
 
+        os.environ["TZ"] = self.time_zone()
+
     def _dict_merge(self, dct, merge_dct) -> None:
         for key in merge_dct.keys():
             if (
@@ -90,6 +92,16 @@ class Settings:
     def settings_dir() -> str:
         return f"{Settings.configs_dir()}/settings"
 
+    def services_files(self) -> List:
+        services_dir = os.path.join(self._configs_dir(), "services/")
+
+        return glob.glob(f"{services_dir}**/*-services.xml")
+
+    def event_handlers_files(self) -> str:
+        services_dir = os.path.join(self._configs_dir(), "services/")
+
+        return glob.glob(f"{services_dir}**/event-handlers.xml")
+
     def environment(self) -> str:
         return self._environment
 
@@ -118,6 +130,12 @@ class Settings:
 
     def api_version(self) -> int:
         return self._get("api", "version")
+
+    def api_doc_path(self) -> str:
+        return self._get("api", "doc_path", "/doc")
+
+    def api_version_str(self) -> str:
+        return self._get("api", "version_str").format(self.api_version())
 
     def api_prefix(self, path: Optional[str] = None) -> str:
         api_prefix = self._get("api", "prefix").format(self.api_version())
@@ -180,14 +198,14 @@ class Settings:
     def get_app_entry_point(self) -> str:
         return self._get("application", "entry_point")
 
-    @staticmethod
-    def contexts() -> List:
-        contexts_dir = "/var/www/src"
+    def contexts_dir(self) -> str:
+        return self._get("application", "contexts_dir")
 
+    def contexts(self) -> List:
         return list(
             filter(
                 lambda context: "." not in context,
-                find_packages(where=contexts_dir),
+                find_packages(where=self.contexts_dir()),
             )
         )
 
@@ -210,6 +228,11 @@ class Settings:
             return {}
 
         return context_config.get("event_store", {})
+
+    def store_domain_even_subscriber(self) -> Dict:
+        return self._config.get("application").get(
+            "store_domain_event_subscriber"
+        )
 
     def is_event_store_enabled_for_context(self, context: str) -> bool:
         context_event_store = self.event_store_config_for_context(context)
@@ -251,3 +274,51 @@ class Settings:
 
     def time_zone(self):
         return self._get("application", "timezone")
+
+    def flask_config(self) -> Dict:
+        if not self._config.get("flask"):
+            return {}
+
+        return {
+            key.upper(): value
+            for (key, value) in self._config.get("flask").items()
+        }
+
+    def database_dsn(self, context: str) -> str:
+        context = context.upper()
+
+        db_user = f"{context}_{self._env_site()}_DATABASE_USER"
+        db_password = f"{context}_{self._env_site()}_DATABASE_PASSWORD"
+        db_name = f"{context}_{self._env_site()}_DATABASE_NAME"
+
+        return "mysql+pymysql://{}:{}@{}/{}?charset=utf8mb4".format(
+            os.environ.get(db_user),
+            os.environ.get(db_password),
+            os.environ.get("MARIA_DB_HOST"),
+            os.environ.get(db_name),
+        )
+
+    def mongodb_connection_settings(self) -> dict:
+        db_user = f"MONGO_{self._env_site()}_INITDB_USER"
+        db_password = f"MONGO_{self._env_site()}_INITDB_PASSWORD"
+        db_name = f"MONGO_{self._env_site()}_INITDB_DATABASE"
+
+        return {
+            "host": os.environ.get("MONGO_HOST"),
+            "port": int(os.environ.get("MONGO_PORT")),
+            "username": os.environ.get(db_user),
+            "password": os.environ.get(db_password),
+            "database": os.environ.get(db_name),
+        }
+
+    def _env_site(self) -> str:
+        return self._site.replace(".", "_").upper()
+
+    def rabbit_connection_settings(self) -> dict:
+        return {
+            "host": os.environ.get("RABBITMQ_HOST"),
+            "port": os.environ.get("RABBITMQ_PORT"),
+            "user": os.environ.get("RABBITMQ_USER"),
+            "password": os.environ.get("RABBITMQ_PASSWORD"),
+            "vhost": "/",
+        }
