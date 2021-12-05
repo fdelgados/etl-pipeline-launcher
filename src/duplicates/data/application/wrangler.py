@@ -31,8 +31,7 @@ class WrangleDataOnReportCreated(DomainEventSubscriber):
 
     def handle(self, domain_event: ReportCreated) -> None:
         pages = self._data_gatherer.gather(
-            domain_event.from_corpus,
-            domain_event.corpus_build_id
+            domain_event.from_corpus, domain_event.corpus_build_id
         )
         report = self._report_repository.report_of_id(
             ReportId(domain_event.report_id)

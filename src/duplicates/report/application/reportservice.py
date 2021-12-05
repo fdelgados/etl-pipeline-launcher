@@ -53,8 +53,7 @@ class ReportCreatorCommandHandler(CommandHandler):
         self._logger.info("Create a new pages near duplicates report")
 
         build = self._build_repository.last_build(
-            command.tenant_id,
-            command.corpus
+            command.tenant_id, command.corpus
         )
 
         report = Report(

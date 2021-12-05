@@ -11,7 +11,7 @@ class BuildRepositoryImpl(BuildRepository):
     def last_build(self, tenant_id: str, corpus_name: str) -> Build:
         sentence = """
             SELECT id, name, started_on
-            FROM builds 
+            FROM builds
             WHERE tenant_id = :tenant_id
             AND status = 1
             AND corpus_name = :corpus_name
@@ -20,15 +20,11 @@ class BuildRepositoryImpl(BuildRepository):
         """
 
         result = self._db_service.execute(
-            sentence,
-            tenant_id=tenant_id,
-            corpus_name=corpus_name
+            sentence, tenant_id=tenant_id, corpus_name=corpus_name
         )
 
         row = result.fetchone()
 
         return Build(
-            str(uuid.UUID(bytes=row["id"])),
-            row["name"],
-            row["started_on"]
+            str(uuid.UUID(bytes=row["id"])), row["name"], row["started_on"]
         )
