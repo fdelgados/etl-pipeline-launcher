@@ -49,6 +49,25 @@ CREATE INDEX IF NOT EXISTS `reports_started_on_index`
     ON reports (`started_on`);
 
 
+CREATE TABLE IF NOT EXISTS `duplicity_checks`
+(
+    `id` BINARY(16) NOT NULL,
+    `tenant_id` CHAR(36) NOT NULL,
+    `requested_by` VARCHAR(30) NOT NULL,
+    `status` TINYINT(1) DEFAULT 0 NOT NULL,
+    `similarity_threshold` DECIMAL(2, 1) NOT NULL,
+    `requested_on` DATETIME NOT NULL,
+    `completed_on` DATETIME DEFAULT NULL,
+    PRIMARY KEY `pk_reports` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE INDEX IF NOT EXISTS `duplicity_checks_creator_index`
+    ON duplicity_checks (`tenant_id`, `requested_by`);
+
+CREATE INDEX IF NOT EXISTS `duplicity_checks_completed_on_index`
+    ON duplicity_checks (`completed_on`);
+
+
 CREATE TABLE IF NOT EXISTS `duplicates`
 (
     `report_id` BINARY(16) NOT NULL,
@@ -78,10 +97,5 @@ CREATE INDEX IF NOT EXISTS `event_store_event_name_index`
 CREATE INDEX IF NOT EXISTS `event_store_aggregate_id_index`
     ON event_store (`aggregate_id`);
 
-ALTER TABLE `event_store`
-    ADD COLUMN IF NOT EXISTS `report_id` CHAR(36)
-        GENERATED ALWAYS AS (
-                JSON_UNQUOTE(JSON_EXTRACT(event_data, "$.report_id"))
-            );
 CREATE INDEX IF NOT EXISTS `event_store_event_data_index`
-    ON event_store (`report_id`);
+    ON event_store (`event_data`);
