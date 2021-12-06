@@ -151,7 +151,7 @@ class ExtractDataOnBuildStarted(DomainEventSubscriber):
                 response.status_code,
                 response.status,
                 response.modified_on,
-                corpus.name
+                corpus.name,
             )
 
             if not response.is_successful:

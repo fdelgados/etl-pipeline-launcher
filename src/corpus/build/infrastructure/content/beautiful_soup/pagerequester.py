@@ -90,7 +90,7 @@ class PageRequesterImpl(PageRequester):
                 http_response.status_code,
                 http_response.reason,
                 modified_on,
-                request
+                request,
             )
 
             if http_response.status_code not in [
