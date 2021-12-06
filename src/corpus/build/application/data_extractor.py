@@ -14,7 +14,7 @@ from corpus.build.domain.event.build_started import BuildStarted
 from corpus.build.domain.event.extraction_failed import ExtractionFailed
 from corpus.build.domain.event.urls_retrieved import UrlsRetrieved
 from corpus.build.domain.model.build import BuildId, Build, BuildRepository
-from corpus.build.domain.service.pagerequester import (
+from shared.domain.service.scraping.pagerequester import (
     PageRequester,
     Request,
     Response,

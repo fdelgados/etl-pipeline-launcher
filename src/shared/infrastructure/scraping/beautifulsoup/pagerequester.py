@@ -19,7 +19,7 @@ from bs4 import BeautifulSoup
 import shared.infrastructure.environment.globalvars as glob
 from shared.domain.service.caching.cache import Cache
 from shared.domain.model.valueobject.url import Url
-from corpus.build.domain.service.pagerequester import (
+from shared.domain.service.scraping.pagerequester import (
     PageRequester,
     Response,
     Request,

@@ -31,4 +31,9 @@
     <service id="shared.infrastructure.environment.settings"
              class="shared.infrastructure.environment.settings.Settings" />
 
+    <service id="shared.infrastructure.scraping.beautifulsoup.pagerequester.page_requester_impl"
+             class="shared.infrastructure.scraping.beautifulsoup.pagerequester.PageRequesterImpl">
+        <argument name="cache" value="shared.domain.service.caching.cache.cache" type="service" />
+    </service>
+
 </services>
