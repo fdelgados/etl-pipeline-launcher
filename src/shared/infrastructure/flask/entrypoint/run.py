@@ -9,6 +9,9 @@ from shared.infrastructure.flask.api.monitoring.healthcheck import health_check
 from corpus.build.infrastructure.flask.api.build import build_api
 from corpus.build.infrastructure.flask.api.corpus import corpus_api
 from duplicates.report.infrastructure.flask.api.report import report_api
+from duplicates.check.infrastructure.flask.api.duplicity_check import (
+    duplicity_check_api,
+)
 
 bootstrap = Bootstrap()
 
@@ -39,5 +42,8 @@ api.add_namespace(
 )
 api.add_namespace(build_api, path=global_vars.settings.api_prefix("builds"))
 api.add_namespace(corpus_api, path=global_vars.settings.api_prefix("corpora"))
-
 api.add_namespace(report_api, path=global_vars.settings.api_prefix("reports"))
+api.add_namespace(
+    duplicity_check_api,
+    path=global_vars.settings.api_prefix("duplicity-checks")
+)

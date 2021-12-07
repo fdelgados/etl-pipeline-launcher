@@ -20,5 +20,5 @@
              alias="shared.infrastructure.bus.event.rabbitmq.rabbitmq_event_bus" />
 
     <service id="shared.domain.service.scraping.pagerequester.page_requester"
-             alias="corpus.build.infrastructure.content.beautiful_soup.pagerequester.page_requester_impl" />
+             alias="shared.infrastructure.scraping.beautifulsoup.pagerequester.page_requester_impl" />
 </services>

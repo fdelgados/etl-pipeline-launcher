@@ -19,8 +19,8 @@
     <service id="duplicates.similarity.domain.service.similaritycalculator.similarity_calculator"
              alias="duplicates.similarity.infrastructure.similaritycalculator.datasketch.similaritycalcutator.similarity_calculator_impl" />
 
-    <service id="duplicates.similarity.domain.model.duplicate.duplicate_repository"
-             alias="duplicates.similarity.infrastructure.persistence.sqlalchemy.duplicaterepository.duplicate_repository_impl" />
+    <service id="duplicates.report.domain.model.report.duplicate_repository"
+             alias="duplicates.report.infrastructure.persistence.sqlalchemy.duplicaterepository.duplicate_repository_impl" />
 
     <service id="duplicates.similarity.domain.service.minhashcalculator.min_hash_calculator"
              alias="duplicates.similarity.infrastructure.minhashcalculator.datasketch.minhashcalculator.min_hash_calculator" />
@@ -38,4 +38,13 @@
 
     <service id="duplicates.report.domain.model.build.build_repository"
              alias="duplicates.report.infrastructure.persistence.sqlalchemy.buildrepository.build_repository_impl" />
+
+    <service id="duplicates.check.domain.model.corpus.corpus_repository"
+             alias="duplicates.check.infrastructure.persistence.sqlalchemy.corpusrepository.corpus_repository_impl" />
+
+    <service id="duplicates.check.domain.model.duplicate.duplicate_repository"
+             alias="duplicates.check.infrastructure.persistence.sqlalchemy.duplicate_repository.duplicate_repository_impl" />
+
+    <service id="duplicates.check.domain.model.duplicitycheck.duplicity_check_repository"
+             alias="duplicates.check.infrastructure.persistence.sqlalchemy.duplicity_check_repository.duplicity_check_repository_impl" />
 </services>

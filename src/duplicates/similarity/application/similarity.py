@@ -20,7 +20,8 @@ from duplicates.similarity.domain.event.pageanalyzed import PageAnalyzed
 from duplicates.similarity.domain.event.analysiscompleted import (
     AnalysisCompleted,
 )
-from duplicates.similarity.domain.model.duplicate import (
+
+from duplicates.report.domain.model.report import (
     Duplicate,
     DuplicateRepository,
 )

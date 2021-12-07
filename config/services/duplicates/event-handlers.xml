@@ -19,4 +19,8 @@
     <event class="duplicates.similarity.domain.event.analysisstarted.AnalysisStarted">
         <handler id="duplicates.report.application.reportupdater.update_stats_on_analysis_started" />
     </event>
+
+    <event class="duplicates.check.domain.event.duplicitycheckrequested.DuplicityCheckRequested">
+        <handler id="duplicates.check.application.duplicity_check_service.scrap_pages_on_duplicity_check_requested" />
+    </event>
 </events>

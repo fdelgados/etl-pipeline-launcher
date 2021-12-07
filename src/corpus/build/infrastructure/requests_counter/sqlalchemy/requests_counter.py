@@ -21,7 +21,9 @@ class RequestsCounterImpl(RequestsCounter):
     def count_failed(self, build_id: BuildId) -> int:
         sentence = """
                 SELECT COUNT(*) AS requests FROM event_store
-                WHERE build_id = :build_id
+                WHERE JSON_UNQUOTE(
+                    JSON_EXTRACT(event_data, "$.build_id")
+                ) = :build_id
                 AND event_name = :event
             """
 

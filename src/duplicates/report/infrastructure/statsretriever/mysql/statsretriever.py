@@ -2,7 +2,11 @@ from shared.infrastructure.persistence.sqlalchemy.dbal import DbalService
 
 from duplicates.similarity.domain.event.pageanalyzed import PageAnalyzed
 
-from duplicates.report.domain.model.report import Report
+from duplicates.report.domain.model.report import (
+    Report,
+    ReportId,
+    DuplicateRepository,
+)
 from duplicates.report.domain.service.statsretriever import (
     ReportStatsRetriever,
     ReportStats,
@@ -10,41 +14,45 @@ from duplicates.report.domain.service.statsretriever import (
 
 
 class ReportStatsRetrieverImpl(ReportStatsRetriever):
-    def __init__(self, db_service: DbalService):
+    def __init__(
+        self,
+        db_service: DbalService,
+        duplicate_repository: DuplicateRepository,
+    ):
         self._db_service = db_service
+        self._duplicate_repository = duplicate_repository
 
     def retrieve(self, report: Report) -> ReportStats:
+        analyzed_pages = self._analyzed_pages(report.report_id)
+        duplicates = self._number_of_duplicates(report.report_id)
+
         return ReportStats(
-            self._get_analysis_stats(report),
-            self._get_duplicity_stats(report),
+            analyzed_pages,
+            duplicates,
+            self._similarity_average(report.report_id),
+            duplicates / analyzed_pages if analyzed_pages > 0 else 0.0
         )
 
-    def _get_analysis_stats(self, report: Report) -> int:
+    def _analyzed_pages(self, report_id: ReportId) -> int:
 
-        sentence = """
+        sentence = '''
             SELECT COUNT(DISTINCT aggregate_id) AS requests FROM event_store
-            WHERE report_id = :report_id
+            WHERE JSON_UNQUOTE(
+                JSON_EXTRACT(event_data, "$.report_id")
+            ) = :report_id
             AND event_name = :event
-        """
+        '''
 
         result = self._db_service.execute(
             sentence,
-            report_id=report.report_id.value,
+            report_id=report_id.value,
             event=PageAnalyzed.type_name(),
         )
 
         return result.scalar()
 
-    def _get_duplicity_stats(self, report: Report) -> int:
+    def _number_of_duplicates(self, report_id: ReportId) -> int:
+        return self._duplicate_repository.count(report_id)
 
-        sentence = """
-            SELECT COUNT(DISTINCT url) AS num_duplicates FROM duplicates
-            WHERE report_id = :report_id
-        """
-
-        result = self._db_service.execute(
-            sentence,
-            report_id=report.report_id.value,
-        )
-
-        return result.scalar()
+    def _similarity_average(self, report_id: ReportId) -> float:
+        return self._duplicate_repository.similarity_average(report_id)

@@ -15,6 +15,12 @@ class Errors:
         return Error(1002, "Your request contains invalid parameters")
 
     @staticmethod
+    def limit_exceeded(**kwargs):
+        details = kwargs.get("details")
+
+        return Error(1003, "Limit exceeded", details)
+
+    @staticmethod
     def authorization(**kwargs):
         details = kwargs.get("details")
         return Error(2001, "Authorization failed", details)

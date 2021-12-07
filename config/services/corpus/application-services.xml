@@ -21,10 +21,10 @@
 
     <service id="corpus.build.application.data_extractor.extract_data_on_build_started"
              class="corpus.build.application.data_extractor.ExtractDataOnBuildStarted">
+        <argument name="page_requester" value="shared.domain.service.scraping.pagerequester.page_requester" type="service"/>
+        <argument name="url_source" value="corpus.build.domain.service.url_source.url_source" type="service"/>
         <argument name="build_repository" value="corpus.build.domain.model.build.build_repository" type="service"/>
         <argument name="page_repository" value="corpus.build.domain.model.page.page_repository" type="service"/>
-        <argument name="page_retriever" value="shared.domain.service.scraping.pagerequester.page_requester" type="service"/>
-        <argument name="url_source" value="corpus.build.domain.service.url_source.url_source" type="service"/>
         <argument name="corpus_repository" value="corpus.build.domain.model.corpus.corpus_repository" type="service"/>
         <argument name="logger" value="shared.domain.service.logging.logger.logger" type="service"/>
         <argument name="event_bus" value="shared.domain.bus.event.event_bus" type="service"/>
