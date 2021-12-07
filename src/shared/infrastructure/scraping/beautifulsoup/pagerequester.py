@@ -19,20 +19,18 @@ from bs4 import BeautifulSoup
 import shared.infrastructure.environment.globalvars as glob
 from shared.domain.service.caching.cache import Cache
 from shared.domain.model.valueobject.url import Url
-from corpus.build.domain.model.page import Page
-from corpus.build.domain.model.build import Build
-from corpus.build.domain.service.page_retriever import (
-    PageRetriever,
+from shared.domain.service.scraping.pagerequester import (
+    PageRequester,
+    Response,
+    Request,
     RetrievalError,
-    PageRetrieverFatalError,
+    PageRequesterFatalError,
 )
-
-from corpus.build.domain.model.corpus import Corpus
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
-class PageRetrieverImpl(PageRetriever):
+class PageRequesterImpl(PageRequester):
     _DELAY = 0
     _PARSER = "lxml"
     _STRING_SEPARATOR = " "
@@ -63,89 +61,80 @@ class PageRetrieverImpl(PageRetriever):
     def __init__(self, cache: Cache):
         self._cache = cache
 
-    def retrieve(self, url: Url, build: Build, corpus: Corpus) -> Page:
+    def request(self, request: Request) -> Response:
+
         if self._DELAY > 0:
             sleep(self._DELAY)
 
-        self._ensure_scraping_is_allowed(url)
+        self._ensure_scraping_is_allowed(request.url)
 
-        headers = self._request_headers(corpus.request_headers)
+        headers = self._request_headers(request.headers)
         try:
-            last_modified_on = self._last_extracted_date_cached(url)
+            last_modified_on = self._last_extracted_date_cached(request.url)
 
             if last_modified_on:
                 headers["If-Modified-Since"] = last_modified_on
 
-            response = requests.get(
-                url.address,
+            http_response = requests.get(
+                request.url.address,
                 allow_redirects=True,
                 verify=glob.settings.is_production(),
                 headers=headers,
             )
 
-            page = Page(
-                url,
-                build.id,
-                build.tenant_id,
-                response.status_code,
-                response.reason,
-                _date_to_local(response.headers.get("Date")),
-                corpus.name,
+            modified_on = _date_to_local(http_response.headers.get("Date"))
+
+            self._ensure_is_a_valid_response(http_response)
+
+            response = Response(
+                http_response.status_code,
+                http_response.reason,
+                modified_on,
+                request,
             )
 
-            self._ensure_is_a_valid_response(response)
-
-            if response.status_code not in [
+            if http_response.status_code not in [
                 HTTPStatus.OK,
                 HTTPStatus.NOT_MODIFIED,
             ]:
-                return page
+                return response
 
-            if response.history:
-                last_response = response.history[-1]
+            if http_response.history:
+                last_response = http_response.history[-1]
 
-                page = Page(
-                    url,
-                    build.id,
-                    build.tenant_id,
-                    last_response.status_code,
-                    last_response.reason,
-                    _date_to_local(response.headers.get("Date")),
-                    corpus.name,
-                )
+                response.status_code = last_response.status_code
+                response.status = last_response.reason
 
-                page.final_url = Url(response.url)
+                response.final_url = Url(http_response.url)
 
-            if response.status_code == HTTPStatus.NOT_MODIFIED:
-                return page
+            if http_response.status_code == HTTPStatus.NOT_MODIFIED:
+                return response
 
             self._cache_last_extracted_date(
-                url.address,
-                response.headers.get("Date"),
+                request.url.address,
+                http_response.headers.get("Date"),
             )
 
             markup_parser = MarkupParser(
-                self._retrieve_content(response.content)
+                self._retrieve_content(http_response.content)
             )
 
-            page.h1 = markup_parser.h1()
-            page.title = markup_parser.title()
-            if markup_parser.is_indexable(response):
-                page.mark_as_indexable()
+            response.h1 = markup_parser.h1()
+            response.title = markup_parser.title()
+            response.is_indexable = markup_parser.is_indexable(http_response)
+            response.canonical_url = markup_parser.canonical_version()
+            response.datalayer = markup_parser.datalayer()
 
-            page.canonical_url = markup_parser.canonical_version()
-            page.datalayer = markup_parser.datalayer()
-
-            blacklisted_tags = corpus.excluded_tags
+            blacklisted_tags = request.excluded_tags
             blacklisted_tags.extend(self._DEFAULT_BLACKLISTED_TAGS)
             body = markup_parser.body(
-                blacklisted_tags, corpus.excluded_selectors
+                blacklisted_tags, request.excluded_selectors
             )
 
-            selector_mapping = corpus.selector_mapping or {}
-            page.content = self._build_content(body, **selector_mapping)
+            selector_mapping = request.selector_mapping
+            response.content = self._build_content(body, **selector_mapping)
 
-            return page
+            return response
         except requests.exceptions.RequestException as error:
             raise RetrievalError(str(error))
 
@@ -209,7 +198,7 @@ class PageRetrieverImpl(PageRetriever):
             return
 
         if self._ACTION_ON_429_STATUS == "exit":
-            raise PageRetrieverFatalError(
+            raise PageRequesterFatalError(
                 "The server responded with a status of {} {}".format(
                     response.status_code, response.reason
                 )

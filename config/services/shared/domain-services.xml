@@ -18,4 +18,7 @@
 
     <service id="shared.domain.service.messaging.publisher.event_publisher"
              alias="shared.infrastructure.bus.event.rabbitmq.rabbitmq_event_bus" />
+
+    <service id="shared.domain.service.scraping.pagerequester.page_requester"
+             alias="shared.infrastructure.scraping.beautifulsoup.pagerequester.page_requester_impl" />
 </services>

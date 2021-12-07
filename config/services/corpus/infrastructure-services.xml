@@ -7,11 +7,6 @@
     <service id="corpus.build.infrastructure.persistence.mongodb.page_repository.mongo_db_page_repository"
              class="corpus.build.infrastructure.persistence.mongodb.page_repository.MongoDbPageRepository" />
 
-    <service id="corpus.build.infrastructure.content.beautiful_soup.page_retriever.page_retriever_impl"
-             class="corpus.build.infrastructure.content.beautiful_soup.page_retriever.PageRetrieverImpl">
-        <argument name="cache" value="shared.domain.service.caching.cache.cache" type="service" />
-    </service>
-
     <service id="corpus.build.infrastructure.content.beautiful_soup.url_source.url_source_impl"
              class="corpus.build.infrastructure.content.beautiful_soup.url_source.UrlSourceImpl" />
 

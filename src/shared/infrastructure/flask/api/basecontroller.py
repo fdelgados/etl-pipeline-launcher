@@ -58,6 +58,7 @@ class BaseController(Resource):
         if (
             exception.error == Errors.missing_request_parameter()
             or exception.error == Errors.invalid_request_parameter()
+            or exception.error == Errors.limit_exceeded()
         ):
             status_code = HTTPStatus.BAD_REQUEST
         if (

@@ -14,13 +14,16 @@ from corpus.build.domain.event.build_started import BuildStarted
 from corpus.build.domain.event.extraction_failed import ExtractionFailed
 from corpus.build.domain.event.urls_retrieved import UrlsRetrieved
 from corpus.build.domain.model.build import BuildId, Build, BuildRepository
-from corpus.build.domain.service.page_retriever import (
-    PageRetriever,
-    PageRetrieverFatalError,
+from shared.domain.service.scraping.pagerequester import (
+    PageRequester,
+    Request,
+    Response,
+    PageRequesterFatalError,
     RetrievalError,
 )
 from corpus.build.domain.service.url_source import UrlSource, UrlSourceError
 from corpus.build.domain.model.page import (
+    Page,
     PageRepository,
     UnableToSavePageError,
 )
@@ -30,7 +33,7 @@ from corpus.build.domain.model.corpus import Corpus, CorpusRepository
 class ExtractDataOnBuildStarted(DomainEventSubscriber):
     def __init__(
         self,
-        page_retriever: PageRetriever,
+        page_requester: PageRequester,
         url_source: UrlSource,
         build_repository: BuildRepository,
         page_repository: PageRepository,
@@ -40,7 +43,7 @@ class ExtractDataOnBuildStarted(DomainEventSubscriber):
     ):
         super().__init__()
 
-        self._page_retriever = page_retriever
+        self._page_requester = page_requester
         self._url_source = url_source
         self._build_repository = build_repository
         self._page_repository = page_repository
@@ -75,7 +78,7 @@ class ExtractDataOnBuildStarted(DomainEventSubscriber):
             build.complete()
 
         except (
-            PageRetrieverFatalError,
+            PageRequesterFatalError,
             UrlSourceError,
             UnableToSavePageError,
             ApplicationError,
@@ -136,9 +139,46 @@ class ExtractDataOnBuildStarted(DomainEventSubscriber):
         return valid_urls
 
     def _retrieve_page_content(self):
+        def build_page(
+            response: Response,
+            corpus: Corpus,
+            build: Build,
+        ) -> Page:
+            page = Page(
+                response.url,
+                build.id,
+                build.tenant_id,
+                response.status_code,
+                response.status,
+                response.modified_on,
+                corpus.name,
+            )
+
+            if not response.is_successful:
+                return page
+
+            page.h1 = response.h1
+            page.title = response.title
+            if response.is_indexable:
+                page.mark_as_indexable()
+
+            page.canonical_url = response.canonical_url
+            page.datalayer = response.datalayer
+            page.content = response.content
+
+            return page
+
         def retrieve_page_content(url: Url, build: Build, corpus: Corpus):
             try:
-                page = self._page_retriever.retrieve(url, build, corpus)
+                request = Request(url)
+                request.headers = corpus.request_headers
+                request.excluded_tags = corpus.excluded_tags
+                request.excluded_selectors = corpus.excluded_selectors
+                request.selector_mapping = corpus.selector_mapping
+
+                response = self._page_requester.request(request)
+
+                page = build_page(response, corpus, build)
 
                 self._page_repository.save(page)
 
@@ -148,7 +188,7 @@ class ExtractDataOnBuildStarted(DomainEventSubscriber):
 
                 self._publish_extraction_failed(build, url)
 
-            except PageRetrieverFatalError as error:
+            except PageRequesterFatalError as error:
                 self._log("critical", f"{url}: {str(error)}")
 
                 self._publish_extraction_failed(build, url)

@@ -7,6 +7,7 @@ from typing import Optional
 from coolname import generate
 
 from shared.domain.model.valueobject.uid import Uuid
+from shared.domain.model.valueobject.url import Url
 from shared.domain.model.aggregate import AggregateRoot
 from shared.domain.model.repository import Repository
 from shared.domain.model.entity.user import User
@@ -48,6 +49,10 @@ class Status:
     @classmethod
     def created(cls) -> Status:
         return cls(cls._CREATED)
+
+    @classmethod
+    def completed(cls) -> Status:
+        return cls(cls._COMPLETED)
 
     def complete(self) -> Status:
         return Status(self._COMPLETED)
@@ -193,4 +198,36 @@ class ReportRepository(Repository, metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def report_of_id(self, report_id: ReportId) -> Optional[Report]:
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def last_of_tenant(self, tenant_id: str) -> Report:
+        raise NotImplementedError
+
+
+class Duplicate(AggregateRoot):
+    def __init__(
+        self,
+        report_id: ReportId,
+        a_url: Url,
+        another_url: Url,
+        similarity: float,
+    ):
+        self._report_id = report_id
+        self._a_url = a_url
+        self._another_url = another_url
+        self._similarity = similarity
+
+
+class DuplicateRepository(Repository, metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def count(self, report_id: ReportId) -> int:
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def similarity_average(self, report_id: ReportId) -> float:
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def similarity_median(self, report_id: ReportId) -> float:
         raise NotImplementedError

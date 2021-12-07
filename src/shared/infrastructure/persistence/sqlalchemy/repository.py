@@ -1,5 +1,5 @@
 from typing import List, Dict
-from sqlalchemy import desc, asc
+from sqlalchemy import desc, asc, text
 
 from shared.domain.model.aggregate import AggregateRoot
 from shared.domain.model.repository import Repository as BaseRepository
@@ -19,6 +19,13 @@ class Repository(BaseRepository):
         init(self._dsn)
         self._session = sessions[self._dsn]
         self._engine = engines[self._dsn]
+
+    def _connection(self):
+        return self._engine
+
+    @staticmethod
+    def _statement(statement: str):
+        return text(statement)
 
     def add(self, aggregate: AggregateRoot) -> None:
         with session_scope(self._dsn) as session:

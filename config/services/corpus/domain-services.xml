@@ -7,9 +7,6 @@
     <service id="corpus.build.domain.model.page.page_repository"
              alias="corpus.build.infrastructure.persistence.mongodb.page_repository.mongo_db_page_repository" />
 
-    <service id="corpus.build.domain.service.page_retriever.page_retriever"
-             alias="corpus.build.infrastructure.content.beautiful_soup.page_retriever.page_retriever_impl" />
-
     <service id="corpus.build.domain.service.url_source.url_source"
              alias="corpus.build.infrastructure.content.beautiful_soup.url_source.url_source_impl" />
 

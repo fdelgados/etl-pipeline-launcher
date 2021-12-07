@@ -1,8 +1,9 @@
 from typing import List, Dict
 
-from duplicates.similarity.domain.model.duplicate import (
+from duplicates.report.domain.model.report import (
     Duplicate,
     DuplicateRepository,
+    Report,
 )
 from duplicates.similarity.domain.model.minhash import (
     MinHash,
@@ -15,7 +16,6 @@ from duplicates.data.domain.model.transformedpagecontent import (
 from duplicates.similarity.domain.service.similaritycalculator import (
     SimilarityCalculator,
 )
-from duplicates.report.domain.model.report import Report
 
 
 class SimilarityCalculatorImpl(SimilarityCalculator):

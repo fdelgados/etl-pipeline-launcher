@@ -15,13 +15,13 @@
 
     <service id="duplicates.similarity.infrastructure.similaritycalculator.datasketch.similaritycalcutator.similarity_calculator_impl"
              class="duplicates.similarity.infrastructure.similaritycalculator.datasketch.similaritycalcutator.SimilarityCalculatorImpl">
-        <argument name="duplicate_repository" value="duplicates.similarity.domain.model.duplicate.duplicate_repository" type="service" />
+        <argument name="duplicate_repository" value="duplicates.report.domain.model.report.duplicate_repository" type="service" />
         <argument name="minhash_repository" value="duplicates.similarity.domain.model.minhash.min_hash_repository" type="service" />
         <argument name="page_repository" value="duplicates.data.domain.model.transformedpagecontent.transformed_page_content_repository" type="service" />
     </service>
 
-    <service id="duplicates.similarity.infrastructure.persistence.sqlalchemy.duplicaterepository.duplicate_repository_impl"
-             class="duplicates.similarity.infrastructure.persistence.sqlalchemy.duplicaterepository.DuplicateRepositoryImpl" />
+    <service id="duplicates.report.infrastructure.persistence.sqlalchemy.duplicaterepository.duplicate_repository_impl"
+             class="duplicates.report.infrastructure.persistence.sqlalchemy.duplicaterepository.DuplicateRepositoryImpl" />
 
     <service id="duplicates.similarity.infrastructure.minhashcalculator.datasketch.minhashcalculator.min_hash_calculator"
              class="duplicates.similarity.infrastructure.minhashcalculator.datasketch.minhashcalculator.MinHashCalculatorImpl" />
@@ -42,10 +42,22 @@
     <service id="duplicates.report.infrastructure.statsretriever.mysql.statsretriever.report_stats_retriever_impl"
              class="duplicates.report.infrastructure.statsretriever.mysql.statsretriever.ReportStatsRetrieverImpl">
         <argument name="db_service" value="duplicates.infrastructure.persistence.sqlalchemy.dbal.sql_alchemy_dbal_service" type="service" />
+        <argument name="duplicate_repository" value="duplicates.report.domain.model.report.duplicate_repository" type="service" />
     </service>
 
     <service id="duplicates.report.infrastructure.persistence.sqlalchemy.buildrepository.build_repository_impl"
              class="duplicates.report.infrastructure.persistence.sqlalchemy.buildrepository.BuildRepositoryImpl">
         <argument name="db_service" value="corpus.infrastructure.persistence.sqlalchemy.dbal.sql_alchemy_dbal_service" type="service" />
     </service>
+
+    <service id="duplicates.check.infrastructure.persistence.sqlalchemy.corpusrepository.corpus_repository_impl"
+             class="duplicates.check.infrastructure.persistence.sqlalchemy.corpusrepository.CorpusRepositoryImpl">
+        <argument name="db_service" value="corpus.infrastructure.persistence.sqlalchemy.dbal.sql_alchemy_dbal_service" type="service" />
+    </service>
+
+    <service id="duplicates.check.infrastructure.persistence.sqlalchemy.duplicate_repository.duplicate_repository_impl"
+             class="duplicates.check.infrastructure.persistence.sqlalchemy.duplicate_repository.DuplicateRepositoryImpl" />
+
+    <service id="duplicates.check.infrastructure.persistence.sqlalchemy.duplicity_check_repository.duplicity_check_repository_impl"
+             class="duplicates.check.infrastructure.persistence.sqlalchemy.duplicity_check_repository.DuplicityCheckRepositoryImpl" />
 </services>

@@ -124,8 +124,8 @@ class ReportDto:
     similarity_threshold: float
     k_shingle_size: int
     duplication_ratio: float
-    duplication_average: float
-    duplication_median: float
+    similarity_average: float
+    similarity_median: float
 
 
 class ReportAssembler:
@@ -148,8 +148,8 @@ class ReportAssembler:
             report.status.serialize(),
             report.similarity_threshold.value,
             report.k_shingle_size.value,
-            0.0,
-            0.0,
+            report_stats.duplication_ratio,
+            report_stats.similarity_average,
             0.0,
         )
 
