@@ -4,7 +4,7 @@ from shared.infrastructure.persistence.sqlalchemy.repository import Repository
 
 from duplicates.check.domain.model.duplicitycheck import (
     DuplicityCheck,
-    DuplicityCheckRepository
+    DuplicityCheckRepository,
 )
 
 

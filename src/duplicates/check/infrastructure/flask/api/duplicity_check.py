@@ -1,13 +1,11 @@
-from http import HTTPStatus
-from flask import request, make_response
+from flask import request
 from flask_restx import Namespace
 
-import shared.infrastructure.environment.globalvars as glob
 from shared.infrastructure.security import authorization_required
 from shared.infrastructure.flask.api.basecontroller import BaseController
 
 from duplicates.check.application.duplicitycheckcreator import (
-    CreateDuplicityCheckCommand
+    CreateDuplicityCheckCommand,
 )
 
 

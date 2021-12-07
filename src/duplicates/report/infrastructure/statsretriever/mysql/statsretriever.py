@@ -30,18 +30,18 @@ class ReportStatsRetrieverImpl(ReportStatsRetriever):
             analyzed_pages,
             duplicates,
             self._similarity_average(report.report_id),
-            duplicates / analyzed_pages if analyzed_pages > 0 else 0.0
+            duplicates / analyzed_pages if analyzed_pages > 0 else 0.0,
         )
 
     def _analyzed_pages(self, report_id: ReportId) -> int:
 
-        sentence = '''
+        sentence = """
             SELECT COUNT(DISTINCT aggregate_id) AS requests FROM event_store
             WHERE JSON_UNQUOTE(
                 JSON_EXTRACT(event_data, "$.report_id")
             ) = :report_id
             AND event_name = :event
-        '''
+        """
 
         result = self._db_service.execute(
             sentence,

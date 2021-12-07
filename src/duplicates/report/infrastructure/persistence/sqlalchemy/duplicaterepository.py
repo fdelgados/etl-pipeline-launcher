@@ -23,8 +23,7 @@ class DuplicateRepositoryImpl(DuplicateRepository, Repository):
 
         with self._connection().connect() as connection:
             result = connection.execute(
-                self._statement(sentence),
-                report_id=bytes(report_id)
+                self._statement(sentence), report_id=bytes(report_id)
             )
 
             duplicates = result.scalar()
@@ -42,8 +41,7 @@ class DuplicateRepositoryImpl(DuplicateRepository, Repository):
 
         with self._connection().connect() as connection:
             result = connection.execute(
-                self._statement(sentence),
-                report_id=bytes(report_id)
+                self._statement(sentence), report_id=bytes(report_id)
             )
 
             average = result.scalar()

@@ -12,10 +12,10 @@ from shared.domain.model.repository import Repository
 from shared.domain.model.valueobject.url import Url
 from shared.domain.model.valueobject.uid import Uuid
 from duplicates.shared.domain.model.similarity_threshold import (
-    SimilarityThreshold
+    SimilarityThreshold,
 )
 from duplicates.check.domain.event.duplicitycheckrequested import (
-    DuplicityCheckRequested
+    DuplicityCheckRequested,
 )
 
 

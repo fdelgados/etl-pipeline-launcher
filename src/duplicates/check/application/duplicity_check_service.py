@@ -6,7 +6,7 @@ from shared.domain.bus.event import DomainEventSubscriber
 from shared.domain.model.valueobject.url import Url
 from shared.domain.service.scraping.pagerequester import PageRequester, Request
 from duplicates.check.domain.event.duplicitycheckrequested import (
-    DuplicityCheckRequested
+    DuplicityCheckRequested,
 )
 from duplicates.check.domain.model.duplicate import (
     Duplicate,
@@ -64,7 +64,7 @@ class PagesScraper:
         tenant_id: str,
         duplicity_check_id: str,
         corpus_name: str,
-        similarity_threshold: float
+        similarity_threshold: float,
     ):
         corpus = self._corpus_repository.corpus_of_name(tenant_id, corpus_name)
         report = self._report_repository.last_of_tenant(tenant_id)
@@ -79,15 +79,9 @@ class PagesScraper:
 
             response = self._pages_requester.request(request)
 
-            content = [
-                section for section in response.content.values()
-            ]
+            content = [section for section in response.content.values()]
             pages.append(
-                Page(
-                    response.url,
-                    " ".join(content),
-                    response.datalayer
-                )
+                Page(response.url, " ".join(content), response.datalayer)
             )
 
         clean_pages = self._data_transformer.transform(pages)

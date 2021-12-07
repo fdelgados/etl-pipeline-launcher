@@ -45,5 +45,5 @@ api.add_namespace(corpus_api, path=global_vars.settings.api_prefix("corpora"))
 api.add_namespace(report_api, path=global_vars.settings.api_prefix("reports"))
 api.add_namespace(
     duplicity_check_api,
-    path=global_vars.settings.api_prefix("duplicity-checks")
+    path=global_vars.settings.api_prefix("duplicity-checks"),
 )

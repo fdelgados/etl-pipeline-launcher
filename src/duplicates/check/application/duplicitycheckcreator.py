@@ -9,7 +9,7 @@ from shared.domain.model.valueobject.url import Url, InvalidUrlException
 from shared.domain.errors.errors import Errors, ApplicationError
 
 from duplicates.shared.domain.model.similarity_threshold import (
-    SimilarityThreshold
+    SimilarityThreshold,
 )
 from duplicates.check.domain.model.duplicitycheck import (
     DuplicityCheckRepository,
