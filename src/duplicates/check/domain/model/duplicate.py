@@ -51,6 +51,7 @@ class DuplicateRepository(Repository, metaclass=abc.ABCMeta):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def duplicates_of_check(self, check_id: DuplicityCheckId)\
-            -> List[Duplicate]:
+    def duplicates_of_check(
+        self, check_id: DuplicityCheckId
+    ) -> List[Duplicate]:
         raise NotImplementedError

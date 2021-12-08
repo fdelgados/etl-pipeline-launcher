@@ -71,11 +71,7 @@ class GetCheckedUrlsSinceDateController(BaseController):
 
         response = self.ask(query)
 
-        return self.response_ok(
-            {
-                "data": response.value().serialize()
-            }
-        )
+        return self.response_ok({"data": response.value().serialize()})
 
 
 @duplicity_check_api.route("/<string:check_id>/results")
@@ -86,8 +82,4 @@ class GetCheckedUrlsOfCheckController(BaseController):
 
         response = self.ask(query)
 
-        return self.response_ok(
-            {
-                "data": response.value().serialize()
-            }
-        )
+        return self.response_ok({"data": response.value().serialize()})

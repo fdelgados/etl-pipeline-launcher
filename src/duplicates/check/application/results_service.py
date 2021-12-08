@@ -34,8 +34,9 @@ class RetrieveDuplicityCheckResultsQueryHandler(QueryHandler):
     def __init__(self, duplicate_repository: DuplicateRepository):
         self._duplicate_repository = duplicate_repository
 
-    def handle(self, query: RetrieveDuplicityCheckResultsQuery) \
-            -> RetrieveDuplicityCheckResultsResponse:
+    def handle(
+        self, query: RetrieveDuplicityCheckResultsQuery
+    ) -> RetrieveDuplicityCheckResultsResponse:
 
         duplicates = self._find_duplicates(query)
 
@@ -47,7 +48,7 @@ class RetrieveDuplicityCheckResultsQueryHandler(QueryHandler):
                 duplicate.url.address,
                 duplicate.duplicate_url.address,
                 duplicate.similarity,
-                duplicate.checked_on
+                duplicate.checked_on,
             )
 
         return RetrieveDuplicityCheckResultsResponse(dto)
@@ -85,18 +86,16 @@ class DuplicatesDto(JsonSerializable):
         }
 
         existing_url_index = next(
-            (index for (index, d) in enumerate(self._duplicates)
-                if d["url"] == url),
-            None
+            (
+                index
+                for (index, d) in enumerate(self._duplicates)
+                if d["url"] == url
+            ),
+            None,
         )
 
         if existing_url_index is None:
-            self._duplicates.append(
-                {
-                    "url": url,
-                    "duplicates": [duplicate]
-                }
-            )
+            self._duplicates.append({"url": url, "duplicates": [duplicate]})
         else:
             self._duplicates[existing_url_index]["duplicates"].append(
                 duplicate
@@ -104,4 +103,3 @@ class DuplicatesDto(JsonSerializable):
 
     def serialize(self) -> list:
         return self._duplicates
-

@@ -96,8 +96,9 @@ class GenerateNextIdentityQueryHandler(QueryHandler):
     def __init__(self, duplicity_check_repository: DuplicityCheckRepository):
         self._duplicity_check_repository = duplicity_check_repository
 
-    def handle(self, query: GenerateNextIdentityQuery) \
-            -> GenerateNextIdentityResponse:
+    def handle(
+        self, query: GenerateNextIdentityQuery
+    ) -> GenerateNextIdentityResponse:
 
         duplicity_check_id = self._duplicity_check_repository.next_identity()
 
