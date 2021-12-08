@@ -36,7 +36,9 @@ class StartBuildController(BaseController):
         self.dispatch(command)
 
         return self.response_accepted(
-            {"Content-Location": f"{self.base_url()}/builds/{build_id}"}
+            headers={
+                "Content-Location": f"{self.base_url()}/builds/{build_id}"
+            }
         )
 
     def _generate_build_id(self) -> str:

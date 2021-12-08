@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import List
 
 from shared.domain.bus.command import Command, CommandHandler
+from shared.domain.bus.query import Query, QueryHandler, Response
 from shared.domain.bus.event import EventBus
 from shared.domain.model.entity.user import User
 from shared.domain.model.valueobject.url import Url, InvalidUrlException
@@ -14,11 +15,13 @@ from duplicates.shared.domain.model.similarity_threshold import (
 from duplicates.check.domain.model.duplicitycheck import (
     DuplicityCheckRepository,
     DuplicityCheck,
+    DuplicityCheckId,
 )
 
 
 @dataclass(frozen=True)
 class CreateDuplicityCheckCommand(Command):
+    check_id: str
     urls: list
     similarity_threshold: float
     requested_by: User
@@ -54,7 +57,7 @@ class CreateDuplicityCheckCommandHandler(CommandHandler):
         self._ensure_max_urls_is_not_exceeded(urls)
 
         duplicity_check = DuplicityCheck(
-            self._duplicity_check_repository.next_identity(),
+            DuplicityCheckId(command.check_id),
             urls,
             SimilarityThreshold(command.similarity_threshold),
             command.requested_by,
@@ -74,3 +77,28 @@ class CreateDuplicityCheckCommandHandler(CommandHandler):
             )
 
             raise ApplicationError(error)
+
+
+@dataclass(frozen=True)
+class GenerateNextIdentityQuery(Query):
+    pass
+
+
+class GenerateNextIdentityResponse(Response):
+    def __init__(self, duplicity_check_id: str):
+        self._duplicity_check_id = duplicity_check_id
+
+    def value(self) -> str:
+        return self._duplicity_check_id
+
+
+class GenerateNextIdentityQueryHandler(QueryHandler):
+    def __init__(self, duplicity_check_repository: DuplicityCheckRepository):
+        self._duplicity_check_repository = duplicity_check_repository
+
+    def handle(self, query: GenerateNextIdentityQuery) \
+            -> GenerateNextIdentityResponse:
+
+        duplicity_check_id = self._duplicity_check_repository.next_identity()
+
+        return GenerateNextIdentityResponse(duplicity_check_id.value)

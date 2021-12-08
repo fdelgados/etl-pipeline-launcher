@@ -128,8 +128,16 @@ class BaseController(Resource):
     def response_ok(self, response: Dict, headers: Optional[Dict] = None):
         return self._json_response(response, HTTPStatus.OK, headers)
 
-    def response_accepted(self, headers: Optional[Dict] = None):
-        return self._json_response("", HTTPStatus.ACCEPTED, headers)
+    def response_accepted(
+        self,
+        response: Optional[Dict] = None,
+        headers: Optional[Dict] = None,
+    ):
+        return self._json_response(
+            response if response is not None else "",
+            HTTPStatus.ACCEPTED,
+            headers,
+        )
 
     def _camelize_keys(self, dict_obj: Dict):
         assert type(dict_obj) == dict

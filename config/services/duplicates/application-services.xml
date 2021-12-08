@@ -81,4 +81,14 @@
              class="duplicates.check.application.duplicity_check_service.ScrapPagesOnDuplicityCheckRequested">
         <argument name="pages_scraper" value="duplicates.check.application.duplicity_check_service.pages_scraper" type="service" />
     </service>
+
+    <service id="duplicates.check.application.duplicitycheckcreator.generate_next_identity_query_handler"
+             class="duplicates.check.application.duplicitycheckcreator.GenerateNextIdentityQueryHandler">
+        <argument name="duplicity_check_repository" value="duplicates.check.domain.model.duplicitycheck.duplicity_check_repository" type="service" />
+    </service>
+
+    <service id="duplicates.check.application.results_service.retrieve_duplicity_check_results_query_handler"
+             class="duplicates.check.application.results_service.RetrieveDuplicityCheckResultsQueryHandler">
+        <argument name="duplicate_repository" value="duplicates.check.domain.model.duplicate.duplicate_repository" type="service" />
+    </service>
 </services>

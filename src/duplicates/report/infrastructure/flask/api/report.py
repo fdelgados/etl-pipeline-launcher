@@ -37,7 +37,7 @@ class ReportController(BaseController):
         self.dispatch(command)
 
         return self.response_accepted(
-            {
+            headers={
                 "Content-Location": "{}/reports/{}".format(
                     glob.settings.api_url(),
                     report_id,
