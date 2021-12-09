@@ -22,7 +22,6 @@ CREATE TABLE IF NOT EXISTS `reports`
     `status` TINYINT(1) DEFAULT 0 NOT NULL,
     `k_shingle_size` TINYINT(1) NOT NULL,
     `similarity_threshold` DECIMAL(2, 1) NOT NULL,
-    `similarity_threshold_margin` DECIMAL(3, 2) NOT NULL DEFAULT 0.0,
     `started_on` DATETIME NOT NULL,
     `completed_on` DATETIME DEFAULT NULL,
     `total_pages` INT NOT NULL DEFAULT 0,

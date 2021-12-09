@@ -25,13 +25,8 @@ CREATE INDEX IF NOT EXISTS `event_store_event_name_index`
 CREATE INDEX IF NOT EXISTS `event_store_aggregate_id_index`
     ON event_store (`aggregate_id`);
 
-ALTER TABLE `event_store`
-ADD COLUMN IF NOT EXISTS `build_id` CHAR(36)
-GENERATED ALWAYS AS (
-    JSON_UNQUOTE(JSON_EXTRACT(event_data, "$.build_id"))
-);
 CREATE INDEX IF NOT EXISTS `event_store_event_data_index`
-    ON event_store (`build_id`);
+    ON event_store (`event_data`);
 
 CREATE TABLE IF NOT EXISTS `builds`
 (

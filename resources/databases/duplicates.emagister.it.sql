@@ -8,7 +8,6 @@ FLUSH PRIVILEGES;
 
 USE duplicates_emagister_it;
 
--- TABLES
 CREATE TABLE IF NOT EXISTS `reports`
 (
     `id` BINARY(16) NOT NULL,
@@ -21,7 +20,6 @@ CREATE TABLE IF NOT EXISTS `reports`
     `status` TINYINT(1) DEFAULT 0 NOT NULL,
     `k_shingle_size` TINYINT(1) NOT NULL,
     `similarity_threshold` DECIMAL(2, 1) NOT NULL,
-    `similarity_threshold_margin` DECIMAL(3, 2) NOT NULL DEFAULT 0.0,
     `started_on` DATETIME NOT NULL,
     `completed_on` DATETIME DEFAULT NULL,
     `total_pages` INT NOT NULL DEFAULT 0,
@@ -58,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `duplicity_checks`
     `similarity_threshold` DECIMAL(2, 1) NOT NULL,
     `requested_on` DATETIME NOT NULL,
     `completed_on` DATETIME DEFAULT NULL,
-    PRIMARY KEY `pk_reports` (`id`)
+    PRIMARY KEY `pk_duplicity_checks` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE INDEX IF NOT EXISTS `duplicity_checks_creator_index`
@@ -85,7 +83,6 @@ CREATE INDEX IF NOT EXISTS `duplicity_check_duplicates_checked_on_index`
     ON duplicity_check_duplicates (`checked_on`);
 
 
-
 CREATE TABLE IF NOT EXISTS `report_duplicates`
 (
     `report_id` BINARY(16) NOT NULL,
@@ -98,7 +95,8 @@ CREATE TABLE IF NOT EXISTS `report_duplicates`
 CREATE INDEX IF NOT EXISTS `report_duplicates_similarity`
     ON report_duplicates (`similarity`);
 
-DROP TABLE IF EXISTS event_store;
+
+
 CREATE TABLE IF NOT EXISTS `event_store`
 (
     `id`           CHAR(36),

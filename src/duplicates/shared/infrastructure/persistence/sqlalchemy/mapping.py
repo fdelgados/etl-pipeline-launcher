@@ -51,12 +51,6 @@ class DuplicatesMapping(Mapping):
             Column(
                 "similarity_threshold", SimilarityThresholdType, nullable=False
             ),
-            Column(
-                "similarity_threshold_margin",
-                Float,
-                nullable=False,
-                default=0.0,
-            ),
             Column("started_on", DateTime, nullable=False),
             Column("completed_on", DateTime, nullable=True),
             Column("total_pages", Integer, nullable=False, default=0),
