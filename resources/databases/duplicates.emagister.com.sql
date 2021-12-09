@@ -26,9 +26,9 @@ CREATE TABLE IF NOT EXISTS `reports`
     `completed_on` DATETIME DEFAULT NULL,
     `total_pages` INT NOT NULL DEFAULT 0,
     `duplicated_pages` INT NOT NULL DEFAULT 0,
-    `duplication_ratio` DECIMAL(5, 2) DEFAULT NULL,
-    `duplication_average` DECIMAL(5, 2) DEFAULT NULL,
-    `duplication_median` DECIMAL(5, 2) DEFAULT NULL,
+    `duplication_ratio` DECIMAL(5, 4) DEFAULT NULL,
+    `duplication_average` DECIMAL(5, 4) DEFAULT NULL,
+    `duplication_median` DECIMAL(5, 4) DEFAULT NULL,
     PRIMARY KEY `pk_reports` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
