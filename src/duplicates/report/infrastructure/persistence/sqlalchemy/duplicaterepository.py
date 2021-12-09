@@ -49,7 +49,7 @@ class DuplicateRepositoryImpl(DuplicateRepository, Repository):
             connection.close()
             self._connection().dispose()
 
-            return float(average)
+            return average
 
     def similarity_median(self, report_id: ReportId) -> float:
         pass
