@@ -23,8 +23,10 @@ class ReportRepositoryImpl(ReportRepository, Repository):
         session = self._session()
         query = (
             session.query(self._aggregate)
-            .filter(Report._tenant_id == tenant_id,
-                    Report._status == Status.completed())
+            .filter(
+                Report._tenant_id == tenant_id,
+                Report._status == Status.completed(),
+            )
             .order_by(Report._completed_on.desc())
         )
 
