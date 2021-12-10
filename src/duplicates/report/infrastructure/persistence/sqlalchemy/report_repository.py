@@ -20,4 +20,17 @@ class ReportRepositoryImpl(ReportRepository, Repository):
         return self.find(_report_id=report_id)
 
     def last_of_tenant(self, tenant_id: str) -> Report:
-        return self.find(_tenant_id=tenant_id, _status=Status.completed())
+        session = self._session()
+        query = (
+            session.query(self._aggregate)
+            .filter(Report._tenant_id == tenant_id,
+                    Report._status == Status.completed())
+            .order_by(Report._completed_on.desc())
+        )
+
+        result = query.first()
+
+        session.close()
+        self._engine.dispose()
+
+        return result
