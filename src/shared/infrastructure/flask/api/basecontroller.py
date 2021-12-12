@@ -120,8 +120,10 @@ class BaseController(Resource):
     ):
         response = make_response(response, status_code)
 
+        response.headers['Content-Type'] = 'application/json'
         if headers:
-            response.headers = headers
+            for header, value in headers.items():
+                response.headers[header] = value
 
         return response
 
