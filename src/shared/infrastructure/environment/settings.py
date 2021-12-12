@@ -86,7 +86,7 @@ class Settings:
 
     @staticmethod
     def configs_dir() -> str:
-        return "/var/www/config"
+        return "/opt/code/config"
 
     @staticmethod
     def settings_dir() -> str:

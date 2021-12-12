@@ -1,11 +1,11 @@
 [application]
 baseurl = "http://localhost"
 id = "fc050f989329b47f861e5760c713c820"
-root_dir = "/var/www"
+root_dir = "/opt/code"
 logs_dir = "/log"
-contexts_dir = "/var/www/src"
-configs_dir = "/var/www/config"
-entry_point = "/var/www/src/shared/infrastructure/flask/entrypoint/run.py"
+contexts_dir = "/opt/code/src"
+configs_dir = "/opt/code/config"
+entry_point = "/opt/code/src/shared/infrastructure/flask/entrypoint/run.py"
 store_domain_event_subscriber.id = "shared.application.event.store.store_domain_event_on_published"
 store_domain_event_subscriber.class_name = "shared.application.event.store.StoreDomainEventOnPublished"
 contexts.corpus.event_store.enabled = true
@@ -42,5 +42,5 @@ error_include_message = false
 flask_debug = false
 
 [duplicates]
-content_file = "/var/www/data/{}/{}/content.csv"
-minhashes_file = "/var/www/data/{}/{}/minhashes.pkl"
+content_file = "/opt/code/data/{}/{}/content.csv"
+minhashes_file = "/opt/code/data/{}/{}/minhashes.pkl"
