@@ -29,8 +29,8 @@ class ReportStatsRetrieverImpl(ReportStatsRetriever):
         return ReportStats(
             analyzed_pages,
             duplicates,
-            self._similarity_average(report.report_id),
-            duplicates / analyzed_pages if analyzed_pages > 0 else 0.0,
+            float(self._similarity_average(report.report_id)),
+            float(duplicates / analyzed_pages) if analyzed_pages > 0 else 0.0,
         )
 
     def _analyzed_pages(self, report_id: ReportId) -> int:
