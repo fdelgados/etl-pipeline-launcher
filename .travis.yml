@@ -23,7 +23,7 @@ jobs:
       name: "Unit Tests"
       script:
         - docker-compose -f ./docker/docker-compose.yml build --build-arg PYTHON_DEPS=requirements-devel.txt
-        - docker-compose -f ./docker/docker-compose.yml run --entrypoint="pytest /var/www/tests/unit" application
+        - docker-compose -f ./docker/docker-compose.yml run --entrypoint="pytest /opt/code/tests/unit" application
     - stage: tests
       name: "Static Analysis"
       script:

@@ -25,13 +25,13 @@ services:
       - mailhog
       - mongo
     volumes:
-      - ../src:/var/www/src
-      - ../tests:/var/www/tests
-      - ../config:/var/www/config
+      - ../src:/opt/code/src
+      - ../tests:/opt/code/tests
+      - ../config:/opt/code/config
       - ../export:/export
       - ../log:/log
-      - ../bin:/var/www/bin
-      - ../.data:/var/www/data
+      - ../bin:/opt/code/bin
+      - ../.data:/opt/code/data
     restart: always
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -71,13 +71,12 @@ services:
       - RABBITMQ_PASSWORD
     ports:
       - "5000:5000"
-    command: gunicorn --bind 0.0.0.0:5000 shared.infrastructure.flask.entrypoint.run:app
 
   worker:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-    command: /var/www/bin/run_workers.py
+    command: /opt/code/bin/run_workers.py
     depends_on:
       - rabbitmq
       - redis

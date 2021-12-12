@@ -23,13 +23,13 @@ start stop destroy:
 test: unit-tests ## Run all tests
 
 unit-tests: ## Run unit tests
-	@docker-compose -f ./docker/docker-compose.yml run --rm --no-deps --entrypoint="pytest /var/www/tests/unit" application
+	@docker-compose -f ./docker/docker-compose.yml run --rm --no-deps --entrypoint="pytest /opt/code/tests/unit" application
 
 e2e-tests: start ## Run end to end tests
-	@docker-compose -f ./docker/docker-compose.yml run --rm --no-deps --entrypoint="pytest /var/www/tests/e2e" application
+	@docker-compose -f ./docker/docker-compose.yml run --rm --no-deps --entrypoint="pytest /opt/code/tests/e2e" application
 
 integration-tests: start ## Run integration tests
-	@docker-compose -f ./docker/docker-compose.yml run --rm --no-deps --entrypoint="pytest /var/www/tests/integration" application
+	@docker-compose -f ./docker/docker-compose.yml run --rm --no-deps --entrypoint="pytest /opt/code/tests/integration" application
 
 reload-workers: stop-workers run-workers ## Reload RabbitMQ workers
 
