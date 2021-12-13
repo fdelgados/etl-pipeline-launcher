@@ -7,15 +7,6 @@ pipeline {
     }
 
     stages {
-        stage("Prepare") {
-            steps {
-                sh "curl -L https://github.com/docker/compose/releases/download/1.29.2/docker-compose-`uname -s`-`uname -m` > docker-compose"
-                sh "chmod +x docker-compose"
-                sh "sudo mv docker-compose /usr/local/bin"
-                sh "docker --version"
-            }
-        }
-
         stage('Clone repository') {
             steps {
                 checkout scm
