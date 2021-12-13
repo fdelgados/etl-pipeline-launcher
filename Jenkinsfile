@@ -18,7 +18,9 @@ pipeline {
         }
 
         stage('Clone repository') {
-            checkout scm
+            steps {
+                checkout scm
+            }
         }
 
         stage("Run unit tests") {
