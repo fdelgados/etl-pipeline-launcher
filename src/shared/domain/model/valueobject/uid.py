@@ -22,9 +22,6 @@ class Uuid(metaclass=abc.ABCMeta):
         if not regex.match(value):
             raise ValueError("Invalid {} value".format(type(self).__name__))
 
-    def __bytes__(self):
-        return uuid.UUID(self.value).bytes
-
     @property
     def value(self) -> str:
         return self.__value
