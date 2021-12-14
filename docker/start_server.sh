@@ -1,5 +1,9 @@
 #!/bin/sh
 
+chown -R uwsgi:uwsgi /opt/code/data
+chown -R uwsgi:uwsgi /opt/code/log
+chown -R uwsgi:uwsgi /opt/code/export
+
 _term() {
   echo "Caught SIGTERM signal! Sending graceful stop to uWSGI through the master-fifo"
   # See details in the uwsgi.ini file and

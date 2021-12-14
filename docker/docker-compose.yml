@@ -31,7 +31,7 @@ services:
       - ../export:/opt/code/export
       - ../log:/opt/code/log
       - ../bin:/opt/code/bin
-      - ../.data:/opt/code/data
+      - ../data:/opt/code/data
     restart: always
     extra_hosts:
       - "host.docker.internal:host-gateway"

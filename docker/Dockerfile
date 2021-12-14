@@ -28,6 +28,7 @@ RUN mkdir -p /opt/code/tests
 RUN mkdir -p /opt/code/config
 RUN mkdir -p /opt/code/bin
 RUN mkdir -p /opt/code/log
+RUN mkdir -p /opt/code/data
 RUN mkdir -p /opt/code/export/certs
 
 COPY src/ /opt/code/src
