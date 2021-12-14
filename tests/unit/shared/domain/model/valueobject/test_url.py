@@ -11,11 +11,12 @@ class TestUrl(unittest.TestCase):
             "foobar",
             "//foo.com",
             "www.google.com",
-         ]
+        ]
     )
-    def test_if_it_raise_an_exception_if_address_is_invalid(self, url: str) \
-            -> None:
-        
+    def test_if_it_raise_an_exception_if_address_is_invalid(
+        self, url: str
+    ) -> None:
+
         with self.assertRaises(InvalidUrlException):
             Url(url)
 

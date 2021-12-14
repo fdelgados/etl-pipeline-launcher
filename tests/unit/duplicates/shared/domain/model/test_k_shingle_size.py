@@ -11,14 +11,16 @@ class TestKShingleSize(unittest.TestCase):
         with self.assertRaises(ValueError):
             KShingleSize(value)
 
-    def test_if_it_raises_an_exception_if_value_is_lower_than_accepted(self) \
-            -> None:
+    def test_if_it_raises_an_exception_if_value_is_lower_than_accepted(
+        self,
+    ) -> None:
 
         with self.assertRaises(ValueError):
             KShingleSize(KShingleSize.min() - 1)
 
-    def test_if_it_raises_an_exception_if_value_is_higher_than_accepted(self) \
-            -> None:
+    def test_if_it_raises_an_exception_if_value_is_higher_than_accepted(
+        self,
+    ) -> None:
 
         with self.assertRaises(ValueError):
             KShingleSize(KShingleSize.max() + 1)
@@ -26,8 +28,9 @@ class TestKShingleSize(unittest.TestCase):
     @given(
         st.integers(min_value=KShingleSize.min(), max_value=KShingleSize.max())
     )
-    def test_if_it_not_raise_an_exception_if_value_is_valid(self, value: int) \
-            -> None:
+    def test_if_it_not_raise_an_exception_if_value_is_valid(
+        self, value: int
+    ) -> None:
 
         k_shingle_size = KShingleSize(value)
 

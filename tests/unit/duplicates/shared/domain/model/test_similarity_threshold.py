@@ -3,7 +3,7 @@ from parameterized import parameterized
 from hypothesis import given, strategies as st
 
 from duplicates.shared.domain.model.similarity_threshold import (
-    SimilarityThreshold
+    SimilarityThreshold,
 )
 
 
@@ -13,14 +13,16 @@ class TestSimilarityThreshold(unittest.TestCase):
         with self.assertRaises(ValueError):
             SimilarityThreshold(value)
 
-    def test_if_it_raises_an_exception_if_value_is_lower_than_accepted(self) \
-            -> None:
+    def test_if_it_raises_an_exception_if_value_is_lower_than_accepted(
+        self,
+    ) -> None:
 
         with self.assertRaises(ValueError):
             SimilarityThreshold(SimilarityThreshold.min() - 0.1)
 
-    def test_if_it_raises_an_exception_if_value_is_higher_than_accepted(self) \
-            -> None:
+    def test_if_it_raises_an_exception_if_value_is_higher_than_accepted(
+        self,
+    ) -> None:
 
         with self.assertRaises(ValueError):
             SimilarityThreshold(SimilarityThreshold.max() + 0.1)
