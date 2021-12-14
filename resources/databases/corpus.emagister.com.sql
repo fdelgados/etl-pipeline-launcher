@@ -1,8 +1,28 @@
 CREATE DATABASE IF NOT EXISTS corpus_emagister_com CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+
+DELIMITER //
+
+CREATE FUNCTION UUID_TO_BIN(uuid CHAR(36)) RETURNS BINARY(16) DETERMINISTIC
+BEGIN
+    RETURN UNHEX(CONCAT(REPLACE(uuid, '-', '')));
+END;
+//
+CREATE FUNCTION BIN_TO_UUID(bin BINARY(16)) RETURNS CHAR(36) DETERMINISTIC
+BEGIN
+    DECLARE hex CHAR(32);
+    SET hex = HEX(bin);
+    RETURN LOWER(CONCAT(LEFT(hex, 8), '-', MID(hex, 9, 4), '-', MID(hex, 13, 4), '-', MID(hex, 17, 4), '-', RIGHT(hex, 12)));
+END;
+
+//
+DELIMITER ;
+
 CREATE USER IF NOT EXISTS emagister_com@'%' IDENTIFIED BY 'wTUbtEmk2S6R';
 
 GRANT INSERT, SELECT, UPDATE, DELETE ON corpus_emagister_com.* TO emagister_com;
+GRANT EXECUTE ON FUNCTION corpus_emagister_com.UUID_TO_BIN TO emagister_com;
+GRANT EXECUTE ON FUNCTION corpus_emagister_com.BIN_TO_UUID TO emagister_com;
 
 FLUSH PRIVILEGES;
 

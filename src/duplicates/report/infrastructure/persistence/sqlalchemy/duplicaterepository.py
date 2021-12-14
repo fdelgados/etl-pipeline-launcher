@@ -18,12 +18,12 @@ class DuplicateRepositoryImpl(DuplicateRepository, Repository):
     def count(self, report_id: ReportId) -> int:
         sentence = """
             SELECT COUNT(DISTINCT url) AS num_duplicates FROM report_duplicates
-            WHERE report_id = :report_id
+            WHERE report_id = UUID_TO_BIN(:report_id)
         """
 
         with self._connection().connect() as connection:
             result = connection.execute(
-                self._statement(sentence), report_id=bytes(report_id)
+                self._statement(sentence), report_id=report_id.value
             )
 
             duplicates = result.scalar()
@@ -36,12 +36,12 @@ class DuplicateRepositoryImpl(DuplicateRepository, Repository):
     def similarity_average(self, report_id: ReportId) -> float:
         sentence = """
             SELECT AVG(similarity) AS similarity_average FROM report_duplicates
-            WHERE report_id = :report_id
+            WHERE report_id = UUID_TO_BIN(:report_id)
         """
 
         with self._connection().connect() as connection:
             result = connection.execute(
-                self._statement(sentence), report_id=bytes(report_id)
+                self._statement(sentence), report_id=report_id.value
             )
 
             average = result.scalar()
