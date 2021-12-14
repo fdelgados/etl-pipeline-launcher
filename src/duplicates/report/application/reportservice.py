@@ -61,7 +61,7 @@ class ReportCreatorCommandHandler(CommandHandler):
             self._report_repository.generate_unique_name(),
             command.corpus,
             build.id,
-            build.corpus_version,
+            build.name,
             command.user,
             KShingleSize(command.k_shingle_size),
             SimilarityThreshold(command.similarity_threshold),

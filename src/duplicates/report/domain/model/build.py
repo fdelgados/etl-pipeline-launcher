@@ -17,10 +17,6 @@ class Build:
     def name(self) -> str:
         return self._build_name
 
-    @property
-    def corpus_version(self) -> str:
-        return self._created_on.strftime("%m%d%Y%H%M%S")
-
 
 class BuildRepository(metaclass=abc.ABCMeta):
     @abc.abstractmethod

@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `reports`
     `name` VARCHAR(60) NOT NULL,
     `from_corpus` VARCHAR(25) NOT NULL,
     `corpus_build_id` CHAR(36) NOT NULL,
-    `corpus_version` CHAR(14) NOT NULL,
+    `corpus_version` VARCHAR(60) NOT NULL,
     `created_by` VARCHAR(30) NOT NULL,
     `status` TINYINT(1) DEFAULT 0 NOT NULL,
     `k_shingle_size` TINYINT(1) NOT NULL,
