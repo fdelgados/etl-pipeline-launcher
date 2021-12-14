@@ -195,9 +195,6 @@ class Settings:
     def get_app_root_dir(self) -> str:
         return self._get("application", "root_dir")
 
-    def get_app_entry_point(self) -> str:
-        return self._get("application", "entry_point")
-
     def contexts_dir(self) -> str:
         return self._get("application", "contexts_dir")
 
