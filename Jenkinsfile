@@ -11,7 +11,8 @@ node {
          /* This builds the actual image; synonymous to
           * docker build on the command line */
 
-         app = docker.build("fdelgados/nlp-application", "./docker")
+         def dockerfile = "docker/Dockerfile"
+         app = docker.build("fdelgados/nlp-application", "-f ${dockerfile} ./")
      }
 
      stage('Test image') {
