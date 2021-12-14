@@ -14,7 +14,7 @@ _term() {
 
 trap _term SIGTERM
 
-uwsgi --processes $PROCESSES --ini /opt/uwsgi/uwsgi.ini &
+uwsgi --ini /opt/uwsgi/uwsgi.ini &
 
 # We need to wait to properly catch the signal, that's why uWSGI is started
 # in the background. $! is the PID of uWSGI
