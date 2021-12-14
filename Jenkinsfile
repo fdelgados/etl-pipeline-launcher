@@ -7,6 +7,13 @@ pipeline {
     }
 
     stages {
+        stage("Prepare") {
+            steps {
+                sh "docker --version"
+                sh "docker-compose version"
+            }
+        }
+
         stage('Clone repository') {
             steps {
                 checkout scm
