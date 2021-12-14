@@ -55,4 +55,9 @@ class ReportStatsRetrieverImpl(ReportStatsRetriever):
         return self._duplicate_repository.count(report_id)
 
     def _similarity_average(self, report_id: ReportId) -> float:
-        return self._duplicate_repository.similarity_average(report_id)
+        average = self._duplicate_repository.similarity_average(report_id)
+
+        if average is not None:
+            return average
+
+        return 0.0
