@@ -17,9 +17,19 @@ class BuildRepositoryImpl(BuildRepository, Repository):
         super().__init__(Build, global_vars.settings.database_dsn("corpus"))
 
     def builds_of_tenant(self, tenant_id: str) -> List[Build]:
-        return self.find_all(
-            order_by={"_started_on": "desc"}, _tenant_id=tenant_id
+        session = self._session()
+        query = (
+            session.query(self._aggregate)
+            .filter_by(_tenant_id=tenant_id)
+            .order_by(Build._started_on.desc())
         )
+
+        result = query.all()
+
+        session.close()
+        self._engine.dispose()
+
+        return result
 
     def running_builds_of_tenant(self, tenant_id: str) -> List[Build]:
         return self.find_all(_tenant_id=tenant_id, _status=Status.running())
