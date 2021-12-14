@@ -30,10 +30,4 @@ node {
              app.push("latest")
          }
      }
-
-     stage('Remove Unused docker image') {
-        steps{
-            sh "docker rmi ${imagename}:${env.BUILD_NUMBER}"
-        }
-     }
  }
