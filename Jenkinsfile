@@ -7,7 +7,9 @@ node {
 
      stage('Build image') {
          def dockerfile = "docker/Dockerfile"
-         app = docker.build("fdelgados/nlp-application", "--build-arg PYTHON_DEPS=requirements-devel.txt -f ${dockerfile} ./")
+         def imagename = "fdelgados/nlp-application"
+
+         app = docker.build($imagename, "--build-arg PYTHON_DEPS=requirements-devel.txt -f ${dockerfile} ./")
      }
 
      stage('Run Unit Tests') {
@@ -23,7 +25,7 @@ node {
      }
 
      stage('Push image') {
-         docker.withRegistry('https://registry.hub.docker.com', 'd8c18dc6-3da8-49c6-9589-ca328cc695b8') {
+         docker.withRegistry('', 'd8c18dc6-3da8-49c6-9589-ca328cc695b8') {
              app.push("${env.BUILD_NUMBER}")
              app.push("latest")
          }
