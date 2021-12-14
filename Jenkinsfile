@@ -9,7 +9,7 @@ node {
          def dockerfile = "docker/Dockerfile"
          def imagename = "fdelgados/nlp-application"
 
-         app = docker.build($imagename, "--build-arg PYTHON_DEPS=requirements-devel.txt -f ${dockerfile} ./")
+         app = docker.build("${imagename}", "--build-arg PYTHON_DEPS=requirements-devel.txt -f ${dockerfile} ./")
      }
 
      stage('Run Unit Tests') {
