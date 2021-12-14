@@ -22,7 +22,7 @@ pipeline {
 
         stage("Run unit tests") {
             steps {
-                sh "docker-compose -f ${env.WORKSPACE}/docker/docker-compose.yml build --build-arg PYTHON_DEPS=requirements-devel.txt application"
+                sh "docker-compose -f ${env.WORKSPACE}/docker/docker-compose.yml build --build-arg PYTHON_DEPS=requirements-devel.txt"
                 sh "docker-compose -f ${env.WORKSPACE}/docker/docker-compose.yml run --entrypoint=\"pytest /opt/code/tests/unit\" application"
             }
         }
