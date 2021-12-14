@@ -47,9 +47,10 @@ class PageCreator(EntityBuilder):
 
     @property
     def corpus_name(self) -> str:
-        return (
-            self._corpus_name if self._corpus_name else self.fake.text(max_nb_chars=25)
-        )
+        if self._corpus_name:
+            return self._corpus_name
+
+        return self.fake.text(max_nb_chars=25)
 
     def with_tenant_id(self, tenant_id: str) -> PageCreator:
         self._tenant_id = tenant_id
