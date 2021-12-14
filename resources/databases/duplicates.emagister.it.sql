@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `event_store`
     `aggregate_id` VARCHAR(255) NOT NULL,
     `event_name`   VARCHAR(200) NOT NULL,
     `event_data`   JSON         NOT NULL,
-    `occurred_on`  DATETIME     NOT NULL,
+    `occurred_on`  DATETIME(6)     NOT NULL,
     PRIMARY KEY `pk_event_store` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
