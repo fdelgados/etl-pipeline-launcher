@@ -28,8 +28,8 @@ services:
       - ../src:/opt/code/src
       - ../tests:/opt/code/tests
       - ../config:/opt/code/config
-      - ../export:/opt/export
-      - ../log:/opt/log
+      - ../export:/opt/code/export
+      - ../log:/opt/code/log
       - ../bin:/opt/code/bin
       - ../.data:/opt/code/data
     restart: always

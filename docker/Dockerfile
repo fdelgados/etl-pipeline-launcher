@@ -27,8 +27,8 @@ RUN mkdir -p /opt/code/src
 RUN mkdir -p /opt/code/tests
 RUN mkdir -p /opt/code/config
 RUN mkdir -p /opt/code/bin
-RUN mkdir -p /opt/log
-RUN mkdir -p /opt/export/certs
+RUN mkdir -p /opt/code/log
+RUN mkdir -p /opt/code/export/certs
 
 COPY src/ /opt/code/src
 
@@ -57,9 +57,6 @@ COPY --chown=uwsgi:uwsgi tests/ /opt/code/tests
 COPY --chown=uwsgi:uwsgi config/ /opt/code/config
 COPY --chown=uwsgi:uwsgi bin/ /opt/code/bin
 COPY --chown=uwsgi:uwsgi wsgi.py /opt/code
-
-RUN chown -R uwsgi:uwsgi /opt/log
-RUN chown -R uwsgi:uwsgi /opt/export/certs
 
 WORKDIR /opt/code
 EXPOSE 5000
