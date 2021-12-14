@@ -3,7 +3,6 @@ baseurl = "http://35.240.60.105"
 
 [identity_access]
 token_issuer = "http://localhost"
-public_key_file = "/export/certs/identity_access.pem"
 
 [flask]
 flask_env = "production"
