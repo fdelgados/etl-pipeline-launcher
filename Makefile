@@ -10,7 +10,7 @@ reload: stop start ## Reload container (stop start)
 
 .PHONY: build
 build: ## Build docker container
-	@docker-compose -f ./docker/docker-compose.yml build --build-arg PYTHON_DEPS=requirements-devel.txt
+	@docker-compose -f ./docker/docker-compose.yml build
 
 start: CMD=up -d --force-recreate application ## Start container
 stop: CMD=stop ## Stop container

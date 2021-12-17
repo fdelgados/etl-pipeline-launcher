@@ -1,7 +1,5 @@
 FROM python:3.9.9 AS compile-image
 
-ARG PYTHON_DEPS=requirements.txt
-
 RUN mkdir -p /opt/code
 WORKDIR /opt/code
 
@@ -19,9 +17,8 @@ RUN pip3 install --upgrade pip setuptools wheel
 RUN pip3 install uwsgi==2.0.20
 
 COPY requirements.txt /opt/
-COPY $PYTHON_DEPS /opt/
 
-RUN pip3 install -r /opt/$PYTHON_DEPS
+RUN pip3 install -r /opt/requirements.txt
 
 RUN mkdir -p /opt/code/src
 RUN mkdir -p /opt/code/tests
