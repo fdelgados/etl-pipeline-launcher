@@ -257,6 +257,14 @@ class Settings:
 
         return file_pattern.format(tenant_id, self._site)
 
+    def report_results_file(self, tenant_id: str, report_name: str) -> str:
+        file_pattern = self._get("duplicates", "report_file")
+
+        return file_pattern.format(tenant_id, self._site, report_name)
+
+    def site_data(self, key: str):
+        return self._get("site_data", key)
+
     def api_path(self):
         return "/{}".format(self.api_version())
 

@@ -9,6 +9,7 @@ from duplicates.report.application.reportservice import (
     NextIdentityQuery,
     ReportProgressQuery,
     ReportProgressResponse,
+    ExportReportResultsCommand,
 )
 
 report_api = Namespace(
@@ -66,3 +67,12 @@ class ReportProgressController(BaseController):
         }
 
         return representation
+
+
+@report_api.route("/<string:report_id>/export")
+class ExportReportController(BaseController):
+    # @authorization_required("export:report-results")
+    def post(self, report_id: str):
+        command = ExportReportResultsCommand(report_id)
+
+        self.dispatch(command)

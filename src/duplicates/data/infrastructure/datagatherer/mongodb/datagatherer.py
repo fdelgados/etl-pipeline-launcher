@@ -79,6 +79,7 @@ class DataGathererImpl(DataGatherer):
             {
                 "address": 1,
                 "content": 1,
+                "datalayer": 1,
             },
         ).limit(self._PAGE_SIZE)
 

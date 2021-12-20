@@ -10,6 +10,7 @@ class ReportStats:
     analyzed_pages: int
     duplicated_pages: int
     similarity_average: float
+    similarity_median: float
     duplication_ratio: float
 
 

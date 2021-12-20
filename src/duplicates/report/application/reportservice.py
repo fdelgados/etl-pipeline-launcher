@@ -19,6 +19,7 @@ from duplicates.report.domain.model.report import (
     ReportRepository,
     ReportId,
 )
+from duplicates.report.domain.service.results_retriever import ResultsRetriever
 from duplicates.report.domain.service.statsretriever import (
     ReportStatsRetriever,
 )
@@ -173,3 +174,32 @@ class NextIdentityQueryHandler(QueryHandler):
 
     def handle(self, query: NextIdentityQuery) -> NextIdentityResponse:
         return NextIdentityResponse(self._report_repository.next_identity())
+
+
+@dataclass(frozen=True)
+class ExportReportResultsCommand(Command):
+    report_id: str
+
+
+class ExportReportResultsCommandHandler(CommandHandler):
+    def __init__(
+        self,
+        report_repository: ReportRepository,
+        results_retriever: ResultsRetriever,
+    ):
+        self._report_repository = report_repository
+        self._results_retriever = results_retriever
+
+    def handle(self, command: ExportReportResultsCommand) -> None:
+        report = self._report_repository.report_of_id(
+            ReportId(command.report_id)
+        )
+
+        if not report:
+            raise ApplicationError(
+                Errors.entity_not_found(
+                    entity_name="Report", entity_id=command.report_id
+                )
+            )
+
+        self._results_retriever.retrieve(report)

@@ -47,10 +47,11 @@
     <service id="duplicates.report.application.reportupdater.update_stats_on_analysis_completed"
              class="duplicates.report.application.reportupdater.UpdateStatsOnAnalysisCompleted">
         <argument name="report_repository" value="duplicates.report.domain.model.report.report_repository" type="service"/>
+        <argument name="stats_retriever" value="duplicates.report.domain.service.statsretriever.report_stats_retriever" type="service"/>
     </service>
 
     <service id="duplicates.report.application.reportupdater.update_stats_on_analysis_started"
-             class="duplicates.report.application.reportupdater.UpdateStatsOnAnalysisStarted">
+             class="duplicates.report.application.reportupdater.UpdateStatusOnAnalysisStarted">
         <argument name="report_repository" value="duplicates.report.domain.model.report.report_repository" type="service"/>
     </service>
 
@@ -90,5 +91,11 @@
     <service id="duplicates.check.application.results_service.retrieve_duplicity_check_results_query_handler"
              class="duplicates.check.application.results_service.RetrieveDuplicityCheckResultsQueryHandler">
         <argument name="duplicate_repository" value="duplicates.check.domain.model.duplicate.duplicate_repository" type="service" />
+    </service>
+
+    <service id="duplicates.report.application.reportservice.export_report_results_command_handler"
+             class="duplicates.report.application.reportservice.ExportReportResultsCommandHandler">
+        <argument name="report_repository" value="duplicates.report.domain.model.report.report_repository" type="service" />
+        <argument name="results_retriever" value="duplicates.report.domain.service.results_retriever.results_retriever" type="service" />
     </service>
 </services>

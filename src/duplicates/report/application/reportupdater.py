@@ -10,6 +10,9 @@ from duplicates.similarity.domain.event.analysisstarted import AnalysisStarted
 from duplicates.similarity.domain.event.analysiscompleted import (
     AnalysisCompleted,
 )
+from duplicates.report.domain.service.statsretriever import (
+    ReportStatsRetriever,
+)
 
 
 class UpdateTotalPagesOnDataLoaded(DomainEventSubscriber):
@@ -48,10 +51,12 @@ class UpdateStatsOnAnalysisCompleted(DomainEventSubscriber):
     def __init__(
         self,
         report_repository: ReportRepository,
+        stats_retriever: ReportStatsRetriever,
     ):
         super().__init__()
 
         self._report_repository = report_repository
+        self._stats_retriever = stats_retriever
 
     def handle(self, domain_event: AnalysisCompleted) -> None:
         report = self._report_repository.report_of_id(
@@ -65,12 +70,12 @@ class UpdateStatsOnAnalysisCompleted(DomainEventSubscriber):
                 )
             )
 
-        report.complete()
+        report.complete(self._stats_retriever.retrieve(report))
 
         self._report_repository.save(report)
 
 
-class UpdateStatsOnAnalysisStarted(DomainEventSubscriber):
+class UpdateStatusOnAnalysisStarted(DomainEventSubscriber):
     def __init__(
         self,
         report_repository: ReportRepository,
