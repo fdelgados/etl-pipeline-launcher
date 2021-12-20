@@ -69,16 +69,3 @@ class Url:
 
     def __hash__(self):
         return hash(self._address)
-
-
-class NullUrl(Url):
-    def __init__(self):
-        self._address = None
-        self._url_struct = {
-            "scheme": None,
-            "netloc": None,
-            "path": None,
-            "params": None,
-            "query": None,
-            "fragment": None,
-        }

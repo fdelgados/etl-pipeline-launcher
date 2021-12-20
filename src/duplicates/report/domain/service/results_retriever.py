@@ -1,11 +1,11 @@
-from typing import Dict
+from typing import Dict, List
 
 import pandas as pd
 
 import shared.infrastructure.environment.globalvars as glob
 
 from duplicates.data.domain.service.datagatherer import DataGatherer
-from duplicates.data.domain.model.page import Page, NullPage
+from duplicates.data.domain.model.page import Page
 from duplicates.report.domain.model.report import (
     Report,
     ReportId,
@@ -14,24 +14,11 @@ from duplicates.report.domain.model.report import (
 )
 
 
-def _find_in_dir(
-    pages: Dict[str, Page], duplicates: Dict[str, Duplicate], address: str
-) -> dict:
-    duplicate = duplicates.get(address)
-
-    if not duplicate:
-        return {
-            "duplicate_page": NullPage(),
-            "similarity": None,
-        }
-
-    return {
-        "duplicate_page": pages.get(duplicate.duplicate_url.address),
-        "similarity": duplicate.similarity,
-    }
-
-
-def _build_record(page, duplicate_page, similarity):
+def _build_records(
+    pages: Dict[str, Page],
+    page: Page,
+    duplicates: List[Duplicate]
+):
     course_info = page.datalayer.get("course")
     methodologies = glob.settings.site_data("methodologies")
 
@@ -46,37 +33,47 @@ def _build_record(page, duplicate_page, similarity):
         "url": page.url.address,
     }
 
-    duplicate_course_info = duplicate_page.datalayer.get("course")
+    if not duplicates:
+        duplicate_course_data = {
+            "matching_search_id": None,
+            "matching_course_id": None,
+            "matching_center_id": None,
+            "matching_center_name": None,
+            "matching_h1": None,
+            "matching_methodology": None,
+            "matching_country": None,
+            "matching_url": None,
+            "similarity": None,
+        }
 
-    duplicate_course_data = {
-        "matching_search_id": duplicate_course_info.get("searchId")
-        if not duplicate_page.is_null()
-        else None,
-        "matching_course_id": duplicate_course_info.get("id")
-        if not duplicate_page.is_null()
-        else None,
-        "matching_center_id": duplicate_course_info.get("center").get("id")
-        if not duplicate_page.is_null()
-        else None,
-        "matching_center_name": duplicate_course_info.get("center").get("name")
-        if not duplicate_page.is_null()
-        else None,
-        "matching_h1": duplicate_course_info.get("name")
-        if not duplicate_page.is_null()
-        else None,
-        "matching_methodology": methodologies[
-            duplicate_course_info.get("methodology").get("id")
-        ]
-        if not duplicate_page.is_null()
-        else None,
-        "matching_country": duplicate_course_info.get("globalSearchId")[0:2]
-        if not duplicate_page.is_null()
-        else None,
-        "matching_url": duplicate_page.url.address,
-        "similarity": similarity,
-    }
+        return [{**course_data, **duplicate_course_data}]
 
-    return {**course_data, **duplicate_course_data}
+    records = []
+    for duplicate in duplicates:
+        duplicate_page = pages.get(duplicate.duplicate_url.address)
+        duplicate_course_info = duplicate_page.datalayer.get("course")
+        duplicate_course_data = {
+            "matching_search_id": duplicate_course_info.get("searchId"),
+            "matching_course_id": duplicate_course_info.get("id"),
+            "matching_center_id":
+                duplicate_course_info.get("center").get("id"),
+            "matching_center_name": duplicate_course_info.get("center").get(
+                "name"
+            ),
+            "matching_h1": duplicate_course_info.get("name"),
+            "matching_methodology": methodologies[
+                duplicate_course_info.get("methodology").get("id")
+            ],
+            "matching_country": duplicate_course_info.get(
+                "globalSearchId"
+            )[0:2],
+            "matching_url": duplicate_page.url.address,
+            "similarity": duplicate.similarity,
+        }
+
+        records.append({**course_data, **duplicate_course_data})
+
+    return records
 
 
 class ResultsRetriever:
@@ -98,15 +95,16 @@ class ResultsRetriever:
             if not page.datalayer:
                 continue
 
-            duplicate = _find_in_dir(pages, duplicates, address)
+            duplicates_of_page = filter(
+                lambda duplicate_page: duplicate_page.url == page.url,
+                duplicates,
+            )
 
-            duplicate_page = duplicate.get("duplicate_page")
-
-            records.append(
-                _build_record(
+            records.extend(
+                _build_records(
+                    pages,
                     page,
-                    duplicate_page,
-                    duplicate.get("similarity"),
+                    list(duplicates_of_page),
                 )
             )
 
@@ -131,7 +129,7 @@ class ResultsRetriever:
 
     def _retrieve_duplicates(
         self, report_id: ReportId
-    ) -> Dict[str, Duplicate]:
+    ) -> List[Duplicate]:
         page_size = 500
         offset = 0
         d = []
@@ -149,6 +147,4 @@ class ResultsRetriever:
             d.extend(duplicates)
             offset += page_size
 
-        addresses = [duplicate.url.address for duplicate in d]
-
-        return dict(zip(addresses, d))
+        return d
