@@ -77,4 +77,4 @@ class ExportReportController(BaseController):
 
         self.dispatch(command)
 
-        return self.response_created()
+        return self.response_accepted()

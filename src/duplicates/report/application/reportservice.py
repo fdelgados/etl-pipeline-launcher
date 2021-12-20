@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import multiprocessing
 from dataclasses import dataclass
 
 from datetime import datetime
@@ -202,4 +203,8 @@ class ExportReportResultsCommandHandler(CommandHandler):
                 )
             )
 
-        self._results_retriever.retrieve(report)
+        job = multiprocessing.Process(
+            target=self._results_retriever.retrieve,
+            args=(report,),
+        )
+        job.start()
