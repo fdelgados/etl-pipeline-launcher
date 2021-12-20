@@ -76,3 +76,5 @@ class ExportReportController(BaseController):
         command = ExportReportResultsCommand(report_id)
 
         self.dispatch(command)
+
+        return self.response_created()
