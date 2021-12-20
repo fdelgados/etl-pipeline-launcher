@@ -47,4 +47,10 @@
 
     <service id="duplicates.check.domain.model.duplicitycheck.duplicity_check_repository"
              alias="duplicates.check.infrastructure.persistence.sqlalchemy.duplicity_check_repository.duplicity_check_repository_impl" />
+
+    <service id="duplicates.report.domain.service.results_retriever.results_retriever"
+             class="duplicates.report.domain.service.results_retriever.ResultsRetriever">
+        <argument name="data_gatherer" value="duplicates.data.domain.service.datagatherer.data_gatherer" type="service" />
+        <argument name="duplicate_repository" value="duplicates.report.domain.model.report.duplicate_repository" type="service" />
+    </service>
 </services>

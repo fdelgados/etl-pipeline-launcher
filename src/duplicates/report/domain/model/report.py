@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import abc
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 from coolname import generate
 
@@ -133,6 +133,10 @@ class Report(AggregateRoot):
         return self._from_corpus
 
     @property
+    def corpus_build_id(self) -> str:
+        return self._corpus_build_id
+
+    @property
     def created_by(self) -> str:
         return self._created_by
 
@@ -156,7 +160,12 @@ class Report(AggregateRoot):
     def started_on(self) -> datetime:
         return self._started_on
 
-    def complete(self) -> None:
+    def complete(self, stats) -> None:
+        self._duplicated_pages = stats.duplicated_pages
+        self._duplication_average = stats.similarity_average
+        self._duplication_ratio = stats.duplication_ratio
+        self._duplication_median = stats.similarity_median
+
         self._status = self._status.complete()
         self._completed_on = datetime.now()
 
@@ -218,8 +227,29 @@ class Duplicate(AggregateRoot):
         self._another_url = another_url
         self._similarity = similarity
 
+    @property
+    def url(self) -> Url:
+        return self._a_url
+
+    @property
+    def duplicate_url(self) -> Url:
+        return self._another_url
+
+    @property
+    def similarity(self) -> float:
+        return self._similarity
+
 
 class DuplicateRepository(Repository, metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def search_all_by_report_id(
+        self,
+        report_id: ReportId,
+        limit: Optional[int] = None,
+        offset: Optional[int] = None,
+    ) -> List[Duplicate]:
+        raise NotImplementedError
+
     @abc.abstractmethod
     def count(self, report_id: ReportId) -> int:
         raise NotImplementedError

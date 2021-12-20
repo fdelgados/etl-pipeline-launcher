@@ -30,6 +30,7 @@ class ReportStatsRetrieverImpl(ReportStatsRetriever):
             analyzed_pages,
             duplicates,
             float(self._similarity_average(report.report_id)),
+            0.0,  # TODO calculate median
             float(duplicates / analyzed_pages) if analyzed_pages > 0 else 0.0,
         )
 

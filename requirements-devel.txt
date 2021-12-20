@@ -1,5 +1,0 @@
--r requirements.txt
-black==21.8b0
-flake8==4.0.1
-pytest==6.2.5
-tenacity==8.0.1

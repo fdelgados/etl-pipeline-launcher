@@ -43,3 +43,4 @@ flask_debug = false
 [duplicates]
 content_file = "/opt/code/data/{}/{}/content.csv"
 minhashes_file = "/opt/code/data/{}/{}/minhashes.pkl"
+report_file = "/opt/code/data/{}/{}/{}.csv"

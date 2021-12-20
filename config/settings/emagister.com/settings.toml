@@ -1,2 +1,9 @@
 [application]
 timezone = "Europe/Madrid"
+
+[site_data]
+methodologies.1 = "Presencial"
+methodologies.2 = "A distancia"
+methodologies.3 = "Online"
+methodologies.8 = "Semipresencial"
+methodologies.9 = "In company"

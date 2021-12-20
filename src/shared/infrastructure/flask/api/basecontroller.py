@@ -141,6 +141,9 @@ class BaseController(Resource):
             headers,
         )
 
+    def response_created(self):
+        return self._json_response("", HTTPStatus.CREATED)
+
     def _camelize_keys(self, dict_obj: Dict):
         assert type(dict_obj) == dict
 
