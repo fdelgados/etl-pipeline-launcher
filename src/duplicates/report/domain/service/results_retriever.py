@@ -1,6 +1,9 @@
 from typing import Dict, List
 
 import pandas as pd
+from joblib import Parallel, delayed
+import multiprocessing
+from tqdm import tqdm
 
 import shared.infrastructure.environment.globalvars as glob
 
@@ -75,6 +78,10 @@ def _build_records(
     return records
 
 
+def _flatten(deep_list: list) -> list:
+    return [item for sublist in deep_list for item in sublist if item]
+
+
 class ResultsRetriever:
     def __init__(
         self,
@@ -88,32 +95,32 @@ class ResultsRetriever:
         pages = self._retrieve_pages(report)
         duplicates = self._retrieve_duplicates(report.report_id)
 
-        records = []
-
-        print(f"Duplicates: {len(duplicates)}")
-        num_pages = len(pages)
-        num = 1
-        for address, page in pages.items():
+        def foo(page):
             if not page.datalayer:
-                continue
+                return []
 
             duplicates_of_page = filter(
                 lambda duplicate_page: duplicate_page.url == page.url,
                 duplicates,
             )
 
-            records.extend(
-                _build_records(
-                    pages,
-                    page,
-                    list(duplicates_of_page),
-                )
+            return _build_records(
+                pages,
+                page,
+                list(duplicates_of_page),
             )
 
-            print(f"{num}/{num_pages}")
-            num += 1
+        num_cores = multiprocessing.cpu_count()
+        records = Parallel(n_jobs=num_cores, prefer="threads")(
+            delayed(foo)(page)
+            for address, page in tqdm(
+                pages.items(),
+                ascii=" #",
+                desc="Building report"
+            )
+        )
 
-        data_frame = pd.DataFrame(data=records)
+        data_frame = pd.DataFrame(data=_flatten(records))
         data_frame.sort_values(
             by=["similarity"], ascending=False, inplace=True
         )

@@ -24,6 +24,7 @@ SQLAlchemy==1.4.22
 tenacity==8.0.1
 text-cleaner-fdelgados==2.0.1
 toml==0.10.2
+tqdm==4.62.3
 urllib3==1.26.6
 xxhash==2.0.2
 
