@@ -15,9 +15,7 @@ from duplicates.report.domain.model.report import (
 
 
 def _build_records(
-    pages: Dict[str, Page],
-    page: Page,
-    duplicates: List[Duplicate]
+    pages: Dict[str, Page], page: Page, duplicates: List[Duplicate]
 ):
     course_info = page.datalayer.get("course")
     methodologies = glob.settings.site_data("methodologies")
@@ -55,8 +53,9 @@ def _build_records(
         duplicate_course_data = {
             "matching_search_id": duplicate_course_info.get("searchId"),
             "matching_course_id": duplicate_course_info.get("id"),
-            "matching_center_id":
-                duplicate_course_info.get("center").get("id"),
+            "matching_center_id": duplicate_course_info.get("center").get(
+                "id"
+            ),
             "matching_center_name": duplicate_course_info.get("center").get(
                 "name"
             ),
@@ -64,9 +63,9 @@ def _build_records(
             "matching_methodology": methodologies[
                 duplicate_course_info.get("methodology").get("id")
             ],
-            "matching_country": duplicate_course_info.get(
-                "globalSearchId"
-            )[0:2],
+            "matching_country": duplicate_course_info.get("globalSearchId")[
+                0:2
+            ],
             "matching_url": duplicate_page.url.address,
             "similarity": duplicate.similarity,
         }
@@ -127,9 +126,7 @@ class ResultsRetriever:
 
         return dict(zip(addresses, pages))
 
-    def _retrieve_duplicates(
-        self, report_id: ReportId
-    ) -> List[Duplicate]:
+    def _retrieve_duplicates(self, report_id: ReportId) -> List[Duplicate]:
         page_size = 500
         offset = 0
         d = []
