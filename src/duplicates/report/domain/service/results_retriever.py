@@ -90,6 +90,9 @@ class ResultsRetriever:
 
         records = []
 
+        print(f"Duplicates: {len(duplicates)}")
+        num_pages = len(pages)
+        num = 1
         for address, page in pages.items():
             if not page.datalayer:
                 continue
@@ -106,6 +109,9 @@ class ResultsRetriever:
                     list(duplicates_of_page),
                 )
             )
+
+            print(f"{num}/{num_pages}")
+            num += 1
 
         data_frame = pd.DataFrame(data=records)
         data_frame.sort_values(
