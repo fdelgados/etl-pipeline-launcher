@@ -114,9 +114,7 @@ class ResultsRetriever:
         records = Parallel(n_jobs=num_cores, prefer="threads")(
             delayed(foo)(page)
             for address, page in tqdm(
-                pages.items(),
-                ascii=" #",
-                desc="Building report"
+                pages.items(), ascii=" #", desc="Building report"
             )
         )
 
