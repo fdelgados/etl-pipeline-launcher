@@ -95,7 +95,7 @@ class ResultsRetriever:
         pages = self._retrieve_pages(report)
         duplicates = self._retrieve_duplicates(report.report_id)
 
-        def foo(page):
+        def search_duplicates(page):
             if not page.datalayer:
                 return []
 
@@ -112,7 +112,7 @@ class ResultsRetriever:
 
         num_cores = multiprocessing.cpu_count()
         records = Parallel(n_jobs=num_cores, prefer="threads")(
-            delayed(foo)(page)
+            delayed(search_duplicates)(page)
             for address, page in tqdm(
                 pages.items(), ascii=" #", desc="Building report"
             )
