@@ -152,7 +152,7 @@ class ReportAssembler:
             report.k_shingle_size.value,
             report_stats.duplication_ratio,
             report_stats.similarity_average,
-            0.0,
+            report_stats.similarity_median,
         )
 
 

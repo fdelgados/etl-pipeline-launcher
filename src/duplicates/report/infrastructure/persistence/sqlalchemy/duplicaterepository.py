@@ -96,4 +96,28 @@ class DuplicateRepositoryImpl(DuplicateRepository, Repository):
             return average
 
     def similarity_median(self, report_id: ReportId) -> float:
-        pass
+        set_row_index = "SET @row_index := -1"
+        sentence = """
+            SELECT AVG(subq.similarity) as median_value
+            FROM (
+                 SELECT @row_index:=@row_index + 1 AS row_index, similarity
+                 FROM report_duplicates
+                 WHERE report_id = UUID_TO_BIN(:report_id)
+                 ORDER BY similarity
+             ) AS subq
+            WHERE subq.row_index
+                      IN (FLOOR(@row_index / 2) , CEIL(@row_index / 2));
+        """
+
+        with self._connection().connect() as connection:
+            connection.execute(set_row_index)
+            result = connection.execute(
+                self._statement(sentence), report_id=report_id.value
+            )
+
+            median = result.scalar()
+
+            connection.close()
+            self._connection().dispose()
+
+            return median

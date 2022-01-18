@@ -29,8 +29,8 @@ class ReportStatsRetrieverImpl(ReportStatsRetriever):
         return ReportStats(
             analyzed_pages,
             duplicates,
-            float(self._similarity_average(report.report_id)),
-            0.0,  # TODO calculate median
+            self._similarity_average(report.report_id),
+            self._similarity_median(report.report_id),
             float(duplicates / analyzed_pages) if analyzed_pages > 0 else 0.0,
         )
 
@@ -59,6 +59,14 @@ class ReportStatsRetrieverImpl(ReportStatsRetriever):
         average = self._duplicate_repository.similarity_average(report_id)
 
         if average is not None:
-            return average
+            return float(average)
+
+        return 0.0
+
+    def _similarity_median(self, report_id: ReportId) -> float:
+        median = self._duplicate_repository.similarity_median(report_id)
+
+        if median is not None:
+            return float(median)
 
         return 0.0
