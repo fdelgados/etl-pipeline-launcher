@@ -41,7 +41,7 @@ def _sanitize_urls(addresses: list) -> List[Url]:
 
 
 class CreateDuplicityCheckCommandHandler(CommandHandler):
-    _MAX_URLS_TO_CHECK = 100
+    _MAX_URLS_TO_CHECK = 500
 
     def __init__(
         self,
