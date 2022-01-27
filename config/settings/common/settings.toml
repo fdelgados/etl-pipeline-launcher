@@ -39,6 +39,7 @@ connection.vhost = "/"
 [flask]
 error_include_message = false
 flask_debug = false
+json_sort_keys = false
 
 [duplicates]
 content_file = "/opt/code/data/{}/{}/content.csv"
