@@ -44,6 +44,10 @@ class Status:
     def in_progress(cls) -> Status:
         return cls(cls._IN_PROGRESS)
 
+    @classmethod
+    def completed(cls) -> Status:
+        return cls(cls._COMPLETED)
+
     def complete(self) -> Status:
         return Status(self._COMPLETED)
 
@@ -136,6 +140,11 @@ class DuplicityCheckRepository(Repository, metaclass=abc.ABCMeta):
     @staticmethod
     def next_identity() -> DuplicityCheckId:
         return DuplicityCheckId()
+
+    @abc.abstractmethod
+    def duplicity_check_of_id(self, duplicity_check_id)\
+            -> Optional[DuplicityCheck]:
+        raise NotImplementedError
 
 
 class Duplicate:

@@ -23,4 +23,8 @@
     <event class="duplicates.check.domain.event.duplicitycheckrequested.DuplicityCheckRequested">
         <handler id="duplicates.check.application.duplicity_check_service.scrap_pages_on_duplicity_check_requested" />
     </event>
+
+    <event class="duplicates.check.domain.event.duplicitycheckcompleted.DuplicityCheckCompleted">
+        <handler id="duplicates.check.application.duplicity_check_service.update_check_status_on_duplicity_check_requested"/>
+    </event>
 </events>

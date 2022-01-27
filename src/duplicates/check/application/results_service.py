@@ -13,7 +13,11 @@ from duplicates.check.domain.model.duplicate import (
     Duplicate,
 )
 
-from duplicates.check.domain.model.duplicitycheck import DuplicityCheckId
+from duplicates.check.domain.model.duplicitycheck import (
+    DuplicityCheckId,
+    DuplicityCheckRepository,
+    Status,
+)
 
 
 @dataclass(frozen=True)
@@ -31,16 +35,37 @@ class RetrieveDuplicityCheckResultsResponse(Response):
 
 
 class RetrieveDuplicityCheckResultsQueryHandler(QueryHandler):
-    def __init__(self, duplicate_repository: DuplicateRepository):
+    def __init__(
+        self,
+        duplicate_repository: DuplicateRepository,
+        duplicity_check_repository: DuplicityCheckRepository,
+    ):
         self._duplicate_repository = duplicate_repository
+        self._duplicity_check_repository = duplicity_check_repository
 
     def handle(
         self, query: RetrieveDuplicityCheckResultsQuery
     ) -> RetrieveDuplicityCheckResultsResponse:
-
-        duplicates = self._find_duplicates(query)
-
         dto = DuplicatesDto()
+        duplicates = []
+
+        if query.since:
+            since = datetime.fromisoformat(query.since)
+
+            duplicates = self._duplicate_repository.duplicates_since(since)
+
+        if query.check_id:
+            check_id = DuplicityCheckId(query.check_id)
+            duplicity_check = \
+                self._duplicity_check_repository.duplicity_check_of_id(
+                    check_id
+                )
+            dto.status = duplicity_check.status.serialize()
+
+            if duplicity_check.status == Status.completed():
+                dto.mark_process_as_completed()
+                duplicates = \
+                    self._duplicate_repository.duplicates_of_check(check_id)
 
         for duplicate in duplicates:
             dto.add_duplicate(
@@ -61,14 +86,27 @@ class RetrieveDuplicityCheckResultsQueryHandler(QueryHandler):
 
         if query.check_id:
             check_id = DuplicityCheckId(query.check_id)
+            duplicity_check = \
+                self._duplicity_check_repository.duplicity_check_of_id(
+                    check_id
+                )
+
+            if duplicity_check.status == Status.in_progress():
+                return []
 
             return self._duplicate_repository.duplicates_of_check(check_id)
+
+    def _find_duplicates_since(self, since: str) -> List[Duplicate]:
+        return self._duplicate_repository.duplicates_since(
+            datetime.fromisoformat(since)
+        )
 
 
 class DuplicatesDto(JsonSerializable):
     def __init__(self):
         self._duplicates = []
-        self._already_listed = []
+        self._status = None
+        self._process_completed = False
 
     def add_duplicate(
         self,
@@ -100,6 +138,20 @@ class DuplicatesDto(JsonSerializable):
             self._duplicates[existing_url_index]["duplicates"].append(
                 duplicate
             )
+
+    @property
+    def status(self) -> str:
+        return self._status
+
+    @status.setter
+    def status(self, status: str) -> None:
+        self._status = status
+
+    def mark_process_as_completed(self) -> None:
+        self._process_completed = True
+
+    def is_process_completed(self) -> bool:
+        return self._process_completed
 
     def serialize(self) -> list:
         return self._duplicates

@@ -9,6 +9,7 @@ from duplicates.check.application.duplicitycheckcreator import (
 )
 from duplicates.check.application.results_service import (
     RetrieveDuplicityCheckResultsQuery,
+    DuplicatesDto,
 )
 from duplicates.check.application.duplicitycheckcreator import (
     CreateDuplicityCheckCommand,
@@ -81,5 +82,9 @@ class GetCheckedUrlsOfCheckController(BaseController):
         query = RetrieveDuplicityCheckResultsQuery(check_id=check_id)
 
         response = self.ask(query)
+        duplicates_dto: DuplicatesDto = response.value()
+
+        if not duplicates_dto.is_process_completed():
+            return self.response_ok({"status": duplicates_dto.status})
 
         return self.response_ok({"data": response.value().serialize()})

@@ -76,6 +76,7 @@
         <argument name="minhash_generator" value="duplicates.similarity.domain.service.minhashgenerator.min_hash_generator" type="service" />
         <argument name="minhash_repository" value="duplicates.similarity.domain.model.minhash.min_hash_repository" type="service" />
         <argument name="duplicate_repository" value="duplicates.check.domain.model.duplicate.duplicate_repository" type="service" />
+        <argument name="event_bus" value="shared.domain.bus.event.event_bus" type="service"/>
     </service>
 
     <service id="duplicates.check.application.duplicity_check_service.scrap_pages_on_duplicity_check_requested"
@@ -91,11 +92,22 @@
     <service id="duplicates.check.application.results_service.retrieve_duplicity_check_results_query_handler"
              class="duplicates.check.application.results_service.RetrieveDuplicityCheckResultsQueryHandler">
         <argument name="duplicate_repository" value="duplicates.check.domain.model.duplicate.duplicate_repository" type="service" />
+        <argument name="duplicity_check_repository" value="duplicates.check.domain.model.duplicitycheck.duplicity_check_repository" type="service" />
     </service>
 
     <service id="duplicates.report.application.reportservice.export_report_results_command_handler"
              class="duplicates.report.application.reportservice.ExportReportResultsCommandHandler">
         <argument name="report_repository" value="duplicates.report.domain.model.report.report_repository" type="service" />
         <argument name="results_retriever" value="duplicates.report.domain.service.results_retriever.results_retriever" type="service" />
+    </service>
+
+    <service id="duplicates.check.application.duplicity_check_service.check_status_updater"
+             class="duplicates.check.application.duplicity_check_service.CheckStatusUpdater">
+        <argument name="duplicity_check_repository" value="duplicates.check.domain.model.duplicitycheck.duplicity_check_repository" type="service" />
+    </service>
+
+    <service id="duplicates.check.application.duplicity_check_service.update_check_status_on_duplicity_check_requested"
+             class="duplicates.check.application.duplicity_check_service.UpdateCheckStatusOnDuplicityCheckRequested">
+        <argument name="check_status_updater" value="duplicates.check.application.duplicity_check_service.check_status_updater" type="service" />
     </service>
 </services>

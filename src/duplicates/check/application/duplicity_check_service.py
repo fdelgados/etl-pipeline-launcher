@@ -2,16 +2,18 @@ from __future__ import annotations
 
 from typing import List
 
-from shared.domain.bus.event import DomainEventSubscriber
+from shared.domain.bus.event import DomainEventSubscriber, EventBus
 from shared.domain.model.valueobject.url import Url
 from shared.domain.service.scraping.pagerequester import PageRequester, Request
+from duplicates.check.domain.event.duplicitycheckcompleted import (
+    DuplicityCheckCompleted,
+)
 from duplicates.check.domain.event.duplicitycheckrequested import (
     DuplicityCheckRequested,
 )
 from duplicates.check.domain.model.duplicate import (
     Duplicate,
     DuplicateRepository,
-    DuplicityCheckId,
 )
 from duplicates.report.domain.model.report import ReportRepository
 from duplicates.data.domain.model.page import Page
@@ -21,6 +23,10 @@ from duplicates.similarity.domain.service.minhashgenerator import (
     MinHashGenerator,
 )
 from duplicates.similarity.domain.model.minhash import MinHashRepository
+from duplicates.check.domain.model.duplicitycheck import (
+    DuplicityCheckRepository,
+    DuplicityCheckId,
+)
 
 
 class ScrapPagesOnDuplicityCheckRequested(DomainEventSubscriber):
@@ -49,6 +55,7 @@ class PagesScraper:
         minhash_generator: MinHashGenerator,
         minhash_repository: MinHashRepository,
         duplicate_repository: DuplicateRepository,
+        event_bus: EventBus,
     ):
         self._report_repository = report_repository
         self._corpus_repository = corpus_repository
@@ -57,6 +64,7 @@ class PagesScraper:
         self._minhash_generator = minhash_generator
         self._minhash_repository = minhash_repository
         self._duplicate_repository = duplicate_repository
+        self._event_bus = event_bus
 
     def scrap(
         self,
@@ -112,3 +120,33 @@ class PagesScraper:
                 )
 
                 self._duplicate_repository.save(duplicate)
+
+        self._event_bus.publish(
+            DuplicityCheckCompleted(duplicity_check_id)
+        )
+
+
+class UpdateCheckStatusOnDuplicityCheckRequested(DomainEventSubscriber):
+    def __init__(self, check_status_updater: CheckStatusUpdater):
+        super().__init__()
+
+        self._check_status_updater = check_status_updater
+
+    def handle(self, domain_event: DuplicityCheckCompleted) -> None:
+        self._check_status_updater.update(
+            DuplicityCheckId(domain_event.check_id)
+        )
+
+
+class CheckStatusUpdater:
+    def __init__(self, duplicity_check_repository: DuplicityCheckRepository):
+        self._duplicity_check_repository = duplicity_check_repository
+
+    def update(self, duplicity_check_id: DuplicityCheckId):
+        duplicity_check = \
+            self._duplicity_check_repository.duplicity_check_of_id(
+                duplicity_check_id
+            )
+
+        duplicity_check.complete()
+        self._duplicity_check_repository.save(duplicity_check)
