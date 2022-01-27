@@ -142,8 +142,9 @@ class DuplicityCheckRepository(Repository, metaclass=abc.ABCMeta):
         return DuplicityCheckId()
 
     @abc.abstractmethod
-    def duplicity_check_of_id(self, duplicity_check_id)\
-            -> Optional[DuplicityCheck]:
+    def duplicity_check_of_id(
+        self, duplicity_check_id
+    ) -> Optional[DuplicityCheck]:
         raise NotImplementedError
 
 

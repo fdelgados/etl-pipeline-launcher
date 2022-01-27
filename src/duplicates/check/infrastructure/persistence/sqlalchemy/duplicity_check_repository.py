@@ -16,6 +16,7 @@ class DuplicityCheckRepositoryImpl(DuplicityCheckRepository, Repository):
             DuplicityCheck, global_vars.settings.database_dsn("duplicates")
         )
 
-    def duplicity_check_of_id(self, duplicity_check_id: DuplicityCheckId) \
-            -> Optional[DuplicityCheck]:
+    def duplicity_check_of_id(
+        self, duplicity_check_id: DuplicityCheckId
+    ) -> Optional[DuplicityCheck]:
         return self.find(_id=duplicity_check_id)

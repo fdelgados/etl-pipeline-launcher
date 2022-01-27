@@ -56,16 +56,18 @@ class RetrieveDuplicityCheckResultsQueryHandler(QueryHandler):
 
         if query.check_id:
             check_id = DuplicityCheckId(query.check_id)
-            duplicity_check = \
+            duplicity_check = (
                 self._duplicity_check_repository.duplicity_check_of_id(
                     check_id
                 )
+            )
             dto.status = duplicity_check.status.serialize()
 
             if duplicity_check.status == Status.completed():
                 dto.mark_process_as_completed()
-                duplicates = \
-                    self._duplicate_repository.duplicates_of_check(check_id)
+                duplicates = self._duplicate_repository.duplicates_of_check(
+                    check_id
+                )
 
         for duplicate in duplicates:
             dto.add_duplicate(
@@ -86,10 +88,11 @@ class RetrieveDuplicityCheckResultsQueryHandler(QueryHandler):
 
         if query.check_id:
             check_id = DuplicityCheckId(query.check_id)
-            duplicity_check = \
+            duplicity_check = (
                 self._duplicity_check_repository.duplicity_check_of_id(
                     check_id
                 )
+            )
 
             if duplicity_check.status == Status.in_progress():
                 return []

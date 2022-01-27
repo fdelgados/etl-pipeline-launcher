@@ -121,9 +121,7 @@ class PagesScraper:
 
                 self._duplicate_repository.save(duplicate)
 
-        self._event_bus.publish(
-            DuplicityCheckCompleted(duplicity_check_id)
-        )
+        self._event_bus.publish(DuplicityCheckCompleted(duplicity_check_id))
 
 
 class UpdateCheckStatusOnDuplicityCheckRequested(DomainEventSubscriber):
@@ -143,10 +141,11 @@ class CheckStatusUpdater:
         self._duplicity_check_repository = duplicity_check_repository
 
     def update(self, duplicity_check_id: DuplicityCheckId):
-        duplicity_check = \
+        duplicity_check = (
             self._duplicity_check_repository.duplicity_check_of_id(
                 duplicity_check_id
             )
+        )
 
         duplicity_check.complete()
         self._duplicity_check_repository.save(duplicity_check)
