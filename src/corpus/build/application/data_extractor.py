@@ -165,6 +165,8 @@ class ExtractDataOnBuildStarted(DomainEventSubscriber):
             page.canonical_url = response.canonical_url
             page.datalayer = response.datalayer
             page.content = response.content
+            if response.is_redirection():
+                page.final_url = response.final_url
 
             return page
 
