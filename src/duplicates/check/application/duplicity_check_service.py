@@ -88,8 +88,12 @@ class PagesScraper:
             response = self._pages_requester.request(request)
 
             content = [section for section in response.content.values()]
+            actual_url = url
+            if response.is_redirection():
+                actual_url = response.final_url
+
             pages.append(
-                Page(response.url, " ".join(content), response.datalayer)
+                Page(actual_url, " ".join(content), response.datalayer)
             )
 
         clean_pages = self._data_transformer.transform(pages)

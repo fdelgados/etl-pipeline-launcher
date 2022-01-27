@@ -48,6 +48,12 @@ class Response:
 
         return self.status_code == HTTPStatus.NOT_MODIFIED
 
+    def is_redirection(self) -> bool:
+        if self.status_code == HTTPStatus.MOVED_PERMANENTLY:
+            return True
+
+        return self.status_code == HTTPStatus.FOUND
+
 
 @dataclass
 class Request:
