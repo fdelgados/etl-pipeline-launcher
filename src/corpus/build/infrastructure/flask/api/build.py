@@ -1,5 +1,5 @@
 from flask import request
-from flask_restx import Namespace
+from flask_restx import Namespace, fields
 
 from shared.infrastructure.security import authorization_required
 from shared.infrastructure.flask.api.basecontroller import BaseController
@@ -17,34 +17,11 @@ from corpus.build.application.buildservice import (
 
 build_api = Namespace("build", description="Corpus build starter")
 
-
-@build_api.route("")
-class StartBuildController(BaseController):
-    @authorization_required("start:corpus-build")
-    def post(self, user):
-        params = request.get_json()
-
-        build_id = self._generate_build_id()
-
-        command = StartBuildCommand(
-            build_id,
-            user.tenant_id(),
-            user.username(),
-            params.get("corpusName"),
-        )
-
-        self.dispatch(command)
-
-        return self.response_accepted(
-            headers={
-                "Content-Location": f"{self.base_url()}/builds/{build_id}"
-            }
-        )
-
-    def _generate_build_id(self) -> str:
-        response: NextIdentityResponse = self.ask(NextIdentityQuery())
-
-        return response.value()
+corpus = build_api.model('Corpus', {
+    "corpusName": fields.String(
+        description='The name of corpus to build', required=True
+    )
+})
 
 
 @build_api.route("")
@@ -71,6 +48,42 @@ class BuildListController(BaseController):
         representation["data"] = build_info
 
         return representation
+
+    @build_api.doc(
+        description="Start a new corpus build",
+        body=corpus,
+        responses={
+            202: "Success",
+            400: "Validation Error",
+            401: "Authorization failed, access token not provided or expired",
+            409: "There is another build running",
+        }
+    )
+    @authorization_required("start:corpus-build")
+    def post(self, user):
+        params = request.get_json()
+
+        build_id = self._generate_build_id()
+
+        command = StartBuildCommand(
+            build_id,
+            user.tenant_id(),
+            user.username(),
+            params.get("corpusName"),
+        )
+
+        self.dispatch(command)
+
+        return self.response_accepted(
+            headers={
+                "Content-Location": f"{self.base_url()}/builds/{build_id}"
+            }
+        )
+
+    def _generate_build_id(self) -> str:
+        response: NextIdentityResponse = self.ask(NextIdentityQuery())
+
+        return response.value()
 
 
 @build_api.route("/<string:build_id>")
