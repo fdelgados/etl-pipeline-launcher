@@ -17,11 +17,14 @@ from corpus.build.application.buildservice import (
 
 build_api = Namespace("build", description="Corpus build starter")
 
-corpus = build_api.model('Corpus', {
-    "corpusName": fields.String(
-        description='The name of corpus to build', required=True
-    )
-})
+corpus = build_api.model(
+    "Corpus",
+    {
+        "corpusName": fields.String(
+            description="The name of corpus to build", required=True
+        )
+    },
+)
 
 
 @build_api.route("")
@@ -57,7 +60,7 @@ class BuildListController(BaseController):
             400: "Validation Error",
             401: "Authorization failed, access token not provided or expired",
             409: "There is another build running",
-        }
+        },
     )
     @authorization_required("start:corpus-build")
     def post(self, user):
